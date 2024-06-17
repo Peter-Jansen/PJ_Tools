@@ -1,12 +1,7 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name Fuse
  tile_color 0x2144ffff
  selected true
- xpos -3001
- ypos 766
  addUserKnob {20 User}
  addUserKnob {26 Fuse l <b>Fuse</b> t "Because I couldn't be assed ingesting the original" T "Simplified copy of Luma Pictures Fuse gizmo"}
  addUserKnob {26 ""}
