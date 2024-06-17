@@ -1,12 +1,7 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name LogSat
  tile_color 0x8fa9d6ff
  selected true
- xpos -3110
- ypos 1275
  addUserKnob {20 User}
  addUserKnob {26 text l "" +STARTLINE T "<font size=\"+5\"> LogSat"}
  addUserKnob {26 ""}
