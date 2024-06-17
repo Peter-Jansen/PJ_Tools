@@ -1,13 +1,8 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name HueVsHue
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nkn = k.name()\n\nk_amount = n.knob('reduce_banding')\nk_banding_blur = n.knob('banding_blur')\nk_edge_crunch = n.knob('edge_crunch')\nk_reduce_banding_enable = n.knob('reduce_banding_enable')\n\nif kn == 'reduce_banding_enable':\n    print('its working')\n    k_amount.setEnabled(k_reduce_banding_enable.value())\n    k_banding_blur.setEnabled(k_reduce_banding_enable.value())\n    k_edge_crunch.setEnabled(k_reduce_banding_enable.value())\n    \n"
  tile_color 0x93abd3ff
  selected true
- xpos -3103
- ypos 1209
  addUserKnob {20 HueVsHue l "Hue vs Hue"}
  addUserKnob {26 title l "" t "Use the \"lum\" curve. Target the hue you want to change on the \nhorizontal axis, make a point (and two either side to anchor it). \nPull the middle point up to change the hue of the selected hue." +STARTLINE T "<font size=\"+5\"> Hue vs Hue"}
  addUserKnob {26 ""}
