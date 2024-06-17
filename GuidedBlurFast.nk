@@ -1,12 +1,7 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
 name rs_GuidedBlur_fast
 help "Description:\n\nThe guided filter is an edge-preserving blur,\nuseful to add details to the edges of a roto/matte\nusing a second image as a guide. \n\nHow to use:\n\nConnect the alpha to the 'matte' input\nand the 'guide' image to the 'img' input.\n\nControl the amount of detail using\nthe 'edge detail' slider.\n\n---\n\nThe filter is an implementation of the\n 'Guided Image Filtering', by Kaiming He. \nMore details at http://kaiminghe.com/eccv10/\n"
 selected true
-xpos -6240
-ypos 661
 addUserKnob {20 GuidedBlur}
 addUserKnob {26 guided_blur_title l "" +STARTLINE T "<font size=\"+5\"> Guided Blur"}
 addUserKnob {26 text l "" +STARTLINE T "<font size=\"2\">But faster!"}
