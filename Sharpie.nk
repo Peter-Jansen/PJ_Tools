@@ -1,12 +1,7 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name Sharpie
  tile_color 0xcc804eff
  selected true
- xpos -3318
- ypos 636
  addUserKnob {20 User l Sharpie}
  addUserKnob {26 text l "" +STARTLINE T "<font size=\"+5\"> Sharpie"}
  addUserKnob {26 text_1 l "" +STARTLINE T "<font size=\"-1\"> Bilateral sharpen using mult/div"}
