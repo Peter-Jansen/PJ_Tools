@@ -1,11 +1,6 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name EdgePush
  selected true
- xpos -3809
- ypos 1307
  addUserKnob {20 User}
  addUserKnob {26 ""}
  addUserKnob {41 pre_blur l "Pre Blur" T preBlur2.size}
