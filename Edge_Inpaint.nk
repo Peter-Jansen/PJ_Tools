@@ -1,12 +1,7 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name Edge_Inpaint
  tile_color 0xcc804eff
  selected true
- xpos -3322
- ypos 544
  addUserKnob {20 Edge_Inpaint l "Edge Inpaint"}
  addUserKnob {26 title l "" t "Start with the alpha crunch, this will be your\nbest bet at restoring colours in blurred areas.\n\nThen move to soft erode to blend the\ntransition edge better, and softly bring\nin more of the original colours.\n\nUse the sharpen options to bring back some\nof the detail that is blurred with soft erode.\n\nFinally for stubborn edges, you can start to\npull on the hard erode slider, but this will destroy \ndetail a lot quicker." +STARTLINE T "<font size=\"+5\"> Edge Inpaint"}
  addUserKnob {26 text l "" +STARTLINE T "<font size=\"-5\">Brought to you by Jansen"}
