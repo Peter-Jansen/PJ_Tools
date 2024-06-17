@@ -1,12 +1,7 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
 name DualPass_GuidedBlur
 knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'fraction':\n    first_pass_size = n.knob('blur_size').value()\n    fraction  = n.knob('fraction').value()\n    second_pass_size = first_pass_size * fraction\n    n.knob('blur_size_1').setValue(second_pass_size)\n    \nif k.name() == 'blur_size':\n\n    first_pass_size = n.knob('blur_size').value()\n    fraction  = n.knob('fraction').value()\n    second_pass_size = first_pass_size * fraction\n    n.knob('blur_size_1').setValue(second_pass_size)    \n    \nif k.name() == \"enable_second\":\n    n.knob('blur_size_1').setEnabled(k.value())"
 selected true
-xpos -21
-ypos 6404
 addUserKnob {20 User}
 addUserKnob {26 text_2 l "" +STARTLINE T "<font size=\"+5\"> Dual Pass Guided Blur"}
 addUserKnob {26 "" +STARTLINE}
