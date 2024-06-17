@@ -1,0 +1,535 @@
+set cut_paste_input [stack 0]
+version 13.2 v1
+push $cut_paste_input
+Group {
+ name Fuse
+ tile_color 0x2144ffff
+ selected true
+ xpos -3001
+ ypos 766
+ addUserKnob {20 User}
+ addUserKnob {26 Fuse l <b>Fuse</b> t "Because I couldn't be assed ingesting the original" T "Simplified copy of Luma Pictures Fuse gizmo"}
+ addUserKnob {26 ""}
+ addUserKnob {41 bbox l "set bbox to " T Merge145.bbox}
+ addUserKnob {41 metainput l "metadata from" -STARTLINE T Merge145.metainput}
+ addUserKnob {41 rangeinput l "range from" -STARTLINE T Merge145.rangeinput}
+ addUserKnob {26 cb l "<b>Colour Bleed</b>"}
+ addUserKnob {7 cb_amount l Amount}
+ cb_amount 0.3
+ addUserKnob {7 cb_size l Size R 0 20}
+ cb_size 5
+ addUserKnob {26 lw l <b>Lightwrap</b>}
+ addUserKnob {7 lw_amount l Amount}
+ lw_amount 0.1
+ addUserKnob {7 lw_size l Size R 0 20}
+ lw_size 5
+ addUserKnob {26 eb l "<b>Edge Blur</b>"}
+ addUserKnob {7 eb_amount l Amount}
+ eb_amount 1
+ addUserKnob {7 eb_size l Size R 0 10}
+ eb_size 3
+ addUserKnob {26 ""}
+ addUserKnob {7 over_mix l Effect t "mix with a normal over"}
+ over_mix 1
+ addUserKnob {7 mix t "overall mix"}
+ mix 1
+}
+ Input {
+  inputs 0
+  name B
+  xpos 2051
+  ypos 4
+ }
+ Dot {
+  name Dot144
+  xpos 2085
+  ypos 427
+ }
+set N4d97d000 [stack 0]
+ Dot {
+  name Dot1
+  xpos 2319
+  ypos 427
+ }
+ Dot {
+  name Dot4
+  xpos 2319
+  ypos 1510
+ }
+set N4d97c800 [stack 0]
+ Dot {
+  name Dot5
+  xpos 2319
+  ypos 1701
+ }
+ Input {
+  inputs 0
+  name A
+  xpos 838
+  ypos 26
+  number 1
+ }
+ Dot {
+  name Dot141
+  xpos 872
+  ypos 502
+ }
+set N4e92f800 [stack 0]
+ Dot {
+  name Dot142
+  xpos 696
+  ypos 502
+ }
+ Dot {
+  name Dot143
+  xpos 696
+  ypos 1186
+ }
+set N4e92f000 [stack 0]
+ Dot {
+  name Dot2
+  xpos 696
+  ypos 1510
+ }
+push $N4d97c800
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos 2171
+  ypos 1506
+ }
+ Dot {
+  name Dot3
+  xpos 2205
+  ypos 1580
+ }
+push $N4e92f000
+push $N4e92f800
+push $N4d97d000
+ Shuffle {
+  alpha white
+  name Shuffle28
+  tile_color 0xfefefeff
+  xpos 1740
+  ypos 423
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge141
+  xpos 1740
+  ypos 498
+ }
+ Dot {
+  name Dot145
+  xpos 1774
+  ypos 633
+ }
+set N4e92d800 [stack 0]
+ Dot {
+  name Dot146
+  xpos 1774
+  ypos 1027
+ }
+ Group {
+  name ExponBlur2
+  help "L_ExponBlur_v03 The ExponBlur blurs an image with an exponential falloff based upon an alpha. Most often used with roto shapes. The effect is applied to RGBA only. (For any questions, comments or suggestions please email gizmos@luma-pictures.com)"
+  tile_color 0xd67f48ff
+  note_font "Bitstream Vera Sans"
+  xpos 1508
+  ypos 1024
+  mapsize {0.15 0.15}
+  addUserKnob {20 ExponBlur}
+  addUserKnob {26 Description l "" +STARTLINE T ":ExponBlur: by Luma Pictures\n\nExponentially blurs image outward or inward"}
+  addUserKnob {14 size R -40 40}
+  size {{parent.lw_size}}
+  addUserKnob {7 Multiplier R 0 10}
+  Multiplier 1
+  addUserKnob {6 crop l "crop to format" +STARTLINE}
+  addUserKnob {6 disableCropBB l "disable CropBB" -STARTLINE}
+  addUserKnob {26 ""}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -372
+   ypos 266
+  }
+set N4e92d000 [stack 0]
+  Invert {
+   name L_ExponBlur_Invert4
+   xpos -372
+   ypos 329
+   disable {{"parent.size>=0 ? 1 : 0" i}}
+  }
+set N4e92cc00 [stack 0]
+  Blur {
+   size {{parent.size.w i} {parent.size.h i}}
+   crop {{parent.crop i}}
+   name L_ExponBlur_Blur1
+   label "\[value size]"
+   xpos -592
+   ypos 479
+  }
+push $N4e92cc00
+  Blur {
+   size {{parent.size.w*parent.Multiplier i} {parent.size.h*parent.Multiplier i}}
+   crop {{parent.crop i}}
+   name L_ExponBlur_Blur2
+   label "\[value size]"
+   xpos -482
+   ypos 479
+  }
+  Merge2 {
+   inputs 2
+   name L_ExponBlur_Merge7
+   xpos -537
+   ypos 572
+  }
+push $N4e92cc00
+  Blur {
+   size {{parent.size.w*parent.Multiplier*2 i} {parent.size.h*parent.Multiplier*2 i}}
+   crop {{parent.crop i}}
+   name L_ExponBlur_Blur3
+   label "\[value size]"
+   xpos -372
+   ypos 479
+  }
+  Merge2 {
+   inputs 2
+   name L_ExponBlur_Merge8
+   xpos -477
+   ypos 637
+  }
+push $N4e92cc00
+  Blur {
+   size {{parent.size.w*parent.Multiplier*4 i} {parent.size.h*parent.Multiplier*4 i}}
+   crop {{parent.crop i}}
+   name L_ExponBlur_Blur4
+   label "\[value size]"
+   xpos -262
+   ypos 479
+  }
+  Merge2 {
+   inputs 2
+   name L_ExponBlur_Merge9
+   xpos -372
+   ypos 709
+  }
+  Invert {
+   name L_ExponBlur_Invert5
+   xpos -372
+   ypos 774
+   disable {{"parent.size>=0 ? 1 : 0"}}
+  }
+  Clamp {
+   channels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+   name L_ExponBlur_clampOutput
+   xpos -372
+   ypos 836
+  }
+  Crop {
+   box {0 0 {input.width} {input.height}}
+   reformat true
+   crop false
+   name L_ExponBlur_Crop1
+   xpos -372
+   ypos 901
+   disable {{parent.disableCropBB x-5 1}}
+  }
+push $N4e92d000
+  Dot {
+   name Dot1
+   xpos -81
+   ypos 270
+  }
+  ShuffleCopy {
+   inputs 2
+   red red
+   green green
+   blue blue
+   name L_ExponBlur_ChannelsPassThrough
+   xpos -115
+   ypos 901
+  }
+  Output {
+   name Output1
+   xpos -115
+   ypos 993
+  }
+ end_group
+push $N4e92d800
+ Group {
+  name ExponBlur3
+  help "L_ExponBlur_v03 The ExponBlur blurs an image with an exponential falloff based upon an alpha. Most often used with roto shapes. The effect is applied to RGBA only. (For any questions, comments or suggestions please email gizmos@luma-pictures.com)"
+  tile_color 0xd67f48ff
+  note_font "Bitstream Vera Sans"
+  xpos 1514
+  ypos 630
+  mapsize {0.15 0.15}
+  addUserKnob {20 ExponBlur}
+  addUserKnob {26 Description l "" +STARTLINE T ":ExponBlur: by Luma Pictures\n\nExponentially blurs image outward or inward"}
+  addUserKnob {14 size R -40 40}
+  size {{parent.cb_size}}
+  addUserKnob {7 Multiplier R 0 10}
+  Multiplier 1
+  addUserKnob {6 crop l "crop to format" +STARTLINE}
+  addUserKnob {6 disableCropBB l "disable CropBB" -STARTLINE}
+  addUserKnob {26 ""}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -372
+   ypos 266
+  }
+set N4e8e1000 [stack 0]
+  Invert {
+   name L_ExponBlur_Invert4
+   xpos -372
+   ypos 329
+   disable {{"parent.size>=0 ? 1 : 0" i}}
+  }
+set N4e8e0c00 [stack 0]
+  Blur {
+   size {{parent.size.w i} {parent.size.h i}}
+   crop {{parent.crop i}}
+   name L_ExponBlur_Blur1
+   label "\[value size]"
+   xpos -592
+   ypos 479
+  }
+push $N4e8e0c00
+  Blur {
+   size {{parent.size.w*parent.Multiplier i} {parent.size.h*parent.Multiplier i}}
+   crop {{parent.crop i}}
+   name L_ExponBlur_Blur2
+   label "\[value size]"
+   xpos -482
+   ypos 479
+  }
+  Merge2 {
+   inputs 2
+   name L_ExponBlur_Merge7
+   xpos -537
+   ypos 572
+  }
+push $N4e8e0c00
+  Blur {
+   size {{parent.size.w*parent.Multiplier*2 i} {parent.size.h*parent.Multiplier*2 i}}
+   crop {{parent.crop i}}
+   name L_ExponBlur_Blur3
+   label "\[value size]"
+   xpos -372
+   ypos 479
+  }
+  Merge2 {
+   inputs 2
+   name L_ExponBlur_Merge8
+   xpos -477
+   ypos 637
+  }
+push $N4e8e0c00
+  Blur {
+   size {{parent.size.w*parent.Multiplier*4 i} {parent.size.h*parent.Multiplier*4 i}}
+   crop {{parent.crop i}}
+   name L_ExponBlur_Blur4
+   label "\[value size]"
+   xpos -262
+   ypos 479
+  }
+  Merge2 {
+   inputs 2
+   name L_ExponBlur_Merge9
+   xpos -372
+   ypos 709
+  }
+  Invert {
+   name L_ExponBlur_Invert5
+   xpos -372
+   ypos 774
+   disable {{"parent.size>=0 ? 1 : 0"}}
+  }
+  Clamp {
+   channels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+   name L_ExponBlur_clampOutput
+   xpos -372
+   ypos 836
+  }
+  Crop {
+   box {0 0 {input.width} {input.height}}
+   reformat true
+   crop false
+   name L_ExponBlur_Crop1
+   xpos -372
+   ypos 901
+   disable {{parent.disableCropBB x-5 1}}
+  }
+push $N4e8e1000
+  Dot {
+   name Dot1
+   xpos -81
+   ypos 270
+  }
+  ShuffleCopy {
+   inputs 2
+   red red
+   green green
+   blue blue
+   name L_ExponBlur_ChannelsPassThrough
+   xpos -115
+   ypos 901
+  }
+  Output {
+   name Output1
+   xpos -115
+   ypos 993
+  }
+ end_group
+set N4e8a9d00 [stack 0]
+ Dot {
+  name Dot147
+  xpos 1548
+  ypos 898
+ }
+push $N4e8a9d00
+ Grade {
+  black 0.0001
+  name lift_slightly
+  xpos 1292
+  ypos 629
+ }
+set N4e864c00 [stack 0]
+push $N4e864c00
+ ColorCorrect {
+  saturation 0
+  name ColorCorrect18
+  xpos 1349
+  ypos 688
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  name extract_colour
+  xpos 1292
+  ypos 753
+ }
+push $N4e92f800
+ Unpremult {
+  name Unpremult4
+  xpos 838
+  ypos 548
+ }
+set N4e7f7c00 [stack 0]
+ Dot {
+  name Dot148
+  xpos 1148
+  ypos 552
+ }
+ ColorCorrect {
+  saturation {{1-parent.cb_amount}}
+  name ColorCorrect19
+  xpos 1114
+  ypos 670
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  mix {{parent.cb_amount}}
+  name Multiply3
+  xpos 1114
+  ypos 753
+ }
+push $N4e7f7c00
+ Keymix {
+  inputs 3
+  name colour_wrap
+  xpos 838
+  ypos 888
+ }
+ Merge2 {
+  inputs 2
+  mix {{parent.lw_amount}}
+  name overall_wrap
+  xpos 838
+  ypos 1023
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy26
+  xpos 838
+  ypos 1176
+ }
+ Premult {
+  name Premult20
+  xpos 838
+  ypos 1279
+ }
+set N4e7f6000 [stack 0]
+ Dot {
+  name Dot149
+  xpos 1824
+  ypos 1283
+ }
+set N4e7f5c00 [stack 0]
+ Blur {
+  size 3
+  name Blur48
+  xpos 1790
+  ypos 1346
+ }
+set N4e7f5800 [stack 0]
+push $N4e7f5800
+ Merge2 {
+  inputs 2
+  operation xor
+  name Merge144
+  xpos 1790
+  ypos 1424
+ }
+push $N4e7f5c00
+push $N4d97d000
+ Merge2 {
+  inputs 2
+  name Merge145
+  xpos 2051
+  ypos 1279
+ }
+ Blur {
+  inputs 1+1
+  size {{parent.eb_size}}
+  mix {{parent.eb_amount}}
+  name Edge_Blur
+  xpos 2051
+  ypos 1418
+ }
+ Dissolve {
+  inputs 2
+  which {{1-parent.over_mix}}
+  name over_mix
+  xpos 2051
+  ypos 1570
+ }
+ Dissolve {
+  inputs 2
+  which {{1-parent.mix}}
+  name mix
+  xpos 2051
+  ypos 1691
+ }
+ Output {
+  name Output1
+  xpos 2051
+  ypos 1810
+ }
+push $N4e7f6000
+ Viewer {
+  frame_range 1001-1085
+  colour_sample_bbox {-0.0908203125 -0.12890625 -0.08984375 -0.1279296875}
+  name Viewer1
+  xpos 988
+  ypos 2013
+ }
+end_group

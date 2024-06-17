@@ -1,0 +1,321 @@
+set cut_paste_input [stack 0]
+version 13.2 v1
+push $cut_paste_input
+Group {
+ name Edge_Inpaint
+ tile_color 0xcc804eff
+ selected true
+ xpos -3322
+ ypos 544
+ addUserKnob {20 Edge_Inpaint l "Edge Inpaint"}
+ addUserKnob {26 title l "" t "Start with the alpha crunch, this will be your\nbest bet at restoring colours in blurred areas.\n\nThen move to soft erode to blend the\ntransition edge better, and softly bring\nin more of the original colours.\n\nUse the sharpen options to bring back some\nof the detail that is blurred with soft erode.\n\nFinally for stubborn edges, you can start to\npull on the hard erode slider, but this will destroy \ndetail a lot quicker." +STARTLINE T "<font size=\"+5\"> Edge Inpaint"}
+ addUserKnob {26 text l "" +STARTLINE T "<font size=\"-5\">Brought to you by Jansen"}
+ addUserKnob {26 ""}
+ addUserKnob {6 premultiplied_input l "Premultiplied Input" +STARTLINE}
+ premultiplied_input true
+ addUserKnob {6 premult_output l "Premultiply output" -STARTLINE}
+ premult_output true
+ addUserKnob {26 extendtext l <b>Extend</b>}
+ addUserKnob {7 alpha_crunch l "Alpha crunch"}
+ alpha_crunch 0.6
+ addUserKnob {7 soft_erode l "Soft erode size" R 0 50}
+ soft_erode 4
+ addUserKnob {7 hard_erode l "Hard erode size" R 0 10}
+ hard_erode 1
+ addUserKnob {7 edgeblur l "Edge Blur" t "Useful when Alpha crunch approaches 1." R 0 15}
+ addUserKnob {26 sharpentext l <b>Sharpen</b>}
+ addUserKnob {41 amount T Sharpen1.amount}
+ addUserKnob {41 size T Sharpen1.size}
+ addUserKnob {6 enablesharpen l Enable +STARTLINE}
+ enablesharpen true
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannel l "mask channel" T Keymix2.maskChannel}
+ addUserKnob {41 invertMask l invert -STARTLINE T Keymix2.invertMask}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {26 ""}
+ addUserKnob {20 Advanced}
+ addUserKnob {26 "" l "Local GPU:" T ""}
+ addUserKnob {26 gpuName l "" -STARTLINE T "NVIDIA GeForce RTX 3060"}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T Inpaint1.useGPUIfAvailable}
+ addUserKnob {26 inpaintadvanced l <b>Inpaint}
+ addUserKnob {41 smoothness l Smoothness T Inpaint1.smoothness}
+ addUserKnob {26 "" l "@b;Stretch"}
+ addUserKnob {41 stretchAmount l Amount T Inpaint1.stretchAmount}
+ addUserKnob {41 stretchDirection l Direction T Inpaint1.stretchDirection}
+ addUserKnob {26 "" l "@b;Detail"}
+ addUserKnob {7 detail_amount l Amount}
+ addUserKnob {26 ""}
+ addUserKnob {20 help_1 l Help}
+ addUserKnob {26 text_1 l "" +STARTLINE T "Start with the alpha crunch, this will be your\nbest bet at restoring colours in blurred areas.\n\nThen move to soft erode to blend the\ntransition edge better, and softly bring\nin more of the original colours.\n\nUse the sharpen options to bring back some\nof the detail that is blurred with soft erode.\n\nFinally for stubborn edges, you can start to\npull on the hard erode slider, but this will destroy \ndetail a lot quicker."}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x262626ff
+  label Sharpen
+  note_font_size 42
+  xpos 524
+  ypos 1379
+  bdwidth 381
+  bdheight 371
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x262626ff
+  note_font_size 42
+  xpos 529
+  ypos 832
+  bdwidth 402
+  bdheight 222
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 859
+  ypos 2019
+  number 1
+ }
+ Invert {
+  channels alpha
+  name Invert1
+  xpos 859
+  ypos 2106
+ }
+ Input {
+  inputs 0
+  name Source
+  xpos 562
+  ypos -164
+ }
+ Dot {
+  name Dot21
+  xpos 596
+  ypos -66
+ }
+set N4e60c400 [stack 0]
+ Dot {
+  name Dot23
+  xpos 443
+  ypos -66
+ }
+ Dot {
+  name Dot20
+  xpos 443
+  ypos 2115
+ }
+set N4e5bb800 [stack 0]
+push $N4e60c400
+ Unpremult {
+  name Unpremult1
+  xpos 562
+  ypos 74
+  disable {{1-parent.premultiplied_input}}
+ }
+ Dot {
+  name Dot19
+  xpos 596
+  ypos 305
+ }
+set N4e5bb000 [stack 0]
+ Dot {
+  name Dot6
+  xpos 706
+  ypos 305
+ }
+set N4e5bac00 [stack 0]
+ Invert {
+  channels alpha
+  name Invert2
+  xpos 672
+  ypos 383
+ }
+set N4e5ba800 [stack 0]
+push $N4e5ba800
+ Merge2 {
+  inputs 2
+  operation divide
+  output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+  name Merge1
+  xpos 672
+  ypos 452
+ }
+ Invert {
+  channels alpha
+  name Invert3
+  xpos 672
+  ypos 505
+ }
+push $N4e5bac00
+ Grade {
+  channels alpha
+  blackpoint {{"min(parent.alpha_crunch, .9999)"}}
+  name Grade1
+  xpos 795
+  ypos 296
+ }
+ Dot {
+  name Dot5
+  xpos 1060
+  ypos 305
+ }
+ ChannelMerge {
+  inputs 2
+  name ChannelMerge1
+  xpos 1026
+  ypos 499
+ }
+ FilterErode {
+  size {{hard_erode}}
+  name Hard_Erode
+  label "\[value size]"
+  xpos 1026
+  ypos 721
+ }
+set N4e5b9000 [stack 0]
+ FilterErode {
+  size {{soft_erode}}
+  filter gaussian
+  name Soft_Erode
+  label "\[value size]"
+  xpos 1026
+  ypos 823
+ }
+ Dot {
+  name Dot3
+  xpos 1060
+  ypos 939
+ }
+set N4e5b8800 [stack 0]
+ Dot {
+  name Dot2
+  xpos 1060
+  ypos 1660
+ }
+push $N4e5b8800
+ Inpaint2 {
+  fillRegion "Source Inverted Alpha"
+  detailAmount {{parent.detail_amount}}
+  name Inpaint1
+  xpos 729
+  ypos 936
+ }
+push $N4e5b9000
+ Grade {
+  channels alpha
+  blackpoint 0.49
+  whitepoint 0.51
+  white_clamp true
+  name Grade2
+  xpos 837
+  ypos 727
+ }
+push $N4e5bb000
+add_layer {EdgeInpaint EdgeInpaint.tempMask}
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 EdgeInpaint.tempMask
+  name Copy1
+  xpos 562
+  ypos 727
+ }
+ Shuffle2 {
+  inputs 2
+  fromInput1 {{1} B A}
+  fromInput2 {{0} B A}
+  in2 alpha
+  mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 0 2 rgba.blue 0 2 rgba.alpha 1 0 rgba.alpha 0 3"
+  name Shuffle1
+  label "\[value in1] > \[value out1]"
+  xpos 562
+  ypos 930
+ }
+ EdgeBlur {
+  channels rgb
+  controlchannel EdgeInpaint.tempMask
+  size {{parent.edgeblur}}
+  output -mask.a
+  name EdgeBlur1
+  xpos 562
+  ypos 1147
+  disable {{"parent.edgeblur == 0"}}
+ }
+ Remove {
+  channels EdgeInpaint
+  name Remove1
+  xpos 562
+  ypos 1247
+ }
+ Dot {
+  name Dot1
+  xpos 596
+  ypos 1451
+ }
+set N4e562000 [stack 0]
+ Colorspace {
+  colorspace_out AlexaV3LogC
+  name Colorspace1
+  label "\[value colorspace_in] - \[value colorspace_out]"
+  xpos 721
+  ypos 1442
+ }
+ Sharpen {
+  channels rgb
+  amount 2
+  name Sharpen1
+  xpos 721
+  ypos 1518
+ }
+ Colorspace {
+  colorspace_in AlexaV3LogC
+  name Colorspace2
+  label "\[value colorspace_in] - \[value colorspace_out]"
+  xpos 721
+  ypos 1569
+ }
+push $N4e562000
+ Keymix {
+  inputs 3
+  channels rgba
+  invertMask true
+  name sharpen_mix
+  xpos 562
+  ypos 1657
+  disable {{1-parent.enablesharpen}}
+ }
+ Premult {
+  name Premult4
+  xpos 562
+  ypos 1818
+  disable {{1-parent.premult_output}}
+ }
+ Keymix {
+  inputs 3
+  bbox B
+  name Keymix2
+  selected true
+  xpos 562
+  ypos 2106
+  disable {{"1-\[exists parent.input1]"}}
+ }
+push $N4e5bb800
+ Dot {
+  name Dot4
+  xpos 443
+  ypos 2258
+ }
+ Dissolve {
+  inputs 2
+  which {{parent.mix}}
+  name Dissolve1
+  xpos 562
+  ypos 2249
+ }
+ Output {
+  name Output1
+  xpos 562
+  ypos 2469
+ }
+end_group

@@ -1,0 +1,4156 @@
+set cut_paste_input [stack 0]
+version 13.2 v1
+push $cut_paste_input
+Group {
+name DualPass_GuidedBlur
+knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'fraction':\n    first_pass_size = n.knob('blur_size').value()\n    fraction  = n.knob('fraction').value()\n    second_pass_size = first_pass_size * fraction\n    n.knob('blur_size_1').setValue(second_pass_size)\n    \nif k.name() == 'blur_size':\n\n    first_pass_size = n.knob('blur_size').value()\n    fraction  = n.knob('fraction').value()\n    second_pass_size = first_pass_size * fraction\n    n.knob('blur_size_1').setValue(second_pass_size)    \n    \nif k.name() == \"enable_second\":\n    n.knob('blur_size_1').setEnabled(k.value())"
+selected true
+xpos -21
+ypos 6404
+addUserKnob {20 User}
+addUserKnob {26 text_2 l "" +STARTLINE T "<font size=\"+5\"> Dual Pass Guided Blur"}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {4 output M {"first pass" "matte crunch" "second pass" "contact sheet" ""}}
+output "second pass"
+addUserKnob {26 text l "<b>First Pass"}
+addUserKnob {7 blur_size l "blur size" R 0 100}
+blur_size 60
+addUserKnob {41 tolerance l "edge detail" T First_pass.tolerance}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {7 sharpen_first l sharpen}
+sharpen_first 1
+addUserKnob {7 blackpoint}
+addUserKnob {7 whitepoint}
+whitepoint 0.5
+addUserKnob {26 text_1 l "<b>Second Pass"}
+addUserKnob {7 fraction l "fraction of first pass"}
+fraction 0.5
+addUserKnob {7 blur_size_1 l "blur size" R 0 100}
+blur_size_1 30
+addUserKnob {41 tolerance_1 l "edge detail" T Second_Pass.tolerance}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {6 downscale_enable l Downscale +STARTLINE}
+downscale_enable true
+addUserKnob {7 downscale l "" -STARTLINE}
+downscale 0.25
+addUserKnob {6 log_space l "Preconvert img to log space" +STARTLINE}
+log_space true
+addUserKnob {6 alt_method l "Alternative Method (softer)" +STARTLINE}
+}
+Input {
+inputs 0
+name img
+xpos -280
+ypos 212
+}
+Dot {
+name Dot36
+xpos -220
+ypos 317
+}
+set N64d87c00 [stack 0]
+push $N64d87c00
+Input {
+inputs 0
+name matte
+xpos -92
+ypos 160
+number 1
+}
+Dot {
+name Dot35
+xpos -58
+ypos 200
+}
+set N64d87800 [stack 0]
+Group {
+inputs 2
+name First_pass
+help "Description:\n\nThe guided filter is an edge-preserving blur,\nuseful to add details to the edges of a roto/matte\nusing a second image as a guide. \n\nHow to use:\n\nConnect the alpha to the 'matte' input\nand the 'guide' image to the 'img' input.\n\nControl the amount of detail using\nthe 'edge detail' slider.\n\n---\n\nThe filter is an implementation of the\n 'Guided Image Filtering', by Kaiming He. \nMore details at http://kaiminghe.com/eccv10/\n"
+xpos -92
+ypos 314
+addUserKnob {20 GuidedBlur}
+addUserKnob {26 guided_blur_title l "" +STARTLINE T "<font size=\"+5\"> Guided Blur"}
+addUserKnob {26 text l "" +STARTLINE T "<font size=\"2\">But faster!"}
+addUserKnob {26 ""}
+addUserKnob {7 blur_size l "blur size" R 0 100}
+blur_size {{parent.blur_size}}
+addUserKnob {41 tolerance l "edge detail" t "Control the amount of detail that will be preserved. \n\nA value close to 0 makes the filter behave like a regular blur. \n\nValues close to 6 or 7 can introduce artifacts, identifying grain \"as edges\". \n\nRecommended values are between 2.5 and 4." T Constant_eps.multiplier}
+addUserKnob {41 filter T Blur1.filter}
+addUserKnob {41 quality l "" -STARTLINE T Blur1.quality}
+addUserKnob {26 ""}
+addUserKnob {6 downscale_enable l Downscale +STARTLINE}
+downscale_enable {{parent.downscale_enable}}
+addUserKnob {7 downscale l "" -STARTLINE}
+downscale 0.25
+addUserKnob {6 log_space l "Preconvert img to log space" +STARTLINE}
+log_space {{parent.log_space}}
+addUserKnob {6 alt_method l "Alternative Method (softer)" +STARTLINE}
+alt_method {{parent.alt_method}}
+addUserKnob {20 info l Info}
+addUserKnob {26 versionInfo l "" +STARTLINE T "\nCreated by Rafael Silva\nwww.rafael.ai\nrafael@rafael.ai\n\nVersion 1.3\nLast Updated: August 16th, 2020\n\nToronto, Canada\n\n---\n\nOptimised by Peter Jansen\nMay 12th, 2022"}
+addUserKnob {26 ""}
+}
+Input {
+inputs 0
+name img
+label p
+xpos -68
+ypos -672
+number 1
+}
+set N64d87400 [stack 0]
+Colorspace {
+colorspace_out AlexaV3LogC
+name Colorspace1
+label "\[value colorspace_in] - \[value colorspace_out]"
+xpos -68
+ypos -600
+disable {{!log_space x91 1}}
+}
+set N64d87000 [stack 0]
+Dot {
+name Dot3
+xpos 2862
+ypos 344
+}
+NoOp {
+name I1
+xpos 2828
+ypos 1695
+}
+Input {
+inputs 0
+name matte
+label i
+xpos 2050
+ypos -611
+}
+Reformat {
+type scale
+scale {{downscale}}
+name DOWNSCALE
+xpos 2050
+ypos -407
+disable {{!downscale_enable}}
+}
+set C64d86000 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle5
+xpos 2050
+ypos 372
+}
+set N64d85800 [stack 0]
+push $N64d85800
+Blur {
+size {{"downscale_enable ? blur_size * downscale : blur_size"}}
+filter quadratic
+name Blur1
+xpos 2019
+ypos 492
+}
+set C64d85400 [stack 0]
+AdjBBox {
+numpixels 20
+name AdjBBox1
+xpos 2050
+ypos 604
+disable true
+}
+set N64d85000 [stack 0]
+push $N64d87000
+clone $C64d86000 {
+xpos 78
+ypos -418
+selected false
+}
+Shuffle2 {
+fromInput1 {{0} B}
+fromInput2 {{0} B}
+mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 0 2 rgba.blue 0 2 white -1 -1 rgba.alpha 0 3"
+name Shuffle1
+label "\[value in1] > \[value out1]"
+xpos 78
+ypos -351
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 78
+ypos -194
+}
+BlackOutside {
+name BlackOutside1
+xpos 78
+ypos -59
+}
+Dot {
+name Dot4
+xpos 544
+ypos 165
+}
+set N263f3400 [stack 0]
+Dot {
+name Dot6
+xpos 654
+ypos 165
+}
+set N263f3000 [stack 0]
+Dot {
+name Dot7
+xpos 874
+ypos 165
+}
+set N263f2c00 [stack 0]
+Dot {
+name Dot8
+xpos 984
+ypos 165
+}
+set N263f2800 [stack 0]
+Dot {
+name Dot15
+xpos 2194
+ypos 344
+}
+Merge {
+inputs 2
+operation mult
+name Merge5
+xpos 2160
+ypos 430
+}
+clone $C64d85400 {
+xpos 2216
+ypos 567
+selected false
+}
+NoOp {
+name mean_Ip
+xpos 2160
+ypos 711
+}
+push $N263f3400
+clone $C64d85400 {
+xpos 510
+ypos 663
+selected false
+}
+NoOp {
+name mean_I
+xpos 510
+ypos 735
+}
+Dot {
+name Dot9
+xpos 544
+ypos 786
+}
+set N263f0c00 [stack 0]
+Dot {
+name Dot13
+xpos 874
+ypos 810
+}
+set N263f0800 [stack 0]
+Dot {
+name Dot14
+xpos 1424
+ypos 834
+}
+set N263f0400 [stack 0]
+push $N64d85000
+NoOp {
+name mean_p
+xpos 2050
+ypos 687
+}
+set N554b7c00 [stack 0]
+Merge {
+inputs 2
+operation mult
+name Merge8
+xpos 1940
+ypos 951
+}
+Merge {
+inputs 2
+operation minus
+name Merge9
+xpos 1940
+ypos 1023
+}
+NoOp {
+name cov_Ip
+xpos 1940
+ypos 1095
+}
+set N554b7000 [stack 0]
+Constant {
+inputs 0
+channels rgb
+color {{"1/pow(10, multiplier)"}}
+name Constant_eps
+xpos 400
+ypos 1095
+addUserKnob {20 User}
+addUserKnob {7 multiplier R 1 6}
+multiplier 3.5
+}
+set N554b6c00 [stack 0]
+push $N263f3000
+push $N263f2c00
+Merge2 {
+inputs 2
+operation multiply
+name Merge18
+label I*I
+xpos 730
+ypos 611
+}
+clone $C64d85400 {
+xpos 730
+ypos 685
+selected false
+}
+set N554b6400 [stack 0]
+Dot {
+name Dot5
+xpos 2634
+ypos 834
+}
+NoOp {
+name mean_II
+xpos 2600
+ypos 1023
+}
+push $N263f0400
+Dot {
+name Dot1
+xpos 2524
+ypos 882
+}
+set N554b5800 [stack 0]
+push $N554b5800
+Merge2 {
+inputs 2
+operation multiply
+name Merge4
+label "mean I * mean I"
+xpos 2490
+ypos 1019
+}
+Merge2 {
+inputs 2
+operation minus
+name Merge2
+xpos 2490
+ypos 1095
+}
+NoOp {
+name var_I
+xpos 2490
+ypos 1167
+}
+Merge {
+inputs 2
+operation plus
+bbox B
+name Merge13
+xpos 2490
+ypos 1287
+}
+Merge {
+inputs 2
+operation divide
+bbox B
+name Merge14
+xpos 2490
+ypos 1407
+}
+NoOp {
+name a_mono
+label a
+xpos 2490
+ypos 1475
+}
+set N58c17c00 [stack 0]
+clone $C64d85400 {
+xpos 2600
+ypos 1696
+selected false
+}
+Reformat {
+type "to box"
+box_width {{parent.width}}
+box_height {{parent.height}}
+box_fixed true
+filter notch
+name UPSCALE
+xpos 2600
+ypos 1732
+disable {{!downscale_enable}}
+}
+set C58c17400 [stack 0]
+Merge {
+inputs 2
+operation mult
+bbox B
+name Merge17
+xpos 2718
+ypos 1815
+}
+Dot {
+name Dot11
+xpos 2752
+ypos 2008
+}
+push $N554b7c00
+Dot {
+name Dot19
+xpos 2084
+ypos 1410
+}
+set N58c16400 [stack 0]
+push $N263f0400
+push $N58c17c00
+Merge {
+inputs 2
+operation mult
+bbox B
+name Merge15
+xpos 2490
+ypos 1551
+}
+Merge {
+inputs 2
+operation minus
+bbox B
+name Merge7
+xpos 2490
+ypos 1671
+}
+NoOp {
+name b_mono
+xpos 2490
+ypos 1745
+}
+clone $C64d85400 {
+xpos 2490
+ypos 1811
+selected false
+}
+NoOp {
+name mean_b_mono_
+xpos 2490
+ypos 1868
+}
+clone $C58c17400 {
+xpos 2490
+ypos 1892
+selected false
+}
+Merge {
+inputs 2
+operation plus
+bbox B
+name Merge16
+xpos 2490
+ypos 2005
+}
+Dot {
+name Dot18
+xpos 2524
+ypos 2922
+}
+Dot {
+name Dot21
+xpos 312
+ypos 3499
+}
+Saturation {
+saturation 0
+mode Maximum
+name Saturation1
+xpos 278
+ypos 3555
+}
+Shuffle2 {
+fromInput1 {{0} B}
+fromInput2 {{0} B}
+mappings "4 black -1 -1 rgba.red 0 0 black -1 -1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 rgba.red 0 0 rgba.alpha 0 3"
+name Shuffle4
+label "\[value in1] > \[value out1]"
+xpos 278
+ypos 3579
+}
+push $N58c16400
+Dot {
+name Dot10
+xpos 1314
+ypos 2346
+}
+Dot {
+name Dot2
+xpos 1314
+ypos 2562
+}
+push $N554b6c00
+push $N554b6400
+push $N263f0c00
+Expression {
+expr0 r*r
+expr1 g*g
+expr2 b*b
+name Expression3
+label "I*I (rr, gg, bb)"
+xpos 510
+ypos 995
+}
+Merge {
+inputs 2
+operation minus
+name Merge11
+xpos 730
+ypos 1119
+}
+Merge {
+inputs 2
+operation plus
+bbox B
+name Merge12
+xpos 730
+ypos 1215
+}
+NoOp {
+name I___
+label "rr, gg, bb"
+xpos 730
+ypos 1283
+}
+set N50179800 [stack 0]
+push $N263f2800
+Expression {
+expr0 r*g
+expr1 r*b
+expr2 g*b
+name Expression2
+label "rg, rb, gb"
+xpos 950
+ypos 611
+}
+clone $C64d85400 {
+xpos 950
+ypos 683
+selected false
+}
+push $N263f0800
+Expression {
+expr0 r*g
+expr1 r*b
+expr2 g*b
+name Expression4
+label "rg, rb, gb"
+xpos 840
+ypos 1019
+}
+Merge {
+inputs 2
+operation minus
+name Merge10
+xpos 950
+ypos 1095
+}
+NoOp {
+name I____
+label "rg, rb, gb"
+xpos 950
+ypos 1283
+}
+set N50178400 [stack 0]
+MergeExpression {
+inputs 2
+expr0 Ar*Ab-Bg*Bg
+expr1 Bg*Br-Ar*Bb
+expr2 Ar*Ag-Br*Br
+name MergeExpression2
+label "invgg, invgb, invbb"
+xpos 730
+ypos 1695
+}
+push $N50179800
+push $N50178400
+MergeExpression {
+inputs 2
+expr0 Ag*Ab-Bb*Bb
+expr1 Bb*Bg-Br*Ab
+expr2 Br*Bb-Ag*Bg
+name MergeExpression1
+label "invrr, invrg, invrb"
+xpos 510
+ypos 1406
+}
+set N6c07f800 [stack 0]
+push $N50178400
+MergeExpression {
+inputs 2
+expr0 Ab*Bg
+expr1 0
+expr2 0
+name MergeExpression5
+label invrb*I_rb
+xpos 1170
+ypos 1476
+}
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle8
+xpos 1170
+ypos 1551
+}
+push 0
+push $N6c07f800
+push $N50179800
+MergeExpression {
+inputs 2
+expr0 Ar*Br
+expr1 0
+expr2 0
+name MergeExpression3
+label invrr*I_rr
+xpos 620
+ypos 1474
+}
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle2
+xpos 620
+ypos 1529
+}
+push $N6c07f800
+push $N50178400
+MergeExpression {
+inputs 2
+expr0 Ag*Br
+expr1 0
+expr2 0
+name MergeExpression4
+label invrg*I_rg
+xpos 950
+ypos 1500
+}
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle3
+xpos 950
+ypos 1551
+}
+Merge2 {
+inputs 3+1
+operation plus
+name Merge1
+label covDet
+xpos 950
+ypos 1691
+}
+set N6c07dc00 [stack 0]
+MergeExpression {
+inputs 2
+expr0 Ar/Br
+expr1 Ag/Bg
+expr2 Ab/Bb
+expr3 0
+name MergeExpression7
+label "invgg, invgb, invbb"
+xpos 730
+ypos 1888
+}
+Group {
+name NAN_INF_Killer2
+tile_color 0xff6200ff
+label "\[value which]"
+note_font "Bitstream Vera Sans Bold"
+note_font_color 0xffffffff
+xpos 730
+ypos 1974
+addUserKnob {20 NAN_INF_Killer}
+addUserKnob {26 text l " " T "<big><b><font color=darkorange>Detects and Kills <font color=white>NAN <font color=darkorange>and <font color=white>INF <font color=darkorange>pixels"}
+addUserKnob {41 channels T Shuffle1.in}
+addUserKnob {4 which l Method M {"Replace with 0" "Replace with Color" "Clone Over" "Blur Unpremult" TimeOffset "" "" "" ""}}
+addUserKnob {6 keepAlpha l "Keep Alpha" +STARTLINE}
+keepAlpha true
+addUserKnob {26 ""}
+addUserKnob {19 replaceColor l "Replace Color"}
+replaceColor {0 0 0 0}
+addUserKnob {6 replaceColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 replaceColor_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 color_rgba_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {26 ""}
+addUserKnob {41 translateText_1 l Translate T Transform1.translate}
+addUserKnob {20 extraTranslate l "Extra tranlate Options" n 1}
+extraTranslate 0
+addUserKnob {41 rotate T Transform1.rotate}
+addUserKnob {41 scale T Transform1.scale}
+addUserKnob {41 skewX l "skew X" T Transform1.skewX}
+addUserKnob {41 skewY l "skew Y" T Transform1.skewY}
+addUserKnob {41 skew_order l "skew order" T Transform1.skew_order}
+addUserKnob {41 center T Transform1.center}
+addUserKnob {41 invert_matrix l invert T Transform1.invert_matrix}
+addUserKnob {41 filter T Transform1.filter}
+addUserKnob {20 endGroup n -1}
+addUserKnob {26 ""}
+addUserKnob {26 blurUnpremult l Blur/Unpremult T " "}
+addUserKnob {41 size l "Blur Size" T Blur1.size}
+addUserKnob {26 ""}
+addUserKnob {3 timeOffset l TimeOffset}
+timeOffset -1
+addUserKnob {26 ""}
+addUserKnob {26 "" l mask T ""}
+addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T Merge1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+addUserKnob {20 info l Info}
+addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+addUserKnob {26 desc l Description: t "kills NANs with options of how to replace" T NAN_Killer}
+addUserKnob {26 ver l Version: T v04}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x383b5000
+label "Replace with Color"
+note_font_size 36
+note_font_color 0xffffffff
+xpos 439
+ypos 455
+bdwidth 331
+bdheight 349
+}
+BackdropNode {
+inputs 0
+name BackdropNode2
+tile_color 0x4f4b4200
+label "Replace\nwith 0"
+note_font_size 40
+note_font_color 0xffffffff
+xpos 53
+ypos 259
+bdwidth 372
+bdheight 214
+}
+BackdropNode {
+inputs 0
+name BackdropNode3
+tile_color 0x634c7400
+label "Clone Over"
+note_font_size 30
+note_font_color 0xffffffff
+xpos 823
+ypos 458
+bdwidth 187
+bdheight 176
+}
+BackdropNode {
+inputs 0
+name BackdropNode4
+tile_color 0x3f2d4100
+label Blur/Unpremult
+note_font_size 50
+note_font_color 0xffffffff
+xpos 1097
+ypos 434
+bdwidth 368
+bdheight 726
+}
+BackdropNode {
+inputs 0
+name BackdropNode5
+tile_color 0x3c4d4400
+label Timeoffset
+note_font_size 50
+note_font_color 0xffffffff
+xpos 1760
+ypos 727
+bdwidth 270
+bdheight 312
+}
+Input {
+inputs 0
+name Inputmask
+xpos 314
+ypos 1901
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos 168
+ypos -227
+}
+Dot {
+name Dot26
+note_font_size 41
+xpos 202
+ypos -90
+}
+set N66bc3400 [stack 0]
+Reformat {
+type scale
+scale 2
+resize none
+pbb true
+name Reformat142
+xpos 166
+ypos -23
+}
+Shuffle {
+name Shuffle1
+label "\[value in]"
+xpos 166
+ypos 21
+}
+AddChannels {
+channels rgba
+name AddChannels1
+xpos 166
+ypos 79
+}
+set N66bc2400 [stack 0]
+Dot {
+name Dot29
+note_font_size 41
+xpos 200
+ypos 191
+}
+set N66bc2000 [stack 0]
+Dot {
+name Dot30
+note_font_size 41
+xpos 337
+ypos 191
+}
+Expression {
+expr3 isnan(a)||isinf(a)?0:a
+name nan_killer_ReplaceWithZero1
+selected true
+xpos 303
+ypos 354
+}
+push $N66bc2000
+Expression {
+expr0 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:r
+expr1 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:g
+expr2 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:b
+expr3 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:a
+name nan_killer_ReplaceWithZero
+xpos 166
+ypos 305
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy4
+xpos 166
+ypos 350
+disable {{!parent.keepAlpha}}
+}
+Dot {
+name Dot1301
+note_font_size 41
+xpos 200
+ypos 404
+}
+set N66bc0c00 [stack 0]
+Dot {
+name Dot11
+note_font_size 41
+xpos 200
+ypos 774
+}
+set N66bc0800 [stack 0]
+Dot {
+name Dot7
+note_font_size 41
+xpos 57
+ypos 774
+}
+Dot {
+name Dot16
+note_font_size 41
+xpos 57
+ypos 1642
+}
+set N3c2b7c00 [stack 0]
+Dot {
+name Dot9
+note_font_size 41
+xpos 56
+ypos 1712
+}
+set N3c2b7800 [stack 0]
+Dot {
+name Dot10
+note_font_size 41
+xpos 57
+ypos 1765
+}
+push $N3c2b7800
+push $N66bc2400
+Dot {
+name Dot28
+note_font_size 41
+xpos 1620
+ypos 82
+}
+Expression {
+expr3 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))
+name nan_killer_Alpha1
+xpos 1586
+ypos 456
+}
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle2
+tile_color 0xffffffff
+note_font_size 21
+note_font_color 0xffffffff
+xpos 1586
+ypos 520
+}
+Dot {
+name Dot1
+label mask
+note_font_size 41
+xpos 1620
+ypos 578
+}
+set N3c2b6400 [stack 0]
+Dot {
+name Dot20
+note_font_size 41
+xpos 1620
+ypos 659
+}
+set N3c2b6000 [stack 0]
+Dot {
+name Dot13
+note_font_size 41
+xpos 1620
+ypos 982
+}
+set N3c2b5c00 [stack 0]
+Dot {
+name Dot2
+label mask
+note_font_size 41
+xpos 1704
+ypos 982
+}
+push $N66bc0c00
+Dot {
+name Dot19
+note_font_size 41
+xpos 519
+ypos 404
+}
+set N3c2b5400 [stack 0]
+Dot {
+name Dot22
+note_font_size 41
+xpos 629
+ypos 404
+}
+set N3c2b5000 [stack 0]
+Dot {
+name Dot24
+note_font_size 41
+xpos 904
+ypos 404
+}
+set N3c2b4c00 [stack 0]
+Dot {
+name Dot5
+note_font_size 41
+xpos 1188
+ypos 404
+}
+set N3c2b4800 [stack 0]
+Dot {
+name Dot14
+note_font_size 41
+xpos 1834
+ypos 404
+}
+set N3c2b4400 [stack 0]
+TimeOffset {
+time_offset {{parent.timeOffset}}
+time ""
+name TimeOffset1
+label "\[value time_offset]"
+xpos 1800
+ypos 827
+}
+Dot {
+name Dot17
+note_font_size 41
+xpos 1834
+ypos 914
+}
+push $N3c2b4400
+Dot {
+name Dot15
+note_font_size 41
+xpos 1944
+ypos 404
+}
+Merge2 {
+inputs 2+1
+operation copy
+name Merge3
+xpos 1910
+ypos 979
+}
+Dot {
+name Dot18
+note_font_size 41
+xpos 1944
+ypos 1132
+}
+push $N3c2b5c00
+push $N3c2b6000
+Dot {
+name Dot6
+note_font_size 41
+xpos 1308
+ypos 659
+}
+set N4cc06c00 [stack 0]
+Invert {
+channels rgba
+name Invert1
+xpos 1274
+ypos 758
+}
+push $N3c2b4800
+Dot {
+name Dot12
+note_font_size 41
+xpos 1188
+ypos 834
+}
+set N4cc06400 [stack 0]
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy2
+xpos 1274
+ypos 827
+}
+Blur {
+channels rgba
+size 3
+name Blur1
+label "\[value size]"
+xpos 1274
+ypos 873
+}
+Unpremult {
+name Unpremult1
+xpos 1274
+ypos 922
+}
+push $N4cc06400
+Merge2 {
+inputs 2+1
+operation copy
+name Merge4
+xpos 1154
+ypos 979
+}
+Dot {
+name Dot8
+note_font_size 41
+xpos 1188
+ypos 1079
+}
+push $N3c2b6400
+push $N3c2b4c00
+TransformMasked {
+inputs 1+1
+channels rgba
+translate {4 4}
+center {2362 1116}
+shutteroffset centred
+name Transform1
+xpos 870
+ypos 575
+}
+Dot {
+name Dot4
+note_font_size 41
+xpos 904
+ypos 937
+}
+push $N4cc06c00
+Dot {
+name Dot3
+label mask
+note_font_size 41
+xpos 705
+ypos 659
+}
+push $N3c2b5400
+Grade {
+multiply 0
+add {{parent.replaceColor} {parent.replaceColor} {parent.replaceColor} {parent.replaceColor}}
+name Grade1
+xpos 485
+ypos 569
+}
+Dot {
+name Dot21
+note_font_size 41
+xpos 519
+ypos 660
+}
+push $N3c2b5000
+Merge2 {
+inputs 2+1
+operation copy
+name Merge2
+xpos 595
+ypos 656
+}
+Dot {
+name Dot23
+note_font_size 41
+xpos 629
+ypos 846
+}
+push $N66bc0800
+Switch {
+inputs 5
+which {{parent.which}}
+name Switch20
+label "\[value which]"
+xpos 166
+ypos 1439
+}
+push $N3c2b7c00
+ShuffleCopy {
+inputs 2
+alpha alpha2
+black red
+white green
+red2 blue
+green2 alpha
+out2 {{{parent.Shuffle1.in}}}
+name ShuffleCopy1
+xpos 166
+ypos 1639
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy1
+xpos 166
+ypos 1705
+disable {{!parent.keepAlpha}}
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 166
+ypos 1761
+}
+Reformat {
+type scale
+scale {{1/parent.Reformat142.scale}}
+resize none
+pbb true
+name Reformat143
+xpos 166
+ypos 1826
+}
+push $N66bc3400
+Dot {
+name Dot27
+note_font_size 41
+xpos -33
+ypos -90
+}
+Dot {
+name Dot25
+note_font_size 41
+xpos -33
+ypos 1905
+}
+Merge2 {
+inputs 2+1
+operation copy
+also_merge all
+name Merge1
+xpos 166
+ypos 1901
+}
+Output {
+name Output1
+xpos 167
+ypos 2027
+}
+end_group
+set N540ba400 [stack 0]
+push $N6c07f800
+push $N6c07dc00
+MergeExpression {
+inputs 2
+expr0 Ar/Br
+expr1 Ag/Bg
+expr2 Ab/Bb
+expr3 0
+name MergeExpression6
+label "invrr, invrg, invrb"
+xpos 510
+ypos 1883
+}
+Group {
+name NAN_INF_Killer1
+tile_color 0xff6200ff
+label "\[value which]"
+note_font "Bitstream Vera Sans Bold"
+note_font_color 0xffffffff
+xpos 510
+ypos 1970
+addUserKnob {20 NAN_INF_Killer}
+addUserKnob {26 text l " " T "<big><b><font color=darkorange>Detects and Kills <font color=white>NAN <font color=darkorange>and <font color=white>INF <font color=darkorange>pixels"}
+addUserKnob {41 channels T Shuffle1.in}
+addUserKnob {4 which l Method M {"Replace with 0" "Replace with Color" "Clone Over" "Blur Unpremult" TimeOffset "" "" "" ""}}
+addUserKnob {6 keepAlpha l "Keep Alpha" +STARTLINE}
+keepAlpha true
+addUserKnob {26 ""}
+addUserKnob {19 replaceColor l "Replace Color"}
+replaceColor {0 0 0 0}
+addUserKnob {6 replaceColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 replaceColor_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 color_rgba_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {26 ""}
+addUserKnob {41 translateText_1 l Translate T Transform1.translate}
+addUserKnob {20 extraTranslate l "Extra tranlate Options" n 1}
+extraTranslate 0
+addUserKnob {41 rotate T Transform1.rotate}
+addUserKnob {41 scale T Transform1.scale}
+addUserKnob {41 skewX l "skew X" T Transform1.skewX}
+addUserKnob {41 skewY l "skew Y" T Transform1.skewY}
+addUserKnob {41 skew_order l "skew order" T Transform1.skew_order}
+addUserKnob {41 center T Transform1.center}
+addUserKnob {41 invert_matrix l invert T Transform1.invert_matrix}
+addUserKnob {41 filter T Transform1.filter}
+addUserKnob {20 endGroup n -1}
+addUserKnob {26 ""}
+addUserKnob {26 blurUnpremult l Blur/Unpremult T " "}
+addUserKnob {41 size l "Blur Size" T Blur1.size}
+addUserKnob {26 ""}
+addUserKnob {3 timeOffset l TimeOffset}
+timeOffset -1
+addUserKnob {26 ""}
+addUserKnob {26 "" l mask T ""}
+addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T Merge1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+addUserKnob {20 info l Info}
+addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+addUserKnob {26 desc l Description: t "kills NANs with options of how to replace" T NAN_Killer}
+addUserKnob {26 ver l Version: T v04}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x383b5000
+label "Replace with Color"
+note_font_size 36
+note_font_color 0xffffffff
+xpos 439
+ypos 455
+bdwidth 331
+bdheight 349
+}
+BackdropNode {
+inputs 0
+name BackdropNode2
+tile_color 0x4f4b4200
+label "Replace\nwith 0"
+note_font_size 40
+note_font_color 0xffffffff
+xpos 53
+ypos 259
+bdwidth 372
+bdheight 214
+}
+BackdropNode {
+inputs 0
+name BackdropNode3
+tile_color 0x634c7400
+label "Clone Over"
+note_font_size 30
+note_font_color 0xffffffff
+xpos 823
+ypos 458
+bdwidth 187
+bdheight 176
+}
+BackdropNode {
+inputs 0
+name BackdropNode4
+tile_color 0x3f2d4100
+label Blur/Unpremult
+note_font_size 50
+note_font_color 0xffffffff
+xpos 1097
+ypos 434
+bdwidth 368
+bdheight 726
+}
+BackdropNode {
+inputs 0
+name BackdropNode5
+tile_color 0x3c4d4400
+label Timeoffset
+note_font_size 50
+note_font_color 0xffffffff
+xpos 1760
+ypos 727
+bdwidth 270
+bdheight 312
+}
+Input {
+inputs 0
+name Inputmask
+xpos 314
+ypos 1901
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos 168
+ypos -227
+}
+Dot {
+name Dot26
+note_font_size 41
+xpos 202
+ypos -90
+}
+set N63a3a000 [stack 0]
+Reformat {
+type scale
+scale 2
+resize none
+pbb true
+name Reformat142
+xpos 166
+ypos -23
+}
+Shuffle {
+name Shuffle1
+label "\[value in]"
+xpos 166
+ypos 21
+}
+AddChannels {
+channels rgba
+name AddChannels1
+xpos 166
+ypos 79
+}
+set N63a39000 [stack 0]
+Dot {
+name Dot29
+note_font_size 41
+xpos 200
+ypos 191
+}
+set N63a38c00 [stack 0]
+Dot {
+name Dot30
+note_font_size 41
+xpos 337
+ypos 191
+}
+Expression {
+expr3 isnan(a)||isinf(a)?0:a
+name nan_killer_ReplaceWithZero1
+selected true
+xpos 303
+ypos 354
+}
+push $N63a38c00
+Expression {
+expr0 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:r
+expr1 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:g
+expr2 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:b
+expr3 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:a
+name nan_killer_ReplaceWithZero
+xpos 166
+ypos 305
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy4
+xpos 166
+ypos 350
+disable {{!parent.keepAlpha}}
+}
+Dot {
+name Dot1301
+note_font_size 41
+xpos 200
+ypos 404
+}
+set N4d34f400 [stack 0]
+Dot {
+name Dot11
+note_font_size 41
+xpos 200
+ypos 774
+}
+set N4d34f000 [stack 0]
+Dot {
+name Dot7
+note_font_size 41
+xpos 57
+ypos 774
+}
+Dot {
+name Dot16
+note_font_size 41
+xpos 57
+ypos 1642
+}
+set N4d34e800 [stack 0]
+Dot {
+name Dot9
+note_font_size 41
+xpos 56
+ypos 1712
+}
+set N4d34e400 [stack 0]
+Dot {
+name Dot10
+note_font_size 41
+xpos 57
+ypos 1765
+}
+push $N4d34e400
+push $N63a39000
+Dot {
+name Dot28
+note_font_size 41
+xpos 1620
+ypos 82
+}
+Expression {
+expr3 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))
+name nan_killer_Alpha1
+xpos 1586
+ypos 456
+}
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle2
+tile_color 0xffffffff
+note_font_size 21
+note_font_color 0xffffffff
+xpos 1586
+ypos 520
+}
+Dot {
+name Dot1
+label mask
+note_font_size 41
+xpos 1620
+ypos 578
+}
+set N4d34d000 [stack 0]
+Dot {
+name Dot20
+note_font_size 41
+xpos 1620
+ypos 659
+}
+set N4d34cc00 [stack 0]
+Dot {
+name Dot13
+note_font_size 41
+xpos 1620
+ypos 982
+}
+set N4d34c800 [stack 0]
+Dot {
+name Dot2
+label mask
+note_font_size 41
+xpos 1704
+ypos 982
+}
+push $N4d34f400
+Dot {
+name Dot19
+note_font_size 41
+xpos 519
+ypos 404
+}
+set N4997bc00 [stack 0]
+Dot {
+name Dot22
+note_font_size 41
+xpos 629
+ypos 404
+}
+set N4997b800 [stack 0]
+Dot {
+name Dot24
+note_font_size 41
+xpos 904
+ypos 404
+}
+set N4997b400 [stack 0]
+Dot {
+name Dot5
+note_font_size 41
+xpos 1188
+ypos 404
+}
+set N4997b000 [stack 0]
+Dot {
+name Dot14
+note_font_size 41
+xpos 1834
+ypos 404
+}
+set N4997ac00 [stack 0]
+TimeOffset {
+time_offset {{parent.timeOffset}}
+time ""
+name TimeOffset1
+label "\[value time_offset]"
+xpos 1800
+ypos 827
+}
+Dot {
+name Dot17
+note_font_size 41
+xpos 1834
+ypos 914
+}
+push $N4997ac00
+Dot {
+name Dot15
+note_font_size 41
+xpos 1944
+ypos 404
+}
+Merge2 {
+inputs 2+1
+operation copy
+name Merge3
+xpos 1910
+ypos 979
+}
+Dot {
+name Dot18
+note_font_size 41
+xpos 1944
+ypos 1132
+}
+push $N4d34c800
+push $N4d34cc00
+Dot {
+name Dot6
+note_font_size 41
+xpos 1308
+ypos 659
+}
+set N49979800 [stack 0]
+Invert {
+channels rgba
+name Invert1
+xpos 1274
+ypos 758
+}
+push $N4997b000
+Dot {
+name Dot12
+note_font_size 41
+xpos 1188
+ypos 834
+}
+set N49979000 [stack 0]
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy2
+xpos 1274
+ypos 827
+}
+Blur {
+channels rgba
+size 3
+name Blur1
+label "\[value size]"
+xpos 1274
+ypos 873
+}
+Unpremult {
+name Unpremult1
+xpos 1274
+ypos 922
+}
+push $N49979000
+Merge2 {
+inputs 2+1
+operation copy
+name Merge4
+xpos 1154
+ypos 979
+}
+Dot {
+name Dot8
+note_font_size 41
+xpos 1188
+ypos 1079
+}
+push $N4d34d000
+push $N4997b400
+TransformMasked {
+inputs 1+1
+channels rgba
+translate {4 4}
+center {2362 1116}
+shutteroffset centred
+name Transform1
+xpos 870
+ypos 575
+}
+Dot {
+name Dot4
+note_font_size 41
+xpos 904
+ypos 937
+}
+push $N49979800
+Dot {
+name Dot3
+label mask
+note_font_size 41
+xpos 705
+ypos 659
+}
+push $N4997bc00
+Grade {
+multiply 0
+add {{parent.replaceColor} {parent.replaceColor} {parent.replaceColor} {parent.replaceColor}}
+name Grade1
+xpos 485
+ypos 569
+}
+Dot {
+name Dot21
+note_font_size 41
+xpos 519
+ypos 660
+}
+push $N4997b800
+Merge2 {
+inputs 2+1
+operation copy
+name Merge2
+xpos 595
+ypos 656
+}
+Dot {
+name Dot23
+note_font_size 41
+xpos 629
+ypos 846
+}
+push $N4d34f000
+Switch {
+inputs 5
+which {{parent.which}}
+name Switch20
+label "\[value which]"
+xpos 166
+ypos 1439
+}
+push $N4d34e800
+ShuffleCopy {
+inputs 2
+alpha alpha2
+black red
+white green
+red2 blue
+green2 alpha
+out2 {{{parent.Shuffle1.in}}}
+name ShuffleCopy1
+xpos 166
+ypos 1639
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy1
+xpos 166
+ypos 1705
+disable {{!parent.keepAlpha}}
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 166
+ypos 1761
+}
+Reformat {
+type scale
+scale {{1/parent.Reformat142.scale}}
+resize none
+pbb true
+name Reformat143
+xpos 166
+ypos 1826
+}
+push $N63a3a000
+Dot {
+name Dot27
+note_font_size 41
+xpos -33
+ypos -90
+}
+Dot {
+name Dot25
+note_font_size 41
+xpos -33
+ypos 1905
+}
+Merge2 {
+inputs 2+1
+operation copy
+also_merge all
+name Merge1
+xpos 166
+ypos 1901
+}
+Output {
+name Output1
+xpos 167
+ypos 2027
+}
+end_group
+set N78645600 [stack 0]
+ShuffleCopy {
+inputs 2
+red blue2
+green green
+blue blue
+alpha black
+name ShuffleCopy1
+label "invrb, invgb, invbb"
+xpos 840
+ypos 2098
+}
+push $N554b7000
+NoOp {
+name cov_Ip1
+xpos 950
+ypos 1887
+}
+Dot {
+name Dot17
+xpos 984
+ypos 1986
+}
+set N4afe6400 [stack 0]
+MergeExpression {
+inputs 2
+expr0 Ar*Bb
+expr1 Ag*Bb
+expr2 Ab*Bb
+name MergeExpression10
+xpos 840
+ypos 2177
+}
+push 0
+push $N78645600
+push $N4afe6400
+MergeExpression {
+inputs 2
+expr0 Ar*Br
+expr1 Ag*Br
+expr2 Ab*Br
+name MergeExpression8
+xpos 617
+ypos 2176
+}
+push $N540ba400
+push $N78645600
+ShuffleCopy {
+inputs 2
+red green2
+green red
+blue green
+alpha black
+name ShuffleCopy2
+label "invrg, invgg, invgb"
+xpos 730
+ypos 2100
+}
+push $N4afe6400
+MergeExpression {
+inputs 2
+expr0 Ar*Bg
+expr1 Ag*Bg
+expr2 Ab*Bg
+name MergeExpression9
+xpos 730
+ypos 2179
+}
+Merge2 {
+inputs 3+1
+operation plus
+name A
+label "a_r, a_g, a_b\n-"
+xpos 730
+ypos 2266
+}
+set N4afe5000 [stack 0]
+push $N263f0400
+NoOp {
+name NoOp2
+label mean_I
+xpos 1390
+ypos 2411
+}
+Merge2 {
+inputs 2
+operation multiply
+bbox B
+name Merge22
+xpos 1390
+ypos 2487
+}
+set N4afe4800 [stack 0]
+Shuffle {
+green red
+blue red
+alpha red
+name a_r_mult_mean_I_r
+xpos 1390
+ypos 2559
+}
+Merge2 {
+inputs 2
+operation minus
+name Merge6
+xpos 1390
+ypos 2679
+}
+push $N4afe4800
+Shuffle {
+red green
+blue green
+alpha green
+name a_g_mult_mean_I_g
+xpos 1500
+ypos 2559
+}
+Merge2 {
+inputs 2
+operation minus
+name Merge19
+xpos 1500
+ypos 2727
+}
+push $N4afe4800
+Shuffle {
+red blue
+green blue
+alpha blue
+name a_b_mult_mean_I_b
+xpos 1610
+ypos 2560
+}
+Merge2 {
+inputs 2
+operation minus
+name Merge20
+xpos 1610
+ypos 2776
+}
+NoOp {
+name NoOp4
+label B
+xpos 1610
+ypos 2819
+}
+clone $C64d85400 {
+xpos 1610
+ypos 2915
+selected false
+}
+NoOp {
+name NoOp5
+label boxfilter(b)
+xpos 1610
+ypos 2987
+}
+clone $C58c17400 {
+xpos 551
+ypos 3344
+selected false
+}
+push $N4afe5000
+clone $C64d85400 {
+xpos 730
+ypos 2364
+selected false
+}
+clone $C58c17400 {
+xpos 259
+ypos 2655
+selected false
+}
+set N253e1000 [stack 0]
+Dot {
+name Dot16
+xpos 293
+ypos 2806
+}
+push $N253e1000
+push $N64d87000
+CopyBBox {
+inputs 2
+name CopyBBox2
+xpos -40
+ypos 2655
+}
+BlackOutside {
+name BlackOutside2
+xpos -40
+ypos 2702
+}
+Merge2 {
+inputs 2
+operation multiply
+bbox B
+name Merge3
+xpos -40
+ypos 2803
+}
+NoOp {
+name NoOp6
+label "boxfilter(a_\[rgb])"
+xpos -40
+ypos 3227
+}
+set N6bf43400 [stack 0]
+Shuffle {
+red blue
+green blue
+alpha blue
+name ab2
+xpos 177
+ypos 3328
+}
+push 0
+push $N6bf43400
+Shuffle {
+green red
+blue red
+alpha red
+name ar2
+label "boxfiler(a_r,r) * I_r"
+xpos -40
+ypos 3323
+}
+push $N6bf43400
+Shuffle {
+red green
+blue green
+alpha green
+name ag2
+xpos 69
+ypos 3327
+}
+Merge2 {
+inputs 4+1
+operation plus
+name Merge25
+xpos -40
+ypos 3482
+}
+Switch {
+inputs 2
+which {{parent.alt_method}}
+name Switch1
+xpos -40
+ypos 3626
+}
+Clamp {
+channels alpha
+name Clamp1
+xpos -40
+ypos 3694
+}
+push $N253e1000
+push $N64d87400
+Dot {
+name Dot22
+xpos -220
+ypos -663
+}
+Dot {
+name Dot12
+selected true
+xpos -220
+ypos 2603
+}
+CopyBBox {
+inputs 2
+name CopyBBox3
+xpos -254
+ypos 2655
+}
+Dot {
+name Dot23
+xpos -327
+ypos 2705
+}
+Dot {
+name Dot20
+xpos -327
+ypos 3836
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy1
+xpos -40
+ypos 3827
+}
+Output {
+name Output1
+xpos -40
+ypos 4018
+}
+end_group
+set N540bb200 [stack 0]
+Sharpen {
+channels alpha
+amount {{parent.sharpen_first}}
+size {{parent.blur_size}}
+name Sharpen1
+xpos -92
+ypos 358
+}
+Grade {
+channels alpha
+blackpoint {{parent.blackpoint}}
+whitepoint {{parent.whitepoint}}
+white_clamp true
+unpremult -rgba.alpha
+name Grade23
+selected true
+xpos -92
+ypos 394
+}
+set Na4e37800 [stack 0]
+Group {
+inputs 2
+name Second_Pass
+help "Description:\n\nThe guided filter is an edge-preserving blur,\nuseful to add details to the edges of a roto/matte\nusing a second image as a guide. \n\nHow to use:\n\nConnect the alpha to the 'matte' input\nand the 'guide' image to the 'img' input.\n\nControl the amount of detail using\nthe 'edge detail' slider.\n\n---\n\nThe filter is an implementation of the\n 'Guided Image Filtering', by Kaiming He. \nMore details at http://kaiminghe.com/eccv10/\n"
+xpos -92
+ypos 501
+addUserKnob {20 GuidedBlur}
+addUserKnob {26 guided_blur_title l "" +STARTLINE T "<font size=\"+5\"> Guided Blur"}
+addUserKnob {26 text l "" +STARTLINE T "<font size=\"2\">But faster!"}
+addUserKnob {26 ""}
+addUserKnob {7 blur_size l "blur size" R 0 100}
+blur_size {{parent.blur_size_1}}
+addUserKnob {41 tolerance l "edge detail" t "Control the amount of detail that will be preserved. \n\nA value close to 0 makes the filter behave like a regular blur. \n\nValues close to 6 or 7 can introduce artifacts, identifying grain \"as edges\". \n\nRecommended values are between 2.5 and 4." T Constant_eps.multiplier}
+addUserKnob {41 filter T Blur1.filter}
+addUserKnob {41 quality l "" -STARTLINE T Blur1.quality}
+addUserKnob {26 ""}
+addUserKnob {6 downscale_enable l Downscale +STARTLINE}
+downscale_enable {{parent.downscale_enable}}
+addUserKnob {7 downscale l "" -STARTLINE}
+downscale 0.25
+addUserKnob {6 log_space l "Preconvert img to log space" +STARTLINE}
+log_space {{parent.log_space}}
+addUserKnob {6 alt_method l "Alternative Method (softer)" +STARTLINE}
+alt_method {{parent.alt_method}}
+addUserKnob {20 info l Info}
+addUserKnob {26 versionInfo l "" +STARTLINE T "\nCreated by Rafael Silva\nwww.rafael.ai\nrafael@rafael.ai\n\nVersion 1.3\nLast Updated: August 16th, 2020\n\nToronto, Canada\n\n---\n\nOptimised by Peter Jansen\nMay 12th, 2022"}
+addUserKnob {26 ""}
+}
+Input {
+inputs 0
+name img
+label p
+xpos -68
+ypos -672
+number 1
+}
+set Na4e37400 [stack 0]
+Colorspace {
+colorspace_out AlexaV3LogC
+name Colorspace1
+label "\[value colorspace_in] - \[value colorspace_out]"
+xpos -68
+ypos -600
+disable {{!log_space x91 1}}
+}
+set Na4e37000 [stack 0]
+Dot {
+name Dot3
+xpos 2862
+ypos 344
+}
+NoOp {
+name I1
+xpos 2828
+ypos 1695
+}
+Input {
+inputs 0
+name matte
+label i
+xpos 2050
+ypos -611
+}
+Reformat {
+type scale
+scale {{downscale}}
+name DOWNSCALE
+xpos 2050
+ypos -407
+disable {{!downscale_enable}}
+}
+set Ca4e36000 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle5
+xpos 2050
+ypos 372
+}
+set Na4e35800 [stack 0]
+push $Na4e35800
+Blur {
+size {{"downscale_enable ? blur_size * downscale : blur_size"}}
+filter quadratic
+name Blur1
+xpos 2019
+ypos 492
+}
+set Ca4e35400 [stack 0]
+AdjBBox {
+numpixels 20
+name AdjBBox1
+xpos 2050
+ypos 604
+disable true
+}
+set Na4e35000 [stack 0]
+push $Na4e37000
+clone $Ca4e36000 {
+xpos 78
+ypos -418
+selected false
+}
+Shuffle2 {
+fromInput1 {{0} B}
+fromInput2 {{0} B}
+mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 0 2 rgba.blue 0 2 white -1 -1 rgba.alpha 0 3"
+name Shuffle1
+label "\[value in1] > \[value out1]"
+xpos 78
+ypos -351
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 78
+ypos -194
+}
+BlackOutside {
+name BlackOutside1
+xpos 78
+ypos -59
+}
+Dot {
+name Dot4
+xpos 544
+ypos 165
+}
+set N70be3400 [stack 0]
+Dot {
+name Dot6
+xpos 654
+ypos 165
+}
+set N70be3000 [stack 0]
+Dot {
+name Dot7
+xpos 874
+ypos 165
+}
+set N70be2c00 [stack 0]
+Dot {
+name Dot8
+xpos 984
+ypos 165
+}
+set N70be2800 [stack 0]
+Dot {
+name Dot15
+xpos 2194
+ypos 344
+}
+Merge {
+inputs 2
+operation mult
+name Merge5
+xpos 2160
+ypos 430
+}
+clone $Ca4e35400 {
+xpos 2216
+ypos 567
+selected false
+}
+NoOp {
+name mean_Ip
+xpos 2160
+ypos 711
+}
+push $N70be3400
+clone $Ca4e35400 {
+xpos 510
+ypos 663
+selected false
+}
+NoOp {
+name mean_I
+xpos 510
+ypos 735
+}
+Dot {
+name Dot9
+xpos 544
+ypos 786
+}
+set N70be0c00 [stack 0]
+Dot {
+name Dot13
+xpos 874
+ypos 810
+}
+set N70be0800 [stack 0]
+Dot {
+name Dot14
+xpos 1424
+ypos 834
+}
+set N70be0400 [stack 0]
+push $Na4e35000
+NoOp {
+name mean_p
+xpos 2050
+ypos 687
+}
+set N490abc00 [stack 0]
+Merge {
+inputs 2
+operation mult
+name Merge8
+xpos 1940
+ypos 951
+}
+Merge {
+inputs 2
+operation minus
+name Merge9
+xpos 1940
+ypos 1023
+}
+NoOp {
+name cov_Ip
+xpos 1940
+ypos 1095
+}
+set N490ab000 [stack 0]
+Constant {
+inputs 0
+channels rgb
+color {{"1/pow(10, multiplier)"}}
+name Constant_eps
+xpos 400
+ypos 1095
+addUserKnob {20 User}
+addUserKnob {7 multiplier R 1 6}
+multiplier 2.75
+}
+set N490aac00 [stack 0]
+push $N70be3000
+push $N70be2c00
+Merge2 {
+inputs 2
+operation multiply
+name Merge18
+label I*I
+xpos 730
+ypos 611
+}
+clone $Ca4e35400 {
+xpos 730
+ypos 685
+selected false
+}
+set N490aa400 [stack 0]
+Dot {
+name Dot5
+xpos 2634
+ypos 834
+}
+NoOp {
+name mean_II
+xpos 2600
+ypos 1023
+}
+push $N70be0400
+Dot {
+name Dot1
+xpos 2524
+ypos 882
+}
+set N490a9800 [stack 0]
+push $N490a9800
+Merge2 {
+inputs 2
+operation multiply
+name Merge4
+label "mean I * mean I"
+xpos 2490
+ypos 1019
+}
+Merge2 {
+inputs 2
+operation minus
+name Merge2
+xpos 2490
+ypos 1095
+}
+NoOp {
+name var_I
+xpos 2490
+ypos 1167
+}
+Merge {
+inputs 2
+operation plus
+bbox B
+name Merge13
+xpos 2490
+ypos 1287
+}
+Merge {
+inputs 2
+operation divide
+bbox B
+name Merge14
+xpos 2490
+ypos 1407
+}
+NoOp {
+name a_mono
+label a
+xpos 2490
+ypos 1475
+}
+set N77cc3c00 [stack 0]
+clone $Ca4e35400 {
+xpos 2600
+ypos 1696
+selected false
+}
+Reformat {
+type "to box"
+box_width {{parent.width}}
+box_height {{parent.height}}
+box_fixed true
+filter notch
+name UPSCALE
+xpos 2600
+ypos 1732
+disable {{!downscale_enable}}
+}
+set C77cc3400 [stack 0]
+Merge {
+inputs 2
+operation mult
+bbox B
+name Merge17
+xpos 2718
+ypos 1815
+}
+Dot {
+name Dot11
+xpos 2752
+ypos 2008
+}
+push $N490abc00
+Dot {
+name Dot19
+xpos 2084
+ypos 1410
+}
+set N77cc2400 [stack 0]
+push $N70be0400
+push $N77cc3c00
+Merge {
+inputs 2
+operation mult
+bbox B
+name Merge15
+xpos 2490
+ypos 1551
+}
+Merge {
+inputs 2
+operation minus
+bbox B
+name Merge7
+xpos 2490
+ypos 1671
+}
+NoOp {
+name b_mono
+xpos 2490
+ypos 1745
+}
+clone $Ca4e35400 {
+xpos 2490
+ypos 1811
+selected false
+}
+NoOp {
+name mean_b_mono_
+xpos 2490
+ypos 1868
+}
+clone $C77cc3400 {
+xpos 2490
+ypos 1892
+selected false
+}
+Merge {
+inputs 2
+operation plus
+bbox B
+name Merge16
+xpos 2490
+ypos 2005
+}
+Dot {
+name Dot18
+xpos 2524
+ypos 2922
+}
+Dot {
+name Dot21
+xpos 312
+ypos 3499
+}
+Saturation {
+saturation 0
+mode Maximum
+name Saturation1
+xpos 278
+ypos 3555
+}
+Shuffle2 {
+fromInput1 {{0} B}
+fromInput2 {{0} B}
+mappings "4 black -1 -1 rgba.red 0 0 black -1 -1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 rgba.red 0 0 rgba.alpha 0 3"
+name Shuffle4
+label "\[value in1] > \[value out1]"
+xpos 278
+ypos 3579
+}
+push $N77cc2400
+Dot {
+name Dot10
+xpos 1314
+ypos 2346
+}
+Dot {
+name Dot2
+xpos 1314
+ypos 2562
+}
+push $N490aac00
+push $N490aa400
+push $N70be0c00
+Expression {
+expr0 r*r
+expr1 g*g
+expr2 b*b
+name Expression3
+label "I*I (rr, gg, bb)"
+xpos 510
+ypos 995
+}
+Merge {
+inputs 2
+operation minus
+name Merge11
+xpos 730
+ypos 1119
+}
+Merge {
+inputs 2
+operation plus
+bbox B
+name Merge12
+xpos 730
+ypos 1215
+}
+NoOp {
+name I___
+label "rr, gg, bb"
+xpos 730
+ypos 1283
+}
+set N24e15800 [stack 0]
+push $N70be2800
+Expression {
+expr0 r*g
+expr1 r*b
+expr2 g*b
+name Expression2
+label "rg, rb, gb"
+xpos 950
+ypos 611
+}
+clone $Ca4e35400 {
+xpos 950
+ypos 683
+selected false
+}
+push $N70be0800
+Expression {
+expr0 r*g
+expr1 r*b
+expr2 g*b
+name Expression4
+label "rg, rb, gb"
+xpos 840
+ypos 1019
+}
+Merge {
+inputs 2
+operation minus
+name Merge10
+xpos 950
+ypos 1095
+}
+NoOp {
+name I____
+label "rg, rb, gb"
+xpos 950
+ypos 1283
+}
+set N24e14400 [stack 0]
+MergeExpression {
+inputs 2
+expr0 Ar*Ab-Bg*Bg
+expr1 Bg*Br-Ar*Bb
+expr2 Ar*Ag-Br*Br
+name MergeExpression2
+label "invgg, invgb, invbb"
+xpos 730
+ypos 1695
+}
+push $N24e15800
+push $N24e14400
+MergeExpression {
+inputs 2
+expr0 Ag*Ab-Bb*Bb
+expr1 Bb*Bg-Br*Ab
+expr2 Br*Bb-Ag*Bg
+name MergeExpression1
+label "invrr, invrg, invrb"
+xpos 510
+ypos 1406
+}
+set N4d893800 [stack 0]
+push $N24e14400
+MergeExpression {
+inputs 2
+expr0 Ab*Bg
+expr1 0
+expr2 0
+name MergeExpression5
+label invrb*I_rb
+xpos 1170
+ypos 1476
+}
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle8
+xpos 1170
+ypos 1551
+}
+push 0
+push $N4d893800
+push $N24e15800
+MergeExpression {
+inputs 2
+expr0 Ar*Br
+expr1 0
+expr2 0
+name MergeExpression3
+label invrr*I_rr
+xpos 620
+ypos 1474
+}
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle2
+xpos 620
+ypos 1529
+}
+push $N4d893800
+push $N24e14400
+MergeExpression {
+inputs 2
+expr0 Ag*Br
+expr1 0
+expr2 0
+name MergeExpression4
+label invrg*I_rg
+xpos 950
+ypos 1500
+}
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle3
+xpos 950
+ypos 1551
+}
+Merge2 {
+inputs 3+1
+operation plus
+name Merge1
+label covDet
+xpos 950
+ypos 1691
+}
+set N4d891c00 [stack 0]
+MergeExpression {
+inputs 2
+expr0 Ar/Br
+expr1 Ag/Bg
+expr2 Ab/Bb
+expr3 0
+name MergeExpression7
+label "invgg, invgb, invbb"
+xpos 730
+ypos 1888
+}
+Group {
+name NAN_INF_Killer2
+tile_color 0xff6200ff
+label "\[value which]"
+note_font "Bitstream Vera Sans Bold"
+note_font_color 0xffffffff
+xpos 730
+ypos 1974
+addUserKnob {20 NAN_INF_Killer}
+addUserKnob {26 text l " " T "<big><b><font color=darkorange>Detects and Kills <font color=white>NAN <font color=darkorange>and <font color=white>INF <font color=darkorange>pixels"}
+addUserKnob {41 channels T Shuffle1.in}
+addUserKnob {4 which l Method M {"Replace with 0" "Replace with Color" "Clone Over" "Blur Unpremult" TimeOffset "" "" "" ""}}
+addUserKnob {6 keepAlpha l "Keep Alpha" +STARTLINE}
+keepAlpha true
+addUserKnob {26 ""}
+addUserKnob {19 replaceColor l "Replace Color"}
+replaceColor {0 0 0 0}
+addUserKnob {6 replaceColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 replaceColor_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 color_rgba_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {26 ""}
+addUserKnob {41 translateText_1 l Translate T Transform1.translate}
+addUserKnob {20 extraTranslate l "Extra tranlate Options" n 1}
+extraTranslate 0
+addUserKnob {41 rotate T Transform1.rotate}
+addUserKnob {41 scale T Transform1.scale}
+addUserKnob {41 skewX l "skew X" T Transform1.skewX}
+addUserKnob {41 skewY l "skew Y" T Transform1.skewY}
+addUserKnob {41 skew_order l "skew order" T Transform1.skew_order}
+addUserKnob {41 center T Transform1.center}
+addUserKnob {41 invert_matrix l invert T Transform1.invert_matrix}
+addUserKnob {41 filter T Transform1.filter}
+addUserKnob {20 endGroup n -1}
+addUserKnob {26 ""}
+addUserKnob {26 blurUnpremult l Blur/Unpremult T " "}
+addUserKnob {41 size l "Blur Size" T Blur1.size}
+addUserKnob {26 ""}
+addUserKnob {3 timeOffset l TimeOffset}
+timeOffset -1
+addUserKnob {26 ""}
+addUserKnob {26 "" l mask T ""}
+addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T Merge1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+addUserKnob {20 info l Info}
+addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+addUserKnob {26 desc l Description: t "kills NANs with options of how to replace" T NAN_Killer}
+addUserKnob {26 ver l Version: T v04}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x383b5000
+label "Replace with Color"
+note_font_size 36
+note_font_color 0xffffffff
+xpos 439
+ypos 455
+bdwidth 331
+bdheight 349
+}
+BackdropNode {
+inputs 0
+name BackdropNode2
+tile_color 0x4f4b4200
+label "Replace\nwith 0"
+note_font_size 40
+note_font_color 0xffffffff
+xpos 53
+ypos 259
+bdwidth 372
+bdheight 214
+}
+BackdropNode {
+inputs 0
+name BackdropNode3
+tile_color 0x634c7400
+label "Clone Over"
+note_font_size 30
+note_font_color 0xffffffff
+xpos 823
+ypos 458
+bdwidth 187
+bdheight 176
+}
+BackdropNode {
+inputs 0
+name BackdropNode4
+tile_color 0x3f2d4100
+label Blur/Unpremult
+note_font_size 50
+note_font_color 0xffffffff
+xpos 1097
+ypos 434
+bdwidth 368
+bdheight 726
+}
+BackdropNode {
+inputs 0
+name BackdropNode5
+tile_color 0x3c4d4400
+label Timeoffset
+note_font_size 50
+note_font_color 0xffffffff
+xpos 1760
+ypos 727
+bdwidth 270
+bdheight 312
+}
+Input {
+inputs 0
+name Inputmask
+xpos 314
+ypos 1901
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos 168
+ypos -227
+}
+Dot {
+name Dot26
+note_font_size 41
+xpos 202
+ypos -90
+}
+set N52e4b400 [stack 0]
+Reformat {
+type scale
+scale 2
+resize none
+pbb true
+name Reformat142
+xpos 166
+ypos -23
+}
+Shuffle {
+name Shuffle1
+label "\[value in]"
+xpos 166
+ypos 21
+}
+AddChannels {
+channels rgba
+name AddChannels1
+xpos 166
+ypos 79
+}
+set N52e4a400 [stack 0]
+Dot {
+name Dot29
+note_font_size 41
+xpos 200
+ypos 191
+}
+set N52e4a000 [stack 0]
+Dot {
+name Dot30
+note_font_size 41
+xpos 337
+ypos 191
+}
+Expression {
+expr3 isnan(a)||isinf(a)?0:a
+name nan_killer_ReplaceWithZero1
+selected true
+xpos 303
+ypos 354
+}
+push $N52e4a000
+Expression {
+expr0 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:r
+expr1 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:g
+expr2 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:b
+expr3 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:a
+name nan_killer_ReplaceWithZero
+xpos 166
+ypos 305
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy4
+xpos 166
+ypos 350
+disable {{!parent.keepAlpha}}
+}
+Dot {
+name Dot1301
+note_font_size 41
+xpos 200
+ypos 404
+}
+set N52e48c00 [stack 0]
+Dot {
+name Dot11
+note_font_size 41
+xpos 200
+ypos 774
+}
+set N52e48800 [stack 0]
+Dot {
+name Dot7
+note_font_size 41
+xpos 57
+ypos 774
+}
+Dot {
+name Dot16
+note_font_size 41
+xpos 57
+ypos 1642
+}
+set N6c00fc00 [stack 0]
+Dot {
+name Dot9
+note_font_size 41
+xpos 56
+ypos 1712
+}
+set N6c00f800 [stack 0]
+Dot {
+name Dot10
+note_font_size 41
+xpos 57
+ypos 1765
+}
+push $N6c00f800
+push $N52e4a400
+Dot {
+name Dot28
+note_font_size 41
+xpos 1620
+ypos 82
+}
+Expression {
+expr3 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))
+name nan_killer_Alpha1
+xpos 1586
+ypos 456
+}
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle2
+tile_color 0xffffffff
+note_font_size 21
+note_font_color 0xffffffff
+xpos 1586
+ypos 520
+}
+Dot {
+name Dot1
+label mask
+note_font_size 41
+xpos 1620
+ypos 578
+}
+set N6c00e400 [stack 0]
+Dot {
+name Dot20
+note_font_size 41
+xpos 1620
+ypos 659
+}
+set N6c00e000 [stack 0]
+Dot {
+name Dot13
+note_font_size 41
+xpos 1620
+ypos 982
+}
+set N6c00dc00 [stack 0]
+Dot {
+name Dot2
+label mask
+note_font_size 41
+xpos 1704
+ypos 982
+}
+push $N52e48c00
+Dot {
+name Dot19
+note_font_size 41
+xpos 519
+ypos 404
+}
+set N6c00d400 [stack 0]
+Dot {
+name Dot22
+note_font_size 41
+xpos 629
+ypos 404
+}
+set N6c00d000 [stack 0]
+Dot {
+name Dot24
+note_font_size 41
+xpos 904
+ypos 404
+}
+set N6c00cc00 [stack 0]
+Dot {
+name Dot5
+note_font_size 41
+xpos 1188
+ypos 404
+}
+set N6c00c800 [stack 0]
+Dot {
+name Dot14
+note_font_size 41
+xpos 1834
+ypos 404
+}
+set N6c00c400 [stack 0]
+TimeOffset {
+time_offset {{parent.timeOffset}}
+time ""
+name TimeOffset1
+label "\[value time_offset]"
+xpos 1800
+ypos 827
+}
+Dot {
+name Dot17
+note_font_size 41
+xpos 1834
+ypos 914
+}
+push $N6c00c400
+Dot {
+name Dot15
+note_font_size 41
+xpos 1944
+ypos 404
+}
+Merge2 {
+inputs 2+1
+operation copy
+name Merge3
+xpos 1910
+ypos 979
+}
+Dot {
+name Dot18
+note_font_size 41
+xpos 1944
+ypos 1132
+}
+push $N6c00dc00
+push $N6c00e000
+Dot {
+name Dot6
+note_font_size 41
+xpos 1308
+ypos 659
+}
+set N99d4ac00 [stack 0]
+Invert {
+channels rgba
+name Invert1
+xpos 1274
+ypos 758
+}
+push $N6c00c800
+Dot {
+name Dot12
+note_font_size 41
+xpos 1188
+ypos 834
+}
+set N99d4a400 [stack 0]
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy2
+xpos 1274
+ypos 827
+}
+Blur {
+channels rgba
+size 3
+name Blur1
+label "\[value size]"
+xpos 1274
+ypos 873
+}
+Unpremult {
+name Unpremult1
+xpos 1274
+ypos 922
+}
+push $N99d4a400
+Merge2 {
+inputs 2+1
+operation copy
+name Merge4
+xpos 1154
+ypos 979
+}
+Dot {
+name Dot8
+note_font_size 41
+xpos 1188
+ypos 1079
+}
+push $N6c00e400
+push $N6c00cc00
+TransformMasked {
+inputs 1+1
+channels rgba
+translate {4 4}
+center {2362 1116}
+shutteroffset centred
+name Transform1
+xpos 870
+ypos 575
+}
+Dot {
+name Dot4
+note_font_size 41
+xpos 904
+ypos 937
+}
+push $N99d4ac00
+Dot {
+name Dot3
+label mask
+note_font_size 41
+xpos 705
+ypos 659
+}
+push $N6c00d400
+Grade {
+multiply 0
+add {{parent.replaceColor} {parent.replaceColor} {parent.replaceColor} {parent.replaceColor}}
+name Grade1
+xpos 485
+ypos 569
+}
+Dot {
+name Dot21
+note_font_size 41
+xpos 519
+ypos 660
+}
+push $N6c00d000
+Merge2 {
+inputs 2+1
+operation copy
+name Merge2
+xpos 595
+ypos 656
+}
+Dot {
+name Dot23
+note_font_size 41
+xpos 629
+ypos 846
+}
+push $N52e48800
+Switch {
+inputs 5
+which {{parent.which}}
+name Switch20
+label "\[value which]"
+xpos 166
+ypos 1439
+}
+push $N6c00fc00
+ShuffleCopy {
+inputs 2
+alpha alpha2
+black red
+white green
+red2 blue
+green2 alpha
+out2 {{{parent.Shuffle1.in}}}
+name ShuffleCopy1
+xpos 166
+ypos 1639
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy1
+xpos 166
+ypos 1705
+disable {{!parent.keepAlpha}}
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 166
+ypos 1761
+}
+Reformat {
+type scale
+scale {{1/parent.Reformat142.scale}}
+resize none
+pbb true
+name Reformat143
+xpos 166
+ypos 1826
+}
+push $N52e4b400
+Dot {
+name Dot27
+note_font_size 41
+xpos -33
+ypos -90
+}
+Dot {
+name Dot25
+note_font_size 41
+xpos -33
+ypos 1905
+}
+Merge2 {
+inputs 2+1
+operation copy
+also_merge all
+name Merge1
+xpos 166
+ypos 1901
+}
+Output {
+name Output1
+xpos 167
+ypos 2027
+}
+end_group
+set N4acdab00 [stack 0]
+push $N4d893800
+push $N4d891c00
+MergeExpression {
+inputs 2
+expr0 Ar/Br
+expr1 Ag/Bg
+expr2 Ab/Bb
+expr3 0
+name MergeExpression6
+label "invrr, invrg, invrb"
+xpos 510
+ypos 1883
+}
+Group {
+name NAN_INF_Killer1
+tile_color 0xff6200ff
+label "\[value which]"
+note_font "Bitstream Vera Sans Bold"
+note_font_color 0xffffffff
+xpos 510
+ypos 1970
+addUserKnob {20 NAN_INF_Killer}
+addUserKnob {26 text l " " T "<big><b><font color=darkorange>Detects and Kills <font color=white>NAN <font color=darkorange>and <font color=white>INF <font color=darkorange>pixels"}
+addUserKnob {41 channels T Shuffle1.in}
+addUserKnob {4 which l Method M {"Replace with 0" "Replace with Color" "Clone Over" "Blur Unpremult" TimeOffset "" "" "" ""}}
+addUserKnob {6 keepAlpha l "Keep Alpha" +STARTLINE}
+keepAlpha true
+addUserKnob {26 ""}
+addUserKnob {19 replaceColor l "Replace Color"}
+replaceColor {0 0 0 0}
+addUserKnob {6 replaceColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 replaceColor_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 color_rgba_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {26 ""}
+addUserKnob {41 translateText_1 l Translate T Transform1.translate}
+addUserKnob {20 extraTranslate l "Extra tranlate Options" n 1}
+extraTranslate 0
+addUserKnob {41 rotate T Transform1.rotate}
+addUserKnob {41 scale T Transform1.scale}
+addUserKnob {41 skewX l "skew X" T Transform1.skewX}
+addUserKnob {41 skewY l "skew Y" T Transform1.skewY}
+addUserKnob {41 skew_order l "skew order" T Transform1.skew_order}
+addUserKnob {41 center T Transform1.center}
+addUserKnob {41 invert_matrix l invert T Transform1.invert_matrix}
+addUserKnob {41 filter T Transform1.filter}
+addUserKnob {20 endGroup n -1}
+addUserKnob {26 ""}
+addUserKnob {26 blurUnpremult l Blur/Unpremult T " "}
+addUserKnob {41 size l "Blur Size" T Blur1.size}
+addUserKnob {26 ""}
+addUserKnob {3 timeOffset l TimeOffset}
+timeOffset -1
+addUserKnob {26 ""}
+addUserKnob {26 "" l mask T ""}
+addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T Merge1.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+addUserKnob {20 info l Info}
+addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+addUserKnob {26 desc l Description: t "kills NANs with options of how to replace" T NAN_Killer}
+addUserKnob {26 ver l Version: T v04}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x383b5000
+label "Replace with Color"
+note_font_size 36
+note_font_color 0xffffffff
+xpos 439
+ypos 455
+bdwidth 331
+bdheight 349
+}
+BackdropNode {
+inputs 0
+name BackdropNode2
+tile_color 0x4f4b4200
+label "Replace\nwith 0"
+note_font_size 40
+note_font_color 0xffffffff
+xpos 53
+ypos 259
+bdwidth 372
+bdheight 214
+}
+BackdropNode {
+inputs 0
+name BackdropNode3
+tile_color 0x634c7400
+label "Clone Over"
+note_font_size 30
+note_font_color 0xffffffff
+xpos 823
+ypos 458
+bdwidth 187
+bdheight 176
+}
+BackdropNode {
+inputs 0
+name BackdropNode4
+tile_color 0x3f2d4100
+label Blur/Unpremult
+note_font_size 50
+note_font_color 0xffffffff
+xpos 1097
+ypos 434
+bdwidth 368
+bdheight 726
+}
+BackdropNode {
+inputs 0
+name BackdropNode5
+tile_color 0x3c4d4400
+label Timeoffset
+note_font_size 50
+note_font_color 0xffffffff
+xpos 1760
+ypos 727
+bdwidth 270
+bdheight 312
+}
+Input {
+inputs 0
+name Inputmask
+xpos 314
+ypos 1901
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos 168
+ypos -227
+}
+Dot {
+name Dot26
+note_font_size 41
+xpos 202
+ypos -90
+}
+set N386ee000 [stack 0]
+Reformat {
+type scale
+scale 2
+resize none
+pbb true
+name Reformat142
+xpos 166
+ypos -23
+}
+Shuffle {
+name Shuffle1
+label "\[value in]"
+xpos 166
+ypos 21
+}
+AddChannels {
+channels rgba
+name AddChannels1
+xpos 166
+ypos 79
+}
+set N386ed000 [stack 0]
+Dot {
+name Dot29
+note_font_size 41
+xpos 200
+ypos 191
+}
+set N386ecc00 [stack 0]
+Dot {
+name Dot30
+note_font_size 41
+xpos 337
+ypos 191
+}
+Expression {
+expr3 isnan(a)||isinf(a)?0:a
+name nan_killer_ReplaceWithZero1
+selected true
+xpos 303
+ypos 354
+}
+push $N386ecc00
+Expression {
+expr0 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:r
+expr1 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:g
+expr2 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:b
+expr3 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))?0:a
+name nan_killer_ReplaceWithZero
+xpos 166
+ypos 305
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy4
+xpos 166
+ypos 350
+disable {{!parent.keepAlpha}}
+}
+Dot {
+name Dot1301
+note_font_size 41
+xpos 200
+ypos 404
+}
+set N5086f400 [stack 0]
+Dot {
+name Dot11
+note_font_size 41
+xpos 200
+ypos 774
+}
+set N5086f000 [stack 0]
+Dot {
+name Dot7
+note_font_size 41
+xpos 57
+ypos 774
+}
+Dot {
+name Dot16
+note_font_size 41
+xpos 57
+ypos 1642
+}
+set N5086e800 [stack 0]
+Dot {
+name Dot9
+note_font_size 41
+xpos 56
+ypos 1712
+}
+set N5086e400 [stack 0]
+Dot {
+name Dot10
+note_font_size 41
+xpos 57
+ypos 1765
+}
+push $N5086e400
+push $N386ed000
+Dot {
+name Dot28
+note_font_size 41
+xpos 1620
+ypos 82
+}
+Expression {
+expr3 (isnan(r)||isnan(g)||isnan(b)||isnan(a))||(isinf(r)||isinf(g)||isinf(b)||isinf(a))
+name nan_killer_Alpha1
+xpos 1586
+ypos 456
+}
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle2
+tile_color 0xffffffff
+note_font_size 21
+note_font_color 0xffffffff
+xpos 1586
+ypos 520
+}
+Dot {
+name Dot1
+label mask
+note_font_size 41
+xpos 1620
+ypos 578
+}
+set N5086d000 [stack 0]
+Dot {
+name Dot20
+note_font_size 41
+xpos 1620
+ypos 659
+}
+set N5086cc00 [stack 0]
+Dot {
+name Dot13
+note_font_size 41
+xpos 1620
+ypos 982
+}
+set N5086c800 [stack 0]
+Dot {
+name Dot2
+label mask
+note_font_size 41
+xpos 1704
+ypos 982
+}
+push $N5086f400
+Dot {
+name Dot19
+note_font_size 41
+xpos 519
+ypos 404
+}
+set N95237c00 [stack 0]
+Dot {
+name Dot22
+note_font_size 41
+xpos 629
+ypos 404
+}
+set N95237800 [stack 0]
+Dot {
+name Dot24
+note_font_size 41
+xpos 904
+ypos 404
+}
+set N95237400 [stack 0]
+Dot {
+name Dot5
+note_font_size 41
+xpos 1188
+ypos 404
+}
+set N95237000 [stack 0]
+Dot {
+name Dot14
+note_font_size 41
+xpos 1834
+ypos 404
+}
+set N95236c00 [stack 0]
+TimeOffset {
+time_offset {{parent.timeOffset}}
+time ""
+name TimeOffset1
+label "\[value time_offset]"
+xpos 1800
+ypos 827
+}
+Dot {
+name Dot17
+note_font_size 41
+xpos 1834
+ypos 914
+}
+push $N95236c00
+Dot {
+name Dot15
+note_font_size 41
+xpos 1944
+ypos 404
+}
+Merge2 {
+inputs 2+1
+operation copy
+name Merge3
+xpos 1910
+ypos 979
+}
+Dot {
+name Dot18
+note_font_size 41
+xpos 1944
+ypos 1132
+}
+push $N5086c800
+push $N5086cc00
+Dot {
+name Dot6
+note_font_size 41
+xpos 1308
+ypos 659
+}
+set N95235800 [stack 0]
+Invert {
+channels rgba
+name Invert1
+xpos 1274
+ypos 758
+}
+push $N95237000
+Dot {
+name Dot12
+note_font_size 41
+xpos 1188
+ypos 834
+}
+set N95235000 [stack 0]
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy2
+xpos 1274
+ypos 827
+}
+Blur {
+channels rgba
+size 3
+name Blur1
+label "\[value size]"
+xpos 1274
+ypos 873
+}
+Unpremult {
+name Unpremult1
+xpos 1274
+ypos 922
+}
+push $N95235000
+Merge2 {
+inputs 2+1
+operation copy
+name Merge4
+xpos 1154
+ypos 979
+}
+Dot {
+name Dot8
+note_font_size 41
+xpos 1188
+ypos 1079
+}
+push $N5086d000
+push $N95237400
+TransformMasked {
+inputs 1+1
+channels rgba
+translate {4 4}
+center {2362 1116}
+shutteroffset centred
+name Transform1
+xpos 870
+ypos 575
+}
+Dot {
+name Dot4
+note_font_size 41
+xpos 904
+ypos 937
+}
+push $N95235800
+Dot {
+name Dot3
+label mask
+note_font_size 41
+xpos 705
+ypos 659
+}
+push $N95237c00
+Grade {
+multiply 0
+add {{parent.replaceColor} {parent.replaceColor} {parent.replaceColor} {parent.replaceColor}}
+name Grade1
+xpos 485
+ypos 569
+}
+Dot {
+name Dot21
+note_font_size 41
+xpos 519
+ypos 660
+}
+push $N95237800
+Merge2 {
+inputs 2+1
+operation copy
+name Merge2
+xpos 595
+ypos 656
+}
+Dot {
+name Dot23
+note_font_size 41
+xpos 629
+ypos 846
+}
+push $N5086f000
+Switch {
+inputs 5
+which {{parent.which}}
+name Switch20
+label "\[value which]"
+xpos 166
+ypos 1439
+}
+push $N5086e800
+ShuffleCopy {
+inputs 2
+alpha alpha2
+black red
+white green
+red2 blue
+green2 alpha
+out2 {{{parent.Shuffle1.in}}}
+name ShuffleCopy1
+xpos 166
+ypos 1639
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy1
+xpos 166
+ypos 1705
+disable {{!parent.keepAlpha}}
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 166
+ypos 1761
+}
+Reformat {
+type scale
+scale {{1/parent.Reformat142.scale}}
+resize none
+pbb true
+name Reformat143
+xpos 166
+ypos 1826
+}
+push $N386ee000
+Dot {
+name Dot27
+note_font_size 41
+xpos -33
+ypos -90
+}
+Dot {
+name Dot25
+note_font_size 41
+xpos -33
+ypos 1905
+}
+Merge2 {
+inputs 2+1
+operation copy
+also_merge all
+name Merge1
+xpos 166
+ypos 1901
+}
+Output {
+name Output1
+xpos 167
+ypos 2027
+}
+end_group
+set Na44b1d00 [stack 0]
+ShuffleCopy {
+inputs 2
+red blue2
+green green
+blue blue
+alpha black
+name ShuffleCopy1
+label "invrb, invgb, invbb"
+xpos 840
+ypos 2098
+}
+push $N490ab000
+NoOp {
+name cov_Ip1
+xpos 950
+ypos 1887
+}
+Dot {
+name Dot17
+xpos 984
+ypos 1986
+}
+set N49d02400 [stack 0]
+MergeExpression {
+inputs 2
+expr0 Ar*Bb
+expr1 Ag*Bb
+expr2 Ab*Bb
+name MergeExpression10
+xpos 840
+ypos 2177
+}
+push 0
+push $Na44b1d00
+push $N49d02400
+MergeExpression {
+inputs 2
+expr0 Ar*Br
+expr1 Ag*Br
+expr2 Ab*Br
+name MergeExpression8
+xpos 617
+ypos 2176
+}
+push $N4acdab00
+push $Na44b1d00
+ShuffleCopy {
+inputs 2
+red green2
+green red
+blue green
+alpha black
+name ShuffleCopy2
+label "invrg, invgg, invgb"
+xpos 730
+ypos 2100
+}
+push $N49d02400
+MergeExpression {
+inputs 2
+expr0 Ar*Bg
+expr1 Ag*Bg
+expr2 Ab*Bg
+name MergeExpression9
+xpos 730
+ypos 2179
+}
+Merge2 {
+inputs 3+1
+operation plus
+name A
+label "a_r, a_g, a_b\n-"
+xpos 730
+ypos 2266
+}
+set N49d01000 [stack 0]
+push $N70be0400
+NoOp {
+name NoOp2
+label mean_I
+xpos 1390
+ypos 2411
+}
+Merge2 {
+inputs 2
+operation multiply
+bbox B
+name Merge22
+xpos 1390
+ypos 2487
+}
+set N49d00800 [stack 0]
+Shuffle {
+green red
+blue red
+alpha red
+name a_r_mult_mean_I_r
+xpos 1390
+ypos 2559
+}
+Merge2 {
+inputs 2
+operation minus
+name Merge6
+xpos 1390
+ypos 2679
+}
+push $N49d00800
+Shuffle {
+red green
+blue green
+alpha green
+name a_g_mult_mean_I_g
+xpos 1500
+ypos 2559
+}
+Merge2 {
+inputs 2
+operation minus
+name Merge19
+xpos 1500
+ypos 2727
+}
+push $N49d00800
+Shuffle {
+red blue
+green blue
+alpha blue
+name a_b_mult_mean_I_b
+xpos 1610
+ypos 2560
+}
+Merge2 {
+inputs 2
+operation minus
+name Merge20
+xpos 1610
+ypos 2776
+}
+NoOp {
+name NoOp4
+label B
+xpos 1610
+ypos 2819
+}
+clone $Ca4e35400 {
+xpos 1610
+ypos 2915
+selected false
+}
+NoOp {
+name NoOp5
+label boxfilter(b)
+xpos 1610
+ypos 2987
+}
+clone $C77cc3400 {
+xpos 551
+ypos 3344
+selected false
+}
+push $N49d01000
+clone $Ca4e35400 {
+xpos 730
+ypos 2364
+selected false
+}
+clone $C77cc3400 {
+xpos 259
+ypos 2655
+selected false
+}
+set N6b6f9000 [stack 0]
+Dot {
+name Dot16
+xpos 293
+ypos 2806
+}
+push $N6b6f9000
+push $Na4e37000
+CopyBBox {
+inputs 2
+name CopyBBox2
+xpos -40
+ypos 2655
+}
+BlackOutside {
+name BlackOutside2
+xpos -40
+ypos 2702
+}
+Merge2 {
+inputs 2
+operation multiply
+bbox B
+name Merge3
+xpos -40
+ypos 2803
+}
+NoOp {
+name NoOp6
+label "boxfilter(a_\[rgb])"
+xpos -40
+ypos 3227
+}
+set N810cf400 [stack 0]
+Shuffle {
+red blue
+green blue
+alpha blue
+name ab2
+xpos 177
+ypos 3328
+}
+push 0
+push $N810cf400
+Shuffle {
+green red
+blue red
+alpha red
+name ar2
+label "boxfiler(a_r,r) * I_r"
+xpos -40
+ypos 3323
+}
+push $N810cf400
+Shuffle {
+red green
+blue green
+alpha green
+name ag2
+xpos 69
+ypos 3327
+}
+Merge2 {
+inputs 4+1
+operation plus
+name Merge25
+xpos -40
+ypos 3482
+}
+Switch {
+inputs 2
+which {{parent.alt_method}}
+name Switch1
+xpos -40
+ypos 3626
+}
+Clamp {
+channels alpha
+name Clamp1
+xpos -40
+ypos 3694
+}
+push $N6b6f9000
+push $Na4e37400
+Dot {
+name Dot22
+xpos -220
+ypos -663
+}
+Dot {
+name Dot12
+selected true
+xpos -220
+ypos 2603
+}
+CopyBBox {
+inputs 2
+name CopyBBox3
+xpos -254
+ypos 2655
+}
+Dot {
+name Dot23
+xpos -327
+ypos 2705
+}
+Dot {
+name Dot20
+xpos -327
+ypos 3836
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy1
+xpos -40
+ypos 3827
+}
+Output {
+name Output1
+xpos -40
+ypos 4018
+}
+end_group
+Grade {
+channels alpha
+whitepoint 0.92
+unpremult -rgba.alpha
+name Grade1
+xpos -92
+ypos 537
+}
+ColorLookup {
+channels alpha
+lut {master {}
+  red {}
+  green {}
+  blue {}
+  alpha {curve C k 0 s0 1 s0}}
+name ColorLookup2
+xpos -92
+ypos 575
+}
+set Nabfe3400 [stack 0]
+push $Na4e37800
+push $N540bb200
+push $N64d87800
+ContactSheet {
+inputs 4
+width {{input.width*columns*resMult}}
+height {{input.height*rows*resMult}}
+rows 2
+columns 2
+center true
+roworder TopBottom
+name ContactSheetAuto
+tile_color 0xff69f7ff
+xpos 374
+ypos 567
+addUserKnob {20 Settings}
+addUserKnob {7 resMult l "Resolution Multiplier" R 0.1 2}
+resMult 1
+}
+Shuffle2 {
+fromInput1 {{0} B}
+fromInput2 {{0} B}
+mappings "4 rgba.alpha 0 3 rgba.red 0 0 rgba.alpha 0 3 rgba.green 0 1 rgba.alpha 0 3 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3"
+name Shuffle1
+label "\[value in1] -> \[value out1]"
+xpos 374
+ypos 591
+}
+push $Nabfe3400
+push $Na4e37800
+push $N540bb200
+Switch {
+inputs 4
+which {{parent.output}}
+name Switch1
+xpos 95
+ypos 713
+}
+Output {
+name Output1
+xpos 95
+ypos 907
+}
+end_group
