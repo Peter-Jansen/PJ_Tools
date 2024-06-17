@@ -1,12 +1,7 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name RSMB_Ghetto
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'shutter':\n    shutter_angle = k.value()*360.0\n    n.knob('shutter_angle').setValue(shutter_angle)\n    \nif k.name() == 'shutter_angle':\n    shutter = k.value()/360\n    n.knob('shutter').setValue(shutter)\n    \n\"\"\"\nif k.name() == 'attenuate':\n    attenuate = k.value()\n    n.begin()\n    \n    keymix = nuke.toNode('Keymix2')\n\n    \n    keymix.knob('maskChannel').setEnabled(attenuate)\n    keymix.knob('invertMask').setEnabled(attenuate)\n\n    n.end()\n\"\"\"\n"
  selected true
- xpos -1282
- ypos 1308
  addUserKnob {20 User l "RSMB Ghetto"}
  addUserKnob {26 text l "" +STARTLINE T "<font size=\"10\"> RSMB Ghetto"}
  addUserKnob {26 ""}
