@@ -1,12 +1,7 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name HueCorrect_Soft
  tile_color 0x93abd3ff
  selected true
- xpos -3096
- ypos 1141
  addUserKnob {20 HueCorrectSoft l "Hue Correct Soft"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Hue Correct Soft"}
  addUserKnob {26 text l "" +STARTLINE T "<font size=\"-5\">A gift from Jansen to the brother Carl"}
