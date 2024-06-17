@@ -1,11 +1,6 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name Soft_crush_highlights
  selected true
- xpos -3011
- ypos 660
  addUserKnob {20 User}
  addUserKnob {7 highlight_threshold l Threshold}
  highlight_threshold 1
