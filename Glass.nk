@@ -1,11 +1,6 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name Glass
  selected true
- xpos -3973
- ypos 1176
  addUserKnob {20 User}
  addUserKnob {26 text l "" t "By Peter Jansen" +STARTLINE T "v01 - Hassle Peter if it sucks"}
  addUserKnob {26 ""}
