@@ -1,12 +1,7 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name Vignette
  tile_color 0x2d2d2dff
  selected true
- xpos -3336
- ypos 826
  addUserKnob {20 vignette l Vignette}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Vignette"}
  addUserKnob {26 ""}
