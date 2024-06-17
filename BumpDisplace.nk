@@ -1,11 +1,6 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name BumpDisplace
  selected true
- xpos -3319
- ypos 713
  addUserKnob {20 User}
  addUserKnob {4 normalsChan l "Bump Channel" M {alpha luminance custom "" ""}}
  normalsChan luminance
