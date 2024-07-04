@@ -143,7 +143,7 @@ Group {
  addUserKnob {20 setuptab l Setup}
  addUserKnob {26 text_12 l "<b> Link Textures"}
  addUserKnob {2 folderPath l "Optical Flares path"}
- folderPath "Z:/applications/nuke/plugins/OpticalFlares/Textures-And-Presets/Optical Flares Textures"
+ folderPath ""
  addUserKnob {26 text_3 l <b>Randomise}
  addUserKnob {22 randomise_distribution l Distribution T "import random\n\nn = nuke.thisNode()\nn.begin()\n\nseed = random.random()\n\nnuke.toNode('Flare_distribute').knob('seed').setValue(seed*200)\nn.end()" +STARTLINE}
  addUserKnob {22 randomise_elements l Elements -STARTLINE T "import random\n\nn = nuke.thisNode()\nn.begin()\n\nseed = random.random()\n\nnuke.toNode('ElementSwitch').knob('seed').setValue(seed*200)\nn.end()"}
