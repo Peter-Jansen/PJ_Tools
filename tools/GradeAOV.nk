@@ -1,0 +1,262 @@
+Group {
+ name GradeAOV
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name() #the knob name\n\n\nif kn == \"tonemap\":\n\n    if k.value() < 1.0:\n        k.setValue(1.0)\n        \nif kn == 'inputChange':\n    if n.input(1) is None:\n        n.begin()\n        nuke.toNode('Keymix2').knob('maskChannel').setValue('none')\n        n.end()\n    if n.input(1) is not None:\n        n.begin()\n        nuke.toNode('Keymix2').knob('maskChannel').setValue('alpha')\n        n.end()\n\n        "
+ tile_color 0x8fa8d8ff
+ label "\[value channels_1]"
+ selected true
+ xpos -4815
+ ypos 12541
+ addUserKnob {20 User}
+ addUserKnob {26 text l "" +STARTLINE T "<font size=\"+5\"> Grade AOV"}
+ addUserKnob {26 text_1 l "" +STARTLINE T "<font style=\"color: #666666;\">v1.1 | Peter Jansen"}
+ addUserKnob {26 ""}
+ addUserKnob {4 output_mode l output M {Result "RAW AOV" "Graded AOV" "" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {41 channels_1 l "AOV Layer" T Copy1.channels}
+ addUserKnob {26 text_2 l "<b>Linear Adjustments"}
+ addUserKnob {41 saturation T Saturation1.saturation}
+ addUserKnob {41 white l gain T Grade1.white}
+ addUserKnob {41 multiply T Grade1.multiply}
+ addUserKnob {26 text_3 l "<b>Non-linear Adjustments"}
+ addUserKnob {41 gamma T Grade1.gamma}
+ addUserKnob {7 tonemap R 1 2}
+ tonemap 1
+ addUserKnob {22 reset_grades l "Reset All" T "for knob in \['saturation', 'white', 'multiply', 'gamma', 'tonemap']:\n    nuke.thisNode().knob(knob).setValue(1.0)\n" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannel l "mask channel" T Keymix2.maskChannel}
+ addUserKnob {41 invertMask l invert -STARTLINE T Keymix2.invertMask}
+ addUserKnob {6 un_premult l "(un)premult by alpha" +STARTLINE}
+ addUserKnob {7 mix}
+ mix 1
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 562
+  ypos 163
+ }
+set Naf279c00 [stack 0]
+ Dot {
+  name Dot1
+  xpos 596
+  ypos 326
+ }
+set Naf279800 [stack 0]
+ Dot {
+  name Dot7
+  xpos 596
+  ypos 387
+ }
+set Naf279400 [stack 0]
+ Dot {
+  name Dot8
+  xpos 328
+  ypos 387
+ }
+ Shuffle {
+  in2 alpha
+  alpha red2
+  name Shuffle2
+  label "\[value in] > \[value out]"
+  xpos 294
+  ypos 469
+ }
+set Naf278c00 [stack 0]
+ Unpremult {
+  name Unpremult2
+  xpos 294
+  ypos 559
+  disable {{!parent.un_premult}}
+ }
+ Dot {
+  name Dot6
+  xpos 328
+  ypos 656
+ }
+set Naf278400 [stack 0]
+ Saturation {
+  name Saturation1
+  xpos 294
+  ypos 706
+ }
+ Grade {
+  name Grade1
+  xpos 294
+  ypos 746
+ }
+ Expression {
+  expr0 r*(1+r/(compression**2))/(1+r)
+  expr1 g*(1+g/(compression**2))/(1+g)
+  expr2 b*(1+b/(compression**2))/(1+b)
+  name tonemap
+  xpos 294
+  ypos 784
+  disable {{parent.tonemap==1}}
+  addUserKnob {20 User}
+  addUserKnob {7 compression l "Highlight Compression" R 1 10}
+  compression {{parent.tonemap}}
+ }
+ Dot {
+  name Dot3
+  xpos 328
+  ypos 843
+ }
+set N4bf23000 [stack 0]
+ Premult {
+  name Premult2
+  xpos 294
+  ypos 993
+  disable {{!parent.un_premult}}
+ }
+ Dot {
+  name Dot9
+  xpos 328
+  ypos 1098
+ }
+set N4bf22800 [stack 0]
+ Dot {
+  name Dot12
+  xpos 328
+  ypos 1629
+ }
+push $Naf278c00
+ Dot {
+  name Dot11
+  xpos 162
+  ypos 480
+ }
+ Dot {
+  name Dot10
+  xpos 162
+  ypos 1704
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 767
+  ypos 1274
+  number 1
+ }
+ Invert {
+  channels alpha
+  name Invert1
+  xpos 767
+  ypos 1358
+ }
+push $Naf279800
+ Dot {
+  name Dot5
+  xpos -474
+  ypos 326
+ }
+ Dot {
+  name Dot4
+  xpos -474
+  ypos 925
+ }
+set N4bf20c00 [stack 0]
+ Dot {
+  name Dot20
+  xpos -474
+  ypos 1367
+ }
+set N4bf20800 [stack 0]
+push $N4bf22800
+push $N4bf20c00
+push $N4bf23000
+push $Naf278400
+push $Naf279400
+ Unpremult {
+  name Unpremult1
+  xpos 562
+  ypos 555
+  disable {{!parent.un_premult}}
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge3
+  xpos 562
+  ypos 652
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge4
+  xpos 562
+  ypos 839
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos 562
+  ypos 916
+ }
+ Premult {
+  name Premult1
+  xpos 562
+  ypos 994
+  disable {{!parent.un_premult}}
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  name ShuffleCopy1
+  label "\[value out]"
+  xpos 562
+  ypos 1087
+ }
+ Keymix {
+  inputs 3
+  maskChannel none
+  bbox B
+  name Keymix2
+  selected true
+  xpos 562
+  ypos 1358
+  disable {{"1-\[exists parent.input1]"}}
+ }
+push $N4bf20800
+ Dot {
+  name Dot2
+  xpos -474
+  ypos 1510
+ }
+ Dissolve {
+  inputs 2
+  which {{parent.mix}}
+  name Dissolve1
+  xpos 562
+  ypos 1501
+ }
+ Switch {
+  inputs 3
+  which {{parent.output_mode}}
+  name Switch1
+  xpos 562
+  ypos 1700
+ }
+ Output {
+  name Output1
+  xpos 562
+  ypos 1804
+ }
+push $Naf279c00
+push 0
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  channels rgba
+  name Copy1
+  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name() #the knob name\n\nif kn == \"channels\":\n\n    channels = k.value()\n    nuke.toNode('Shuffle2').knob('in').setValue(channels)            \n    nuke.toNode('ShuffleCopy1').knob('out').setValue(channels)            \n"
+  xpos 42
+  ypos 149
+ }
+end_group

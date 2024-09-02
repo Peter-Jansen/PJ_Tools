@@ -1,0 +1,488 @@
+Group {
+ name HueVsHue
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nkn = k.name()\n\nk_amount = n.knob('reduce_banding')\nk_banding_blur = n.knob('banding_blur')\nk_edge_crunch = n.knob('edge_crunch')\nk_reduce_banding_enable = n.knob('reduce_banding_enable')\n\nif kn == 'reduce_banding_enable':\n    print('its working')\n    k_amount.setEnabled(k_reduce_banding_enable.value())\n    k_banding_blur.setEnabled(k_reduce_banding_enable.value())\n    k_edge_crunch.setEnabled(k_reduce_banding_enable.value())\n    \n"
+ tile_color 0x93abd3ff
+ selected true
+ addUserKnob {20 HueVsHue l "Hue vs Hue"}
+ addUserKnob {26 title l "" t "Use the \"lum\" curve. Target the hue you want to change on the \nhorizontal axis, make a point (and two either side to anchor it). \nPull the middle point up to change the hue of the selected hue." +STARTLINE T "<font size=\"+5\"> Hue vs Hue"}
+ addUserKnob {26 ""}
+ addUserKnob {26 text_2 l "" +STARTLINE T "Use the \"lum\" curve only!"}
+ addUserKnob {41 hue l "" +STARTLINE T HueCorrect2.hue}
+ addUserKnob {26 ""}
+ addUserKnob {6 reduce_banding_enable l "" +STARTLINE +STARTLINE}
+ reduce_banding_enable true
+ addUserKnob {26 text l "" -STARTLINE T "<font size=\"+2\"> Reduce Banding"}
+ addUserKnob {7 reduce_banding l amount R -50 50}
+ reduce_banding 6.5
+ addUserKnob {7 banding_blur l blur R 0 50}
+ banding_blur 6
+ addUserKnob {7 edge_crunch}
+ edge_crunch 0.2
+ addUserKnob {26 ""}
+ addUserKnob {26 text_1 l "" +STARTLINE T "<font size=\"+2\"> Edge blur"}
+ addUserKnob {41 size T EdgeBlur2.size}
+ addUserKnob {7 threshold}
+ threshold 0.8
+ addUserKnob {6 visualise_threshold l "visualise threshold" -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelMask l "" -STARTLINE T Merge2.maskChannelMask}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge2.invert_mask}
+ addUserKnob {7 mix}
+ mix 1
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x262626ff
+  label "hue vs hue"
+  note_font_size 42
+  xpos -1199
+  ypos -885
+  bdwidth 1984
+  bdheight 2524
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos -230
+  ypos 1051
+  number 1
+ }
+ Invert {
+  name Invert1
+  xpos -230
+  ypos 1075
+ }
+ Input {
+  inputs 0
+  name img
+  xpos -450
+  ypos -724
+ }
+ Dot {
+  name Dot2
+  xpos -416
+  ypos -650
+ }
+set N4be90800 [stack 0]
+ Dot {
+  name Dot3
+  xpos -811
+  ypos -650
+ }
+ Dot {
+  name Dot1
+  xpos -811
+  ypos 1084
+ }
+set N4d1fbc00 [stack 0]
+push $N4be90800
+ Dot {
+  name Dot5
+  xpos -416
+  ypos -535
+ }
+set N4d1fb800 [stack 0]
+push $N4d1fb800
+ ColorCorrect {
+  saturation 0
+  name luma1
+  xpos -647
+  ypos -538
+ }
+ Dot {
+  name Dot6
+  xpos -613
+  ypos -425
+ }
+set N4d1fb000 [stack 0]
+ Merge2 {
+  inputs 2
+  operation divide
+  name Chroma1
+  xpos -450
+  ypos -428
+ }
+set N4d1fac00 [stack 0]
+ Dot {
+  name Dot8
+  xpos -153
+  ypos -425
+ }
+set N4d1fa800 [stack 0]
+ Dot {
+  name Dot12
+  xpos 135
+  ypos -425
+ }
+push $N4d1fa800
+ Dot {
+  name Dot17
+  xpos -153
+  ypos -324
+ }
+set N4d1fa000 [stack 0]
+ HueCorrect {
+  hue {sat {}
+    lum {curve 1 x0.675062418 1 x1.675062418 1 1 x4 1 x5 1 1}
+    red {}
+    green {}
+    blue {}
+    r_sup {}
+    g_sup {}
+    b_sup {}
+    sat_thrsh {}}
+  name HueCorrect2
+  xpos -63
+  ypos -327
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge4
+  xpos 101
+  ypos -327
+ }
+ Saturation {
+  saturation 0
+  name Saturation2
+  xpos 101
+  ypos -249
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.red 0 0 rgba.red 0 0 black -1 -1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 black -1 -1 rgba.alpha 0 3"
+  name Shuffle1
+  label "\[value in1] > \[value out1]"
+  xpos 101
+  ypos -214
+ }
+ Grade {
+  multiply 0.5
+  black_clamp false
+  name Grade4
+  xpos 101
+  ypos -156
+ }
+ Dot {
+  name Dot10
+  xpos 135
+  ypos -92
+ }
+push $N4d1fac00
+ Colorspace {
+  colorspace_out HSV
+  name Colorspace3
+  label "\[value colorspace_in] - \[value colorspace_out]"
+  xpos -450
+  ypos -176
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge8
+  xpos -450
+  ypos -95
+ }
+ Colorspace {
+  colorspace_in HSV
+  name Colorspace4
+  label "\[value colorspace_in] - \[value colorspace_out]"
+  xpos -450
+  ypos -28
+ }
+set N4d18f800 [stack 0]
+ Dot {
+  name Dot11
+  xpos -416
+  ypos 78
+ }
+set N4d18f400 [stack 0]
+push $N4d1fa000
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge3
+  xpos -187
+  ypos 75
+ }
+ Grade {
+  add -1
+  black_clamp false
+  name Grade3
+  xpos -187
+  ypos 123
+ }
+ Expression {
+  expr3 "max(abs(r), abs(g), abs(b))"
+  name Expression1
+  xpos -187
+  ypos 160
+ }
+ Grade {
+  channels alpha
+  blackpoint {{1-parent.threshold}}
+  whitepoint {{blackpoint}}
+  white_clamp true
+  name Grade2
+  xpos -187
+  ypos 223
+ }
+ Dot {
+  name Dot13
+  xpos -153
+  ypos 310
+ }
+set N4d18e000 [stack 0]
+ Dot {
+  name Dot14
+  xpos -153
+  ypos 572
+ }
+set N4d18dc00 [stack 0]
+ Group {
+  name XOR_edge
+  xpos -187
+  ypos 912
+  addUserKnob {20 User}
+  addUserKnob {41 size T Blur1.size}
+  addUserKnob {26 ""}
+  addUserKnob {26 text l "" +STARTLINE T "A simple XOR edge detect"}
+  addUserKnob {26 text_1 l "" +STARTLINE T "Probably grade your alpha to be harder beforehand."}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -641
+   ypos -478
+  }
+  Blur {
+   size {{parent.parent.EdgeBlur2.size}}
+   name Blur1
+   label "\[value size]"
+   xpos -641
+   ypos -396
+  }
+set N4d18d400 [stack 0]
+push $N4d18d400
+  Merge2 {
+   inputs 2
+   operation xor
+   name Merge2
+   xpos -641
+   ypos -316
+  }
+  Grade {
+   channels alpha
+   whitepoint 0.5
+   name Grade4
+   xpos -641
+   ypos -256
+  }
+  Output {
+   name Output1
+   xpos -641
+   ypos -156
+  }
+ end_group
+ Dot {
+  name Dot9
+  xpos -153
+  ypos 972
+ }
+push $N4d1fb000
+ Dot {
+  name Dot7
+  xpos -613
+  ypos 915
+ }
+push $N4d18dc00
+push $N4d18e000
+ Group {
+  name XOR_edge1
+  xpos 37
+  ypos 307
+  addUserKnob {20 User}
+  addUserKnob {41 size T Blur1.size}
+  addUserKnob {26 ""}
+  addUserKnob {26 text l "" +STARTLINE T "A simple XOR edge detect"}
+  addUserKnob {26 text_1 l "" +STARTLINE T "Probably grade your alpha to be harder beforehand."}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -641
+   ypos -478
+  }
+  Blur {
+   size {{reduce_banding}}
+   name Blur1
+   label "\[value size]"
+   xpos -641
+   ypos -396
+  }
+set N4d523400 [stack 0]
+push $N4d523400
+  Merge2 {
+   inputs 2
+   operation xor
+   name Merge2
+   xpos -641
+   ypos -316
+  }
+  Grade {
+   channels alpha
+   whitepoint 0.5
+   name Grade4
+   xpos -641
+   ypos -256
+  }
+  Output {
+   name Output1
+   xpos -641
+   ypos -156
+  }
+ end_group
+ Grade {
+  channels alpha
+  whitepoint {{1-edge_crunch}}
+  white_clamp true
+  name Grade7
+  xpos 37
+  ypos 396
+ }
+push $N4d18f800
+ Dot {
+  name Dot16
+  xpos 267
+  ypos -19
+ }
+ Dilate {
+  channels rgb
+  size {{parent.reduce_banding}}
+  name Dilate1
+  label "\[value size]"
+  xpos 233
+  ypos 86
+ }
+ Dilate {
+  channels rgb
+  size {{-parent.Dilate1.size*2}}
+  name Dilate2
+  label "\[value size]"
+  xpos 233
+  ypos 122
+ }
+ Dilate {
+  channels rgb
+  size {{parent.Dilate1.size}}
+  name Dilate3
+  label "\[value size]"
+  xpos 233
+  ypos 166
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 0 2 rgba.blue 0 2 white -1 -1 rgba.alpha 0 3"
+  name Shuffle2
+  label "\[value in1] > \[value out1]"
+  xpos 233
+  ypos 227
+ }
+ Blur {
+  size {{parent.banding_blur}}
+  name Blur1
+  label "\[value size]"
+  xpos 233
+  ypos 292
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox A
+  name Merge5
+  xpos 233
+  ypos 402
+ }
+ Dot {
+  name Dot15
+  xpos 267
+  ypos 521
+ }
+push $N4d18f400
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos -450
+  ypos 518
+  disable {{!reduce_banding_enable x1012 1}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 mask.a
+  name Copy1
+  xpos -450
+  ypos 563
+ }
+ EdgeBlur {
+  controlchannel mask.a
+  size 8
+  name EdgeBlur2
+  xpos -450
+  ypos 617
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge1
+  xpos -450
+  ypos 912
+ }
+ Grade {
+  inputs 1+1
+  black {0.2 0.040778 0.046878 0.2}
+  black_panelDropped true
+  multiply 0.1
+  name Grade1
+  xpos -450
+  ypos 969
+  disable {{!visualise_threshold}}
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge2
+  xpos -450
+  ypos 1081
+  disable {{"1-\[exists parent.input1]"}}
+ }
+push $N4d1fbc00
+ Dot {
+  name Dot4
+  xpos -811
+  ypos 1240
+ }
+ Dissolve {
+  inputs 2
+  which {{parent.mix}}
+  name Dissolve1
+  xpos -450
+  ypos 1231
+ }
+ Remove {
+  channels mask
+  name Remove1
+  xpos -450
+  ypos 1310
+ }
+ Output {
+  name Output1
+  xpos -450
+  ypos 1405
+ }
+end_group

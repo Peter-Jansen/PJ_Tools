@@ -1,0 +1,172 @@
+Group {
+ name Vignette
+ tile_color 0x2d2d2dff
+ selected true
+ addUserKnob {20 vignette l Vignette}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Vignette"}
+ addUserKnob {26 ""}
+ addUserKnob {4 output l Output M {"Add Vignette" "Remove Vignette" "" ""}}
+ addUserKnob {6 outputchannels l "Output vignette channels" -STARTLINE}
+ addUserKnob {26 text_1 l "<b>Adjust falloff</b>"}
+ addUserKnob {41 lut l "" +STARTLINE T ColorLookup1.lut}
+ addUserKnob {26 ""}
+ addUserKnob {7 strength}
+ strength 1
+ addUserKnob {20 Howto l "How to use"}
+ addUserKnob {26 ""}
+ addUserKnob {26 text l "" +STARTLINE T "Remove vignette at top of script by matching the falloff and\nstrength by eye\n\nUse a copy of the node to restore the vignette at the bottom \nwith the \"Add vignette\" mode.\n\nOptionally, to avoid copying around many duplicates, you can \noutput the vignette channels.\n\nSimply shuffle them out and apply them with a multiply merge \nmode.\n\nYou can then use something like stamps to apply the vignette \nanywhere in your script with only one master vignette node."}
+ addUserKnob {26 ""}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -294
+  ypos 304
+ }
+ Dot {
+  name Dot9
+  xpos -260
+  ypos 379
+ }
+set N4e77d000 [stack 0]
+ Expression {
+  channel0 rgba
+  expr0 "hypot(cx,cy) / hypot( 1/(width/height), 1)"
+  channel3 {none none none -rgba.alpha}
+  name Expression2
+  xpos -562
+  ypos 376
+ }
+ ColorLookup {
+  lut {master {curve C k x0.200000003 0 s0 l x0.7894316912 0.5577985048 x1 1}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookup1
+  xpos -562
+  ypos 413
+ }
+ Grade {
+  channels rgba
+  white {{parent.strength}}
+  name Grade5
+  xpos -562
+  ypos 473
+ }
+ Invert {
+  name Invert1
+  xpos -562
+  ypos 505
+ }
+ Expression {
+  channel0 rgba
+  expr0 "max(r, 0.0001)"
+  name Expression4
+  xpos -562
+  ypos 550
+ }
+ Dot {
+  name Dot37
+  xpos -528
+  ypos 628
+ }
+set N4e70f400 [stack 0]
+ Expression {
+  channel0 rgba
+  expr0 1/a
+  name Expression3
+  xpos -418
+  ypos 625
+ }
+set N4e70f000 [stack 0]
+push $N4e70f400
+ Grade {
+  channels rgba
+  blackpoint 0.0001
+  name Grade1
+  label "CLAMP TO BLACK"
+  xpos -562
+  ypos 692
+  disable true
+ }
+ Dot {
+  name Dot35
+  xpos -528
+  ypos 771
+ }
+set N4e70e800 [stack 0]
+push $N4e70f000
+push $N4e77d000
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge7
+  xpos -179
+  ypos 625
+ }
+push $N4e70e800
+push $N4e77d000
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge6
+  xpos -335
+  ypos 768
+ }
+ Switch {
+  inputs 2
+  which {{output}}
+  name Switch1
+  xpos -229
+  ypos 979
+ }
+set N4e70dc00 [stack 0]
+add_layer {vignette vignette.add vignette.remove vignette.alpha}
+ Shuffle2 {
+  inputs 2
+  fromInput1 {{1} B A}
+  out1 vignette
+  fromInput2 {{0} B A}
+  mappings "3 black -1 -1 vignette.remove 0 1 rgba.red 0 0 vignette.add 0 0 black -1 -1 vignette.alpha 0 2"
+  name Shuffle1
+  label "\[value in1] > \[value out1]"
+  xpos -350
+  ypos 1045
+ }
+ Shuffle2 {
+  inputs 2
+  fromInput1 {{0} B A}
+  in1 {vignette.add vignette.remove -vignette.alpha}
+  out1 vignette
+  fromInput2 {{1} B A}
+  in2 rgb
+  mappings "3 vignette.add 0 0 vignette.add 0 0 rgba.red 1 0 vignette.remove 0 1 black -1 -1 vignette.alpha 0 2"
+  name Shuffle2
+  label "\[value in1] > \[value out1]"
+  xpos -444
+  ypos 1154
+ }
+push $N4e70dc00
+ Switch {
+  inputs 2
+  which {{outputchannels}}
+  name Switch2
+  xpos -229
+  ypos 1196
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 0 2 rgba.blue 0 2 white -1 -1 rgba.alpha 0 3"
+  name Shuffle3
+  label "\[value in1] > \[value out1]"
+  xpos -229
+  ypos 1299
+ }
+ Output {
+  name Output1
+  xpos -229
+  ypos 1394
+ }
+end_group

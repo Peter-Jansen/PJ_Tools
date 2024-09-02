@@ -1,0 +1,63 @@
+Group {
+ name Soft_crush_highlights
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {7 highlight_threshold l Threshold}
+ highlight_threshold 1
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 237
+  ypos 339
+ }
+ Dot {
+  name Dot9
+  xpos 271
+  ypos 379
+ }
+set N4d2c2800 [stack 0]
+ Dot {
+  name Dot37
+  xpos 115
+  ypos 379
+ }
+ Colorspace {
+  colorspace_out AlexaV3LogC
+  name Colorspace5
+  label "\[value colorspace_in] - \[value colorspace_out]"
+  xpos 81
+  ypos 455
+ }
+ ColorCorrect {
+  saturation 0
+  name ColorCorrect3
+  selected true
+  xpos 81
+  ypos 531
+ }
+ Grade {
+  gamma {{max(parent.highlight_threshold,0.01)}}
+  name Grade11
+  xpos 81
+  ypos 572
+ }
+ Dot {
+  name Dot38
+  xpos 115
+  ypos 646
+ }
+push $N4d2c2800
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge17
+  xpos 237
+  ypos 643
+ }
+ Output {
+  name Output1
+  xpos 237
+  ypos 743
+ }
+end_group
