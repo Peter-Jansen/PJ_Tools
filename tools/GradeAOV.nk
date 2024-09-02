@@ -4,8 +4,6 @@ Group {
  tile_color 0x8fa8d8ff
  label "\[value channels_1]"
  selected true
- xpos -4815
- ypos 12541
  addUserKnob {20 User}
  addUserKnob {26 text l "" +STARTLINE T "<font size=\"+5\"> Grade AOV"}
  addUserKnob {26 text_1 l "" +STARTLINE T "<font style=\"color: #666666;\">v1.1 | Peter Jansen"}
