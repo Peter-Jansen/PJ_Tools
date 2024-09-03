@@ -1,104 +1,75 @@
 Group {
  name BumpDisplace
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"lightType\":\n        if k.value() == \"point\":\n            n.knob('altitude').setFlag(nuke.INVISIBLE)\n            n.knob('azimuth').setFlag(nuke.INVISIBLE)\n            \n            n.knob('pos').clearFlag(nuke.INVISIBLE)\n            n.knob('lightHeight').clearFlag(nuke.INVISIBLE)\n            \n        if k.value() == \"directional\":\n            n.knob('altitude').clearFlag(nuke.INVISIBLE)\n            n.knob('azimuth').clearFlag(nuke.INVISIBLE)\n\n            n.knob('pos').setFlag(nuke.INVISIBLE)\n            n.knob('lightHeight').setFlag(nuke.INVISIBLE)"
  selected true
- addUserKnob {20 User}
- addUserKnob {4 normalsChan l "Bump Channel" M {alpha luminance custom "" ""}}
+ addUserKnob {20 BumpDisplace l "Bump Displace"}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Bump Displace"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v2.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 text l <b>Bump</b>}
+ addUserKnob {4 normalsChan l "Bump Channel" M {alpha luminance "" ""}}
  normalsChan luminance
  addUserKnob {6 invertInput l "Invert Input" +STARTLINE}
  addUserKnob {7 bumpMult l "Bump Height" R 0 4}
- bumpMult 1
- addUserKnob {41 size_1 l "Pre Blur" T preBlur.size}
+ bumpMult 0.5
  addUserKnob {41 size l "Bump Blur" T BlurNormals.size}
- addUserKnob {26 ""}
- addUserKnob {7 lightHeight l "Light Height" R 0 300}
- lightHeight 300
- addUserKnob {41 pos l "Light Position" T lightPos.pos}
- addUserKnob {41 specular l Intensity T BasicMaterial2.specular}
+ addUserKnob {26 lightText l "<b>Light </b>"}
+ addUserKnob {4 lightType l "Light Type" M {point directional}}
+ addUserKnob {7 azimuth l Azimuth +INVISIBLE R 0 360}
+ addUserKnob {7 altitude l Altitude +INVISIBLE}
+ altitude 0.5
+ addUserKnob {12 pos l "Light Position"}
+ addUserKnob {7 lightHeight l "Light Height" R 0 1000}
+ lightHeight 500
+ addUserKnob {7 lightIntensity l Intensity R 0 10}
+ lightIntensity 1
+ addUserKnob {26 text_1 l "<b>Material </b>"}
+ addUserKnob {41 diffuse T BasicMaterial1.diffuse}
+ addUserKnob {41 specular T BasicMaterial1.specular}
+ addUserKnob {41 max_shininess l "max shininess" T BasicMaterial1.max_shininess}
  addUserKnob {26 ""}
  addUserKnob {6 effectOnly l "Effect Only" +STARTLINE}
+ effectOnly true
  addUserKnob {6 premult l Premult -STARTLINE}
  addUserKnob {26 ""}
  addUserKnob {6 outputAlpha l "Output In Alpha" t "For Shannagh" +STARTLINE}
+ addUserKnob {20 About}
+ addUserKnob {26 description l "" +STARTLINE T "BumpDisplace by Peter Jansen\n\nThanks to:\nTangent Space Normals Generator v0.1.1\ncolour-science.org - April 9, 2015\n"}
 }
- NoOp {
-  inputs 0
-  name lightPos
-  xpos -1242
-  ypos 762
-  addUserKnob {20 User}
-  addUserKnob {12 pos}
- }
- Axis2 {
-  inputs 0
-  name Axis1
-  xpos -949
-  ypos 513
- }
-push 0
- Light2 {
-  inputs 2
-  light_type directional
-  translate {{parent.Light.translate*5} {parent.Light.translate*5} {parent.Light.translate}}
-  depthmap_slope_bias 0.01
-  name Light1
-  xpos -930
-  ypos 619
- }
  Input {
   inputs 0
   name img
   xpos -611
   ypos 262
  }
-set N4d63b400 [stack 0]
+set N6197c800 [stack 0]
  Dot {
   name in
   xpos -577
   ypos 402
  }
-set N4d63b000 [stack 0]
- Multiply {
-  value 0
-  name Multiply1
-  xpos -680
-  ypos 484
-  disable {{1-effectOnly x1036 0}}
- }
- Input {
-  inputs 0
-  name norm
-  xpos -147
-  ypos 401
-  number 1
- }
- Dot {
-  name Dot2
-  xpos -113
-  ypos 523
- }
-push $N4d63b000
+set N6197c400 [stack 0]
  Dot {
   name Dot10
   xpos -301
   ypos 402
  }
-set N4d63a000 [stack 0]
+set N75ddfc00 [stack 0]
  Dot {
   name Dot13
   xpos -204
   ypos 402
  }
-push $N4d63a000
+push $N75ddfc00
  Shuffle {
   red alpha
   green alpha
   blue alpha
   name Shuffle8
   xpos -335
-  ypos 459
+  ypos 458
  }
  Switch {
-  inputs 3
+  inputs 2
   which {{normalsChan}}
   name Switch1
   xpos -238
@@ -114,19 +85,13 @@ push $N4d63a000
   multiply {{parent.bumpMult}}
   name Grade1
   xpos -238
-  ypos 611
- }
- Blur {
-  quality 100
-  name preBlur
-  xpos -238
-  ypos 637
+  ypos 613
  }
  Group {
   name CreateNormals
   tile_color 0xffbf00ff
   xpos -238
-  ypos 702
+  ypos 694
   addUserKnob {20 prewitt_tangent_space_normals_generator_Tab l "Tangent Space Normals Generator"}
   addUserKnob {20 parameters_Group l Parameters n 1}
   addUserKnob {7 size_Floating_Point_Slider l Size R 1 5}
@@ -140,14 +105,14 @@ push $N4d63a000
   Input {
    inputs 0
    name Input
-   xpos -597
-   ypos -229
+   xpos -603
+   ypos -264
   }
   Saturation {
    saturation 0
    name Saturation
    xpos -603
-   ypos -181
+   ypos -185
   }
   Blur {
    size {{"parent.size_Floating_Point_Slider - 1"}}
@@ -167,9 +132,9 @@ push $N4d63a000
    expr1 "y / width"
    name gradient_Expression
    xpos -603
-   ypos -72
+   ypos -71
   }
-set N4d5db000 [stack 0]
+set N75ddd000 [stack 0]
   Matrix {
    matrix {
        {-3 0 3}
@@ -180,7 +145,7 @@ set N4d5db000 [stack 0]
    xpos -700
    ypos 29
   }
-push $N4d5db000
+push $N75ddd000
   Matrix {
    matrix {
        {3 10 3}
@@ -217,7 +182,6 @@ push $N4d5db000
    xpos -590
    ypos 135
   }
-set N4d5d9c00 [stack 0]
   Expression {
    expr0 "r * 0.5 + 0.5"
    expr1 "g * 0.5 + 0.5"
@@ -225,41 +189,27 @@ set N4d5d9c00 [stack 0]
    name output_offset_Expression
    xpos -590
    ypos 159
+   disable true
   }
   Shuffle {
    alpha white
    name Shuffle
+   selected true
    xpos -590
-   ypos 183
+   ypos 185
   }
   Output {
    name Output
    xpos -590
-   ypos 207
-  }
-push $N4d5d9c00
-  Viewer {
-   frame_range 1001-1031
-   fps 23.97602463
-   name Viewer1
-   selected true
-   xpos -354
-   ypos -46
+   ypos 315
   }
  end_group
  Blur {
   name BlurNormals
   xpos -238
-  ypos 732
+  ypos 739
  }
- Grade {
-  add {-0.5 -0.5 0 0}
-  black_clamp false
-  name Grade10
-  xpos -238
-  ypos 781
- }
-push $N4d63b000
+push $N6197c400
  Expression {
   expr0 x-width/2
   expr1 y-height/2
@@ -268,12 +218,17 @@ push $N4d63b000
   xpos -464
   ypos 543
  }
- Constant {
+ Reformat {
   inputs 0
-  channels rgb
-  name Constant1
+  type "to box"
+  box_width {{img.width}}
+  box_height {{img.height}}
+  box_fixed true
+  resize none
+  filter impulse
+  name Reformat1
   xpos -623
-  ypos 561
+  ypos 590
  }
 add_layer {p p.red p.green p.blue}
  ShuffleCopy {
@@ -298,7 +253,7 @@ add_layer {normals normals.X normals.Y normals.Z}
   xpos -623
   ypos 781
  }
-set N4d569000 [stack 0]
+set N6a311400 [stack 0]
  Dot {
   name Dot11
   xpos -693
@@ -307,32 +262,48 @@ set N4d569000 [stack 0]
  BasicMaterial {
   diffuse 0
   specular 1
-  min_shininess 6.7
-  max_shininess 16.4
-  name BasicMaterial2
+  min_shininess 0
+  name BasicMaterial1
   xpos -727
-  ypos 866
+  ypos 856
  }
  Camera2 {
   inputs 0
   translate {0 0 5000}
   name Camera
-  xpos -850
-  ypos 972
+  xpos -398
+  ypos 971
  }
  Light2 {
   inputs 0
-  intensity 150
-  falloff_type Linear
-  translate {{"parent.lightPos.pos.x - img.width/2"} {"parent.lightPos.pos.y - img.height/2"} {lightHeight}}
+  light_type directional
+  intensity {{lightIntensity}}
+  rot_order YZX
+  rotate {0 {lerp(0,0,1,90,1-parent.altitude)} {90-parent.azimuth}}
   depthmap_slope_bias 0.01
-  name Light
-  xpos -860
-  ypos 783
-  addUserKnob {20 User}
-  addUserKnob {12 pos}
+  name dir
+  xpos -942
+  ypos 723
  }
-push $N4d569000
+ Light2 {
+  inputs 0
+  intensity {{"200 * lightIntensity"}}
+  falloff_type Linear
+  translate {{"pos.x - img.width/2"} {"pos.y - img.height/2"} {lightHeight}}
+  depthmap_slope_bias 0.01
+  name point
+  xpos -1123
+  ypos 775
+  addUserKnob {20 User}
+ }
+ Switch {
+  inputs 2
+  which {{parent.lightType}}
+  name Switch2
+  xpos -952
+  ypos 880
+ }
+push $N6a311400
  ReLight {
   inputs 4
   normal normals
@@ -341,9 +312,15 @@ push $N4d569000
   xpos -611
   ypos 992
  }
-set N4d8eb800 [stack 0]
-push $N4d8eb800
-push $N4d63b400
+set N6ea27400 [stack 0]
+ Dot {
+  name Dot1
+  xpos -549
+  ypos 1474
+ }
+push $N6ea27400
+push $N6ea27400
+push $N6197c800
  Merge2 {
   inputs 2
   operation plus
@@ -360,14 +337,6 @@ push $N4d63b400
   ypos 1342
   disable {{1-parent.effectOnly}}
  }
-set N4d8eb000 [stack 0]
-push $N4d8eb800
- Dot {
-  name Dot1
-  xpos -549
-  ypos 1474
- }
-push $N4d8eb000
  Copy {
   inputs 2
   from0 rgba.red
@@ -390,19 +359,32 @@ push $N4d8eb000
   ypos 1642
   disable {{1-parent.premult}}
  }
-set N4d8ea000 [stack 0]
- Viewer {
-  inputs 2
-  frame_range 1001-1031
-  fps 23.97602463
-  name Viewer1
-  xpos -18
-  ypos 664
- }
-push $N4d8ea000
  Output {
   name Output1
   xpos -722
   ypos 1764
+ }
+push $N6197c400
+ Multiply {
+  value 0
+  name Multiply1
+  xpos -797
+  ypos 431
+  disable {{1-effectOnly x1036 0}}
+ }
+ NoOp {
+  inputs 0
+  name lightPos
+  xpos -1269
+  ypos 663
+  addUserKnob {20 User}
+  addUserKnob {12 pos}
+  pos {1042 772}
+ }
+ Axis2 {
+  inputs 0
+  name Axis1
+  xpos -942
+  ypos 508
  }
 end_group

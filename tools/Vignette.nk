@@ -4,6 +4,7 @@ Group {
  selected true
  addUserKnob {20 vignette l Vignette}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Vignette"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 ""}
  addUserKnob {4 output l Output M {"Add Vignette" "Remove Vignette" "" ""}}
  addUserKnob {6 outputchannels l "Output vignette channels" -STARTLINE}
