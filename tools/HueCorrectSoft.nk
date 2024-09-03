@@ -4,7 +4,8 @@ Group {
  selected true
  addUserKnob {20 HueCorrectSoft l "Hue Correct Soft"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Hue Correct Soft"}
- addUserKnob {26 text l "" +STARTLINE T "<font size=\"-5\">A gift from Jansen to the brother Carl"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 "" +STARTLINE}
  addUserKnob {26 ""}
  addUserKnob {41 hue l "" +STARTLINE T HueCorrect2.hue}
  addUserKnob {26 ""}

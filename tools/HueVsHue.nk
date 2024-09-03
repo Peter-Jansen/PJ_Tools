@@ -4,6 +4,8 @@ Group {
  tile_color 0x93abd3ff
  selected true
  addUserKnob {20 HueVsHue l "Hue vs Hue"}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Hue vs Hue"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 title l "" t "Use the \"lum\" curve. Target the hue you want to change on the \nhorizontal axis, make a point (and two either side to anchor it). \nPull the middle point up to change the hue of the selected hue." +STARTLINE T "<font size=\"+5\"> Hue vs Hue"}
  addUserKnob {26 ""}
  addUserKnob {26 text_2 l "" +STARTLINE T "Use the \"lum\" curve only!"}

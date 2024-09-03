@@ -1,9 +1,11 @@
 Group {
  name RSMB_Ghetto
+ tile_color 0xcc804eff 
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'shutter':\n    shutter_angle = k.value()*360.0\n    n.knob('shutter_angle').setValue(shutter_angle)\n    \nif k.name() == 'shutter_angle':\n    shutter = k.value()/360\n    n.knob('shutter').setValue(shutter)\n    \n\"\"\"\nif k.name() == 'attenuate':\n    attenuate = k.value()\n    n.begin()\n    \n    keymix = nuke.toNode('Keymix2')\n\n    \n    keymix.knob('maskChannel').setEnabled(attenuate)\n    keymix.knob('invertMask').setEnabled(attenuate)\n\n    n.end()\n\"\"\"\n"
  selected true
- addUserKnob {20 User l "RSMB Ghetto"}
- addUserKnob {26 text l "" +STARTLINE T "<font size=\"10\"> RSMB Ghetto"}
+ addUserKnob {20 RSMBGhetto l "RSMB Ghetto"}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> RSMB Ghetto"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 ""}
  addUserKnob {41 channels T VectorBlur14.channels}
  addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T VectorBlur14.useGPUIfAvailable}

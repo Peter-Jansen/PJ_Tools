@@ -2,9 +2,9 @@ Group {
  name Sharpie
  tile_color 0xcc804eff
  selected true
- addUserKnob {20 User l Sharpie}
- addUserKnob {26 text l "" +STARTLINE T "<font size=\"+5\"> Sharpie"}
- addUserKnob {26 text_1 l "" +STARTLINE T "<font size=\"-1\"> Bilateral sharpen using mult/div"}
+ addUserKnob {20 Sharpie l "Sharpie"}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Sharpie"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 ""}
  addUserKnob {7 amount R 0 2}
  amount 1

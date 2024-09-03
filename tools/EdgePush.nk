@@ -1,7 +1,10 @@
 Group {
  name EdgePush
  selected true
- addUserKnob {20 User}
+ addUserKnob {20 EdgePush l "Edge Push"}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Edge Push"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 "" +STARTLINE}
  addUserKnob {26 ""}
  addUserKnob {41 pre_blur l "Pre Blur" T preBlur2.size}
  addUserKnob {41 post_blur l "Post Blur" T postBlur2.size}

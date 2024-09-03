@@ -3,8 +3,8 @@ Group {
  tile_color 0xcc804eff
  selected true
  addUserKnob {20 Edge_Inpaint l "Edge Inpaint"}
- addUserKnob {26 title l "" t "Start with the alpha crunch, this will be your\nbest bet at restoring colours in blurred areas.\n\nThen move to soft erode to blend the\ntransition edge better, and softly bring\nin more of the original colours.\n\nUse the sharpen options to bring back some\nof the detail that is blurred with soft erode.\n\nFinally for stubborn edges, you can start to\npull on the hard erode slider, but this will destroy \ndetail a lot quicker." +STARTLINE T "<font size=\"+5\"> Edge Inpaint"}
- addUserKnob {26 text l "" +STARTLINE T "<font size=\"-5\">Brought to you by Jansen"}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Edge Inpaint"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 ""}
  addUserKnob {6 premultiplied_input l "Premultiplied Input" +STARTLINE}
  premultiplied_input true

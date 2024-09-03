@@ -5,7 +5,7 @@ Group {
  selected true
  addUserKnob {20 LensJuiceTab l "Lens Juice"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Lens Juice"}
- addUserKnob {26 text_10 l "" t peterjansen.work@gmail.com +STARTLINE T "<font style=\"color: #666666;\">v3.1 | Peter Jansen"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v3.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 ""}
  addUserKnob {26 text l "<b>Highlight selection</b>"}
  addUserKnob {7 highlight_threshold l Threshold}

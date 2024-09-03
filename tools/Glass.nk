@@ -1,9 +1,10 @@
 Group {
  name Glass
  selected true
- addUserKnob {20 User}
- addUserKnob {26 text l "" t "By Peter Jansen" +STARTLINE T "v01 - Hassle Peter if it sucks"}
- addUserKnob {26 ""}
+ addUserKnob {20 Glass l "Glass"}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Glass"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 "" +STARTLINE}
  addUserKnob {7 IOR t "Index of Refraction (totally physically accurate)" R 1 4}
  IOR 1.5
  addUserKnob {7 dispersion}
