@@ -1,26 +1,28 @@
 Group {
  name DiffusionRays
- knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"use_3d\":\n        print('hi')\n        if k.value():\n            n.knob('pos').setFlag(nuke.DISABLED)\n         \n        if not k.value():\n            n.knob('pos').clearFlag(nuke.DISABLED)\n         "
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"use_3d\":\n        if k.value():\n            n.knob('pos').setFlag(nuke.DISABLED)\n            n.begin()\n            nuke.toNode('Reconcile3D').knob('calc_output').setValue(True)\n            n.end()\n         \n        if not k.value():\n            n.knob('pos').clearFlag(nuke.DISABLED)\n            n.begin()\n            nuke.toNode('Reconcile3D').knob('calc_output').setValue(False)\n            n.end()\n         "
  selected true
  addUserKnob {20 diffusion_rays l "Diffusion Rays"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Diffusion Rays"}
- addUserKnob {26 version_plug l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a> | <a href=\"https://github.com/Peter-Jansen\" style=\"color: #6786b8;\">Github</a>"}
+ addUserKnob {26 version_plug l "" +STARTLINE T "<font style=\"color: #666666;\">v1.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a> | <a href=\"https://github.com/Peter-Jansen\" style=\"color: #6786b8;\">Github</a>"}
  addUserKnob {26 "" +STARTLINE}
- addUserKnob {12 pos}
+ addUserKnob {12 pos +DISABLED}
  addUserKnob {6 use_3d l "Use 3d" -STARTLINE}
+ use_3d true
  addUserKnob {26 text_1 l <b>Look}
  addUserKnob {7 length R 1 10}
- length 2
+ length 3
  addUserKnob {7 diffusion R 0 2}
- diffusion 0.4
+ diffusion 0.5
+ addUserKnob {41 white l "from colour" T from_colour.white}
  addUserKnob {6 color_rgb_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
- addUserKnob {18 from_colour l "from colour"}
- from_colour 1
- addUserKnob {6 from_colour_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 from_colour_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
  addUserKnob {6 color_rgba_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
- addUserKnob {18 to_colour l "to colour"}
- to_colour 1
- addUserKnob {6 to_colour_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 to_colour_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {6 color_rgba_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ color_rgba_panelDropped true
+ addUserKnob {6 color_rgba_1_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {41 white_1 l "to colour" T to_colour.white}
  addUserKnob {26 text l <b>Quality}
  addUserKnob {3 steps}
  steps 30
@@ -28,25 +30,37 @@ Group {
  vec_blur 0.5
  addUserKnob {7 downscale}
  downscale 0.35
+ addUserKnob {7 overscan l "overscan %" R 0 100}
+ overscan 10
+ addUserKnob {26 "" +STARTLINE}
 }
  Input {
   inputs 0
   name img
-  xpos -203
-  ypos 44
+  xpos -346
+  ypos 8
  }
-set N3ccb800 [stack 0]
+ Dot {
+  name Dot3
+  xpos -312
+  ypos 161
+ }
+set N4d75d000 [stack 0]
+ Dot {
+  name Dot5
+  xpos 124
+  ypos 161
+ }
  Crop {
   box {0 0 {img.width} {img.height}}
   name Crop1
-  selected true
-  xpos -91
-  ypos 460
+  xpos 90
+  ypos 423
  }
  AdjBBox {
-  numpixels 570
+  numpixels {{(width*parent.overscan/100)} {(height*parent.overscan/100)}}
   name OVERSCAN
-  xpos -91
+  xpos 90
   ypos 702
  }
 set N3ccb000 [stack 0]
@@ -55,114 +69,40 @@ set N3ccb000 [stack 0]
   scale {{"max(parent.downscale, .1)"}}
   pbb true
   name DOWNSCALE
-  xpos -194
+  xpos -13
   ypos 757
  }
  set C3ccac00 [stack 0]
 set N3ccac00 [stack 0]
  Dot {
   name Dot62
-  xpos -160
+  xpos 21
   ypos 968
  }
 push $N3ccb000
- Group {
-  name UV_Map2
-  help "Create an uvmap from the input format or the selected format that can be used for example for baking transformations and applying them through a STmap node.\nUse the overscan to create values outside of the viewing window and the 0-1 range."
-  tile_color 0x578100ff
-  note_font "Bitstream Vera Sans"
-  note_font_color 0xffffffff
-  xpos -91
-  ypos 836
-  mapsize {0.15 0.15}
-  addUserKnob {20 tab l "UV Map"}
-  addUserKnob {41 format T Constant1.format}
-  addUserKnob {41 scale l overscan T Reformat1.scale}
-  addUserKnob {6 alpha l "alpha 1" +STARTLINE}
-  addUserKnob {41 black_outside l "black outside" -STARTLINE T Reformat2.black_outside}
+ Expression {
+  expr0 (x+0.5)/width
+  expr1 (y+0.5)/height
+  name Expression2
+  xpos 90
+  ypos 833
  }
-  Input {
-   inputs 0
-   name Input
-   xpos 620
-   ypos -370
-  }
-  Shuffle {
-   red black
-   green black
-   blue black
-   alpha black
-   name Shuffle1
-   xpos 620
-   ypos -309
-  }
-  Constant {
-   inputs 0
-   name Constant1
-   xpos 479
-   ypos -214
-  }
-  Switch {
-   inputs 2
-   which {{"\[exists parent.input0]"}}
-   name Switch1
-   xpos 620
-   ypos -190
-  }
-  Reformat {
-   type scale
-   pbb true
-   name Reformat1
-   xpos 620
-   ypos -71
-  }
-  Reformat {
-   type scale
-   scale {{1/Reformat1.scale} {1/Reformat1.scale}}
-   resize none
-   pbb true
-   name Reformat2
-   xpos 620
-   ypos -37
-  }
-  Shuffle {
-   alpha white
-   name Shuffle13
-   tile_color 0xffffff00
-   label "\[value in]"
-   xpos 620
-   ypos 12
-   disable {{!parent.alpha}}
-  }
-  Expression {
-   expr0 (x+0.5)/width
-   expr1 (y+0.5)/height
-   name Expression2
-   xpos 620
-   ypos 75
-  }
-  Output {
-   name Output1
-   xpos 620
-   ypos 127
-  }
- end_group
  Transform {
   scale 1.02
   center {{"use_3d? Reconcile3D.output : pos"} {"use_3d? Reconcile3D.output : pos"}}
   name Transform2
-  xpos -91
+  xpos 90
   ypos 881
  }
 clone $C3ccac00 {
-  xpos -91
+  xpos 90
   ypos 916
   selected false
  }
  CopyBBox {
   inputs 2
   name CopyBBox4
-  xpos -91
+  xpos 90
   ypos 965
  }
  Expression {
@@ -170,68 +110,59 @@ clone $C3ccac00 {
   expr1 (g-(y+0.5)/height)*height
   expr2 0
   name UV_to_Vector2
-  xpos -91
-  ypos 1015
+  xpos 90
+  ypos 1031
  }
 push $N3ccac00
-push $N3ccb800
- Dot {
-  name Dot63
-  xpos -469
-  ypos 157
- }
+push $N4d75d000
  NoTimeBlur {
   name NoTimeBlur1
-  xpos -503
-  ypos 246
+  xpos -346
+  ypos 238
  }
  Transform {
   scale {{"lerp( 0,1,1, parent.length, pow(fmod(frame,1), (diffusion*3)+1) )"}}
   center {{"use_3d? Reconcile3D.output : pos"} {"use_3d? Reconcile3D.output : pos"}}
   name Transform4
-  xpos -503
-  ypos 300
+  xpos -346
+  ypos 292
  }
 clone $C3ccac00 {
-  xpos -503
-  ypos 348
+  xpos -346
+  ypos 340
   selected false
  }
  Blur {
   size {{"lerp( 0,0,1, diffusion, pow(fmod(frame,1), (diffusion*3)+1) ) * hypot(img.width,img.height) * downscale"}}
   name Blur3
-  xpos -503
-  ypos 386
+  xpos -346
+  ypos 378
  }
  Dot {
   name Dot4
-  xpos -469
-  ypos 498
+  xpos -312
+  ypos 490
  }
 set N3c78400 [stack 0]
  Grade {
-  multiply {{to_colour}}
-  multiply_panelDropped true
   unpremult -rgba.alpha
   name to_colour
-  xpos -404
-  ypos 562
+  xpos -247
+  ypos 554
  }
 push $N3c78400
  Grade {
-  multiply {{from_colour}}
-  multiply_panelDropped true
   unpremult -rgba.alpha
   name from_colour
-  xpos -611
-  ypos 562
+  xpos -454
+  ypos 554
  }
  Dissolve {
   inputs 2
   which {{fmod(frame,1)}}
   name Dissolve1
-  xpos -503
-  ypos 636
+  xpos -346
+  ypos 628
  }
  TimeBlur {
   divisions {{steps}}
@@ -239,8 +170,8 @@ push $N3c78400
   shutteroffset end
   shuttercustomoffset 0
   name TimeBlur1
-  xpos -503
-  ypos 693
+  xpos -346
+  ypos 685
  }
  CopyBBox {
   inputs 2
@@ -251,7 +182,7 @@ push $N3c78400
  Dot {
   name Dot1
   xpos -312
-  ypos 1075
+  ypos 1139
  }
 set N3c1e800 [stack 0]
  Shuffle2 {
@@ -262,21 +193,21 @@ set N3c1e800 [stack 0]
   mappings "4 rgba.red 0 0 forward.u 0 0 rgba.green 0 1 forward.v 0 1 rgba.blue 0 2 backward.u 0 2 rgba.alpha 0 3 backward.v 0 3"
   name Shuffle27
   label "\[value in1] -> \[value out1]"
-  xpos -91
-  ypos 1066
+  xpos 90
+  ypos 1130
  }
  VectorBlur {
   uv motion
   scale {{vec_blur}}
   offset -1
   name VectorBlur4
-  xpos -91
-  ypos 1138
+  xpos 90
+  ypos 1202
  }
  Dot {
   name Dot2
-  xpos -57
-  ypos 1253
+  xpos 124
+  ypos 1317
  }
 push $N3c1e800
  Switch {
@@ -284,7 +215,7 @@ push $N3c1e800
   which {{"vec_blur > 0"}}
   name Switch1
   xpos -346
-  ypos 1250
+  ypos 1314
  }
  Reformat {
   type "to box"
@@ -295,36 +226,36 @@ push $N3c1e800
   pbb true
   name Reformat3
   xpos -346
-  ypos 1346
+  ypos 1410
  }
  Output {
   name Output1
   xpos -346
-  ypos 1460
+  ypos 1524
  }
  Input {
   inputs 0
   name Axis
-  xpos -1168
-  ypos 426
+  xpos -1034
+  ypos 91
   number 2
  }
  NoTimeBlur {
   name NoTimeBlur3
-  xpos -1168
-  ypos 466
+  xpos -1034
+  ypos 131
  }
  Input {
   inputs 0
   name Camera
-  xpos -1017
-  ypos 350
+  xpos -883
+  ypos 15
   number 1
  }
  NoTimeBlur {
   name NoTimeBlur2
-  xpos -1017
-  ypos 437
+  xpos -883
+  ypos 102
  }
  Reformat {
   inputs 0
@@ -333,14 +264,14 @@ push $N3c1e800
   box_height {{img.height}}
   box_fixed true
   name Reformat22
-  xpos -818
-  ypos 415
+  xpos -719
+  ypos 104
  }
  Reconcile3D {
   inputs 3
   calc_output true
   name Reconcile3D
-  xpos -1017
-  ypos 509
+  xpos -883
+  ypos 174
  }
 end_group
