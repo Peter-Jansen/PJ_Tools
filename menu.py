@@ -32,6 +32,8 @@ p_tools.addCommand('Lens Juice', 'nuke.createNode(\'Lens_Juice.nk\')', icon = 'p
 p_tools.addCommand('RSMB Ghetto', 'nuke.createNode(\'RSMB_Ghetto.nk\')', icon = 'p.png')
 p_tools.addCommand('Sharpie', 'nuke.createNode(\'Sharpie.nk\')', icon = 'p.png')
 p_tools.addCommand('Vignette', 'nuke.createNode(\'Vignette.nk\')', icon = 'p.png')
+p_tools.addCommand('VectorBlurOverscan', 'nuke.createNode(\'VectorBlurOverscan.nk\')', icon = 'p.png')
+p_tools.addCommand('DiffusionRays', 'nuke.createNode(\'DiffusionRays.nk\')', icon = 'p.png')
 p_tools.addSeparator()
 
 # Keying
