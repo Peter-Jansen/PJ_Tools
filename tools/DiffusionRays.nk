@@ -6,9 +6,9 @@ Group {
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Diffusion Rays"}
  addUserKnob {26 version_plug l "" +STARTLINE T "<font style=\"color: #666666;\">v1.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a> | <a href=\"https://github.com/Peter-Jansen\" style=\"color: #6786b8;\">Github</a>"}
  addUserKnob {26 "" +STARTLINE}
- addUserKnob {12 pos +DISABLED}
+ addUserKnob {12 pos}
  addUserKnob {6 use_3d l "Use 3d" -STARTLINE}
- use_3d true
+ use_3d false
  addUserKnob {26 text_1 l <b>Look}
  addUserKnob {7 length R 1 10}
  length 3
