@@ -13,5 +13,3 @@ And it should add the menu and all the tools for you.
 
 
 
-<b>Diffusion Rays:
-![Diffusion Rays](https://github.com/user-attachments/assets/cdad812f-c9ae-43ab-9dfb-fe7f4fa45339)
