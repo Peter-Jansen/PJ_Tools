@@ -1,0 +1,62 @@
+set cut_paste_input [stack 0]
+version 13.2 v1
+push $cut_paste_input
+Group {
+ name ParticleFade
+ selected true
+ xpos 927
+ ypos 6050
+ addUserKnob {20 User}
+ addUserKnob {7 fade_width l "fade width" R 0 10}
+ fade_width 5
+}
+ Input {
+  inputs 0
+  name particles
+  xpos -647
+  ypos 280
+ }
+ ParticleExpression {
+  temp_name0 cx
+  temp_expr0 "\[value cpx]"
+  temp_name1 cy
+  temp_expr1 "\[value cpy]"
+  temp_name2 cz
+  temp_expr2 "\[value cpz]"
+  temp_name3 dist
+  temp_expr3 "sqrt( pow2(cy-y(pos)) + pow2(cy-y(pos)) + pow2(cz-z(pos)))"
+  colexpr "color * (dist / \[value fade] > 1 ? 1 : dist / \[value fade] )"
+  opacityexpr "opacity * (dist / \[value fade] > 1 ? 1 : dist / \[value fade] )"
+  name ParticleExpression4
+  label "\[value cpx]"
+  xpos -647
+  ypos 371
+  addUserKnob {20 User}
+  addUserKnob {7 fade}
+  fade {{parent.fade_width}}
+  addUserKnob {7 cpx}
+  cpx {{parent.Axis1.world_matrix.3}}
+  addUserKnob {7 cpy}
+  cpy {{parent.Axis1.world_matrix.7}}
+  addUserKnob {7 cpz}
+  cpz {{parent.Axis1.world_matrix.11}}
+  addUserKnob {6 color_rgb_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ }
+ Output {
+  name Output1
+  xpos -647
+  ypos 496
+ }
+ Input {
+  inputs 0
+  name cam
+  xpos -1005
+  ypos 240
+  number 1
+ }
+ Axis3 {
+  name Axis1
+  xpos -827
+  ypos 283
+ }
+end_group
