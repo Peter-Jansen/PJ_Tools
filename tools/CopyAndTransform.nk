@@ -1,12 +1,7 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
 name CopyAndTransform
 knobChanged "thisNode = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'copies':\n    \n    thisNode.begin()\n    in1 = nuke.toNode('Input1')\n    master = nuke.toNode('MASTER')\n    parent = master\n    m = nuke.toNode('MergeGeo1')\n    for n in nuke.allNodes('TransformGeo'):\n        if n.name() != 'MASTER':\n            nuke.delete(n)\n    \n    m.setSelected(True)\n    nukescripts.remove_inputs()\n    m.setSelected(False)\n    \n    copies = int(k.value()-1)\n    tnodes = \[in1,parent]\n    for n in range(0,copies):\n        parent.setSelected(True)\n        parentx = parent.xpos()\n        parenty = parent.ypos()\n        tg = nuke.createNode('TransformGeo', inpanel = False)\n        tg.knob('translate').setExpression('MASTER.translate')\n        tg.knob('rotate').setExpression('MASTER.rotate')\n        tg.knob('scaling').setExpression('MASTER.scaling')\n        tg.knob('uniform_scale').setExpression('MASTER.uniform_scale')\n    \n    \n        tg.setXpos(parentx + 100)\n        tg.setYpos(parenty)\n        parent=tg\n        tnodes.append(tg)\n    \n    i = 0\n    for tn in tnodes:\n        m.setInput(i,tn)\n        i+=1\n\n    thisNode.end()    \n    \n    \n    \n    "
 selected true
-xpos -1325
-ypos 13921
 addUserKnob {20 User}
 addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Copy and Transform"}
 addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v0.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
