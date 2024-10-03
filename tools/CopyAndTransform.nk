@@ -1,81 +1,65 @@
 Group {
-name CopyAndTransform
-knobChanged "thisNode = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'copies':\n    \n    thisNode.begin()\n    in1 = nuke.toNode('Input1')\n    master = nuke.toNode('MASTER')\n    parent = master\n    m = nuke.toNode('MergeGeo1')\n    for n in nuke.allNodes('TransformGeo'):\n        if n.name() != 'MASTER':\n            nuke.delete(n)\n    \n    m.setSelected(True)\n    nukescripts.remove_inputs()\n    m.setSelected(False)\n    \n    copies = int(k.value()-1)\n    tnodes = \[in1,parent]\n    for n in range(0,copies):\n        parent.setSelected(True)\n        parentx = parent.xpos()\n        parenty = parent.ypos()\n        tg = nuke.createNode('TransformGeo', inpanel = False)\n        tg.knob('translate').setExpression('MASTER.translate')\n        tg.knob('rotate').setExpression('MASTER.rotate')\n        tg.knob('scaling').setExpression('MASTER.scaling')\n        tg.knob('uniform_scale').setExpression('MASTER.uniform_scale')\n    \n    \n        tg.setXpos(parentx + 100)\n        tg.setYpos(parenty)\n        parent=tg\n        tnodes.append(tg)\n    \n    i = 0\n    for tn in tnodes:\n        m.setInput(i,tn)\n        i+=1\n\n    thisNode.end()    \n    \n    \n    \n    "
-selected true
-addUserKnob {20 User}
-addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Copy and Transform"}
-addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v0.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
-addUserKnob {26 "" +STARTLINE}
-addUserKnob {3 copies}
-copies 3
-addUserKnob {26 "" +STARTLINE}
-addUserKnob {41 xform_order l "transform order" T MASTER.xform_order}
-addUserKnob {41 rot_order l "rotation order" T MASTER.rot_order}
-addUserKnob {41 translate T MASTER.translate}
-addUserKnob {41 rotate T MASTER.rotate}
-addUserKnob {41 scaling l scale T MASTER.scaling}
-addUserKnob {41 uniform_scale l "uniform scale" T MASTER.uniform_scale}
+ name CopyAndTransform
+ knobChanged "thisNode = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'copies':\n    \n    thisNode.begin()\n    in1 = nuke.toNode('Input1')\n    master = nuke.toNode('MASTER')\n    parent = master\n    m = nuke.toNode('MergeGeo1')\n    for n in nuke.allNodes('TransformGeo'):\n        if n.name() != 'MASTER':\n            nuke.delete(n)\n    \n    m.setSelected(True)\n    nukescripts.remove_inputs()\n    m.setSelected(False)\n    \n    copies = int(k.value()-1)\n    tnodes = \[in1,parent]\n    for n in range(0,copies):\n        parent.setSelected(True)\n        parentx = parent.xpos()\n        parenty = parent.ypos()\n        tg = nuke.createNode('TransformGeo', inpanel = False)\n        tg.knob('translate').setExpression('MASTER.translate')\n        tg.knob('rotate').setExpression('MASTER.rotate')\n        tg.knob('scaling').setExpression('MASTER.scaling')\n        tg.knob('uniform_scale').setExpression('MASTER.uniform_scale')\n    \n    \n        tg.setXpos(parentx + 100)\n        tg.setYpos(parenty)\n        parent=tg\n        tnodes.append(tg)\n    \n    for i, tn in enumerate(tnodes):\n        m.setInput(i, tn)\n        \n    nuke.selectedNode().setSelected(False)\n    thisNode.end()\n"
+ selected true
+ addUserKnob {20 CopyAndTransform}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Copy and Transform"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v0.2 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 ""}
+ addUserKnob {3 copies}
+ addUserKnob {26 ""}
+ addUserKnob {41 xform_order l "transform order" T MASTER.xform_order}
+ addUserKnob {41 rot_order l "rotation order" T MASTER.rot_order}
+ addUserKnob {41 translate T MASTER.translate}
+ addUserKnob {41 rotate T MASTER.rotate}
+ addUserKnob {41 scaling l scale T MASTER.scaling}
+ addUserKnob {41 uniform_scale l "uniform scale" T MASTER.uniform_scale}
 }
-Input {
-inputs 0
-name Input1
-xpos -717
-ypos 164
-}
-set Nd3a0b400 [stack 0]
-Dot {
-name Dot1
-xpos -736
-ypos 346
-}
-set Ned3e9000 [stack 0]
-TransformGeo {
-translate {0 0.2 0}
-name MASTER
-xpos -586
-ypos 456
-}
-set Nd3a0bc00 [stack 0]
-TransformGeo {
-translate {{MASTER.translate} {MASTER.translate} {MASTER.translate}}
-rotate {{MASTER.rotate} {MASTER.rotate} {MASTER.rotate}}
-scaling {{MASTER.scaling} {MASTER.scaling} {MASTER.scaling}}
-uniform_scale {{MASTER.uniform_scale}}
-name TransformGeo1
-xpos -486
-ypos 456
-}
-set N541de800 [stack 0]
-TransformGeo {
-translate {{MASTER.translate} {MASTER.translate} {MASTER.translate}}
-rotate {{MASTER.rotate} {MASTER.rotate} {MASTER.rotate}}
-scaling {{MASTER.scaling} {MASTER.scaling} {MASTER.scaling}}
-uniform_scale {{MASTER.uniform_scale}}
-name TransformGeo2
-selected true
-xpos -386
-ypos 456
-}
-push $N541de800
-push $Nd3a0bc00
-push $Nd3a0b400
-MergeGeo {
-inputs 4
-name MergeGeo1
-xpos -672
-ypos 785
-}
-push $Ned3e9000
-Switch {
-inputs 2
-which {{"copies != 0"}}
-name Switch1
-xpos -846
-ypos 918
-}
-Output {
-name Output1
-xpos -846
-ypos 1157
-}
+ Input {
+  inputs 0
+  name Input1
+  xpos -717
+  ypos 164
+ }
+set Ne52fa000 [stack 0]
+ Dot {
+  name Dot1
+  xpos -736
+  ypos 346
+ }
+set Ne52f9c00 [stack 0]
+ TransformGeo {
+  name MASTER
+  xpos -586
+  ypos 456
+  disable {{"copies == 0"}}
+ }
+push $Ne52fa000
+ MergeGeo {
+  inputs 2
+  name MergeGeo1
+  xpos -672
+  ypos 785
+ }
+push $Ne52f9c00
+ Switch {
+  inputs 2
+  which {{"copies != 0"}}
+  name Switch1
+  xpos -846
+  ypos 918
+ }
+ Output {
+  name Output1
+  xpos -846
+  ypos 1157
+ }
+ Viewer {
+  inputs 0
+  frame_range 1-100
+  monitorOutOutputTransform rec709
+  name Viewer1
+  xpos -260
+  ypos -9
+ }
 end_group

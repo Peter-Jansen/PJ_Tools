@@ -19,6 +19,7 @@ p_tools.addCommand('HueCorrect Soft', 'nuke.createNode(\'HueCorrectSoft.nk\')', 
 p_tools.addCommand('HueVsHue', 'nuke.createNode(\'HueVsHue.nk\')', icon = 'p.png')
 p_tools.addCommand('LogSat', 'nuke.createNode(\'LogSat.nk\')', icon = 'p.png')
 p_tools.addCommand('Soft Crush Highlights', 'nuke.createNode(\'SoftCrushHighlights.nk\')', icon = 'p.png')
+p_tools.addCommand('SoftContrast', 'nuke.createNode(\'SoftContrast.nk\')', icon = 'p.png')
 p_tools.addSeparator()
 # Filter
 
@@ -39,7 +40,8 @@ p_tools.addSeparator()
 # Keying
 
 # Tansform
-
+p_tools.addCommand('CopyAndTransform', 'nuke.createNode(\'CopyAndTransform.nk\')', icon = 'p.png')
+p_tools.addSeparator()
 # Other
-
+p_tools.addCommand('ParticleFade', 'nuke.createNode(\'ParticleFade.nk\')', icon = 'p.png')
 p_tools.addCommand('Fuse', 'nuke.createNode(\'Fuse.nk\')', icon = 'p.png')
