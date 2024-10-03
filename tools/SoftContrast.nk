@@ -1,0 +1,221 @@
+Group {
+name Soft_Contrast
+tile_color 0x8fa9d6ff
+selected true
+addUserKnob {20 SoftContrast l "Soft Contrast"}
+addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Soft Contrast"}
+addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+addUserKnob {26 ""}
+addUserKnob {7 contrast}
+addUserKnob {7 extra_gain l "extra gain" R 0 2}
+extra_gain 1
+}
+Input {
+inputs 0
+name Input1
+xpos 237
+ypos -149
+}
+Dot {
+name Dot1
+xpos 271
+ypos 155
+}
+set N738d5400 [stack 0]
+Dot {
+name Dot3
+xpos 510
+ypos 155
+}
+Dot {
+name Dot2
+xpos 510
+ypos 1673
+}
+push $N738d5400
+Reformat {
+type "to box"
+box_width 400
+scale 0.1
+name Reformat1
+xpos -616
+ypos 152
+}
+Colorspace {
+colorspace_out AlexaV3LogC
+name Colorspace1
+label "\[value colorspace_in] - \[value colorspace_out]"
+xpos -616
+ypos 176
+}
+Blur {
+size 100
+quality 10
+name Blur2
+xpos -616
+ypos 233
+}
+set C15c23000 [stack 0]
+Colorspace {
+colorspace_in AlexaV3LogC
+name Colorspace2
+label "\[value colorspace_in] - \[value colorspace_out]"
+xpos -616
+ypos 269
+}
+ColorCorrect {
+saturation 0
+unpremult -rgba.alpha
+name ColorCorrect1
+xpos -616
+ypos 333
+}
+Reformat {
+type "to box"
+box_width {{Input1.width}}
+box_height {{Input1.height}}
+box_fixed true
+filter notch
+name Reformat2
+xpos -616
+ypos 381
+}
+push $N738d5400
+Dot {
+name Dot9
+xpos 271
+ypos 379
+}
+set Ndcfbe000 [stack 0]
+Dot {
+name Dot37
+xpos 115
+ypos 379
+}
+Colorspace {
+colorspace_out AlexaV3LogC
+name Colorspace5
+label "\[value colorspace_in] - \[value colorspace_out]"
+xpos 81
+ypos 455
+}
+ColorCorrect {
+saturation 0
+name ColorCorrect3
+xpos 81
+ypos 531
+}
+Grade {
+gamma {{lerp(0,10,1,0.05,pow(parent.contrast,0.1))}}
+name Grade11
+xpos 81
+ypos 572
+}
+Dot {
+name Dot38
+xpos 115
+ypos 760
+}
+push $Ndcfbe000
+Merge2 {
+inputs 2
+operation multiply
+name Merge17
+xpos 237
+ypos 757
+}
+Dot {
+name Dot4
+xpos 271
+ypos 892
+}
+set N17581800 [stack 0]
+Reformat {
+type "to box"
+box_width 400
+scale 0.1
+name Reformat3
+xpos -443
+ypos 889
+}
+Colorspace {
+colorspace_out AlexaV3LogC
+name Colorspace3
+label "\[value colorspace_in] - \[value colorspace_out]"
+xpos -443
+ypos 913
+}
+clone $C15c23000 {
+xpos -443
+ypos 969
+selected false
+}
+Colorspace {
+colorspace_in AlexaV3LogC
+name Colorspace4
+label "\[value colorspace_in] - \[value colorspace_out]"
+xpos -443
+ypos 1027
+}
+ColorCorrect {
+saturation 0
+unpremult -rgba.alpha
+name ColorCorrect2
+xpos -443
+ypos 1102
+}
+Reformat {
+type "to box"
+box_width {{Input1.width}}
+box_height {{Input1.height}}
+box_fixed true
+filter notch
+name Reformat4
+xpos -443
+ypos 1138
+}
+Dot {
+name Dot5
+xpos -409
+ypos 1283
+}
+Merge2 {
+inputs 2
+operation divide
+name Merge3
+xpos -616
+ypos 1280
+}
+Dot {
+name Dot6
+xpos -582
+ypos 1440
+}
+push $N17581800
+Merge2 {
+inputs 2
+operation multiply
+name Merge4
+xpos 237
+ypos 1437
+}
+Dissolve {
+inputs 2
+which {{1-pow(parent.contrast,.1)}}
+name Dissolve1
+xpos 237
+ypos 1664
+}
+Grade {
+white {{parent.extra_gain}}
+unpremult -rgba.alpha
+name Grade1
+xpos 237
+ypos 1769
+}
+Output {
+name Output1
+xpos 237
+ypos 1981
+}
+end_group
