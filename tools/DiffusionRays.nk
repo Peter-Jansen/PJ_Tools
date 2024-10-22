@@ -4,11 +4,10 @@ Group {
  selected true
  addUserKnob {20 diffusion_rays l "Diffusion Rays"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Diffusion Rays"}
- addUserKnob {26 version_plug l "" +STARTLINE T "<font style=\"color: #666666;\">v1.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a> | <a href=\"https://github.com/Peter-Jansen\" style=\"color: #6786b8;\">Github</a>"}
- addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 version_plug l "" +STARTLINE T "<font style=\"color: #666666;\">v1.2 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a> | <a href=\"https://github.com/Peter-Jansen\" style=\"color: #6786b8;\">Github</a>"}
+ addUserKnob {26 ""}
  addUserKnob {12 pos}
  addUserKnob {6 use_3d l "Use 3d" -STARTLINE}
- use_3d false
  addUserKnob {26 text_1 l <b>Look}
  addUserKnob {7 length R 1 10}
  length 3
@@ -18,9 +17,8 @@ Group {
  addUserKnob {6 color_rgb_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
  addUserKnob {6 from_colour_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
  addUserKnob {6 color_rgba_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
- addUserKnob {6 to_colour_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
- addUserKnob {6 color_rgba_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
  color_rgba_panelDropped true
+ addUserKnob {6 to_colour_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
  addUserKnob {6 color_rgba_1_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
  addUserKnob {41 white_1 l "to colour" T to_colour.white}
  addUserKnob {26 text l <b>Quality}
@@ -32,7 +30,7 @@ Group {
  downscale 0.35
  addUserKnob {7 overscan l "overscan %" R 0 100}
  overscan 10
- addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 ""}
 }
  Input {
   inputs 0
@@ -45,7 +43,7 @@ Group {
   xpos -312
   ypos 161
  }
-set N4d75d000 [stack 0]
+set N734fb000 [stack 0]
  Dot {
   name Dot5
   xpos 124
@@ -63,7 +61,7 @@ set N4d75d000 [stack 0]
   xpos 90
   ypos 702
  }
-set N3ccb000 [stack 0]
+set Neb6a4400 [stack 0]
  Reformat {
   type scale
   scale {{"max(parent.downscale, .1)"}}
@@ -72,14 +70,14 @@ set N3ccb000 [stack 0]
   xpos -13
   ypos 757
  }
- set C3ccac00 [stack 0]
-set N3ccac00 [stack 0]
+ set Ceb6a6800 [stack 0]
+set Neb6a6800 [stack 0]
  Dot {
   name Dot62
   xpos 21
   ypos 968
  }
-push $N3ccb000
+push $Neb6a4400
  Expression {
   expr0 (x+0.5)/width
   expr1 (y+0.5)/height
@@ -94,7 +92,7 @@ push $N3ccb000
   xpos 90
   ypos 881
  }
-clone $C3ccac00 {
+clone $Ceb6a6800 {
   xpos 90
   ypos 916
   selected false
@@ -113,8 +111,8 @@ clone $C3ccac00 {
   xpos 90
   ypos 1031
  }
-push $N3ccac00
-push $N4d75d000
+push $Neb6a6800
+push $N734fb000
  NoTimeBlur {
   name NoTimeBlur1
   xpos -346
@@ -127,9 +125,9 @@ push $N4d75d000
   xpos -346
   ypos 292
  }
-clone $C3ccac00 {
+clone $Ceb6a6800 {
   xpos -346
-  ypos 340
+  ypos 341
   selected false
  }
  Blur {
@@ -143,14 +141,14 @@ clone $C3ccac00 {
   xpos -312
   ypos 490
  }
-set N3c78400 [stack 0]
+set N2b04d800 [stack 0]
  Grade {
   unpremult -rgba.alpha
   name to_colour
   xpos -247
   ypos 554
  }
-push $N3c78400
+push $N2b04d800
  Grade {
   unpremult -rgba.alpha
   name from_colour
@@ -184,7 +182,7 @@ push $N3c78400
   xpos -312
   ypos 1139
  }
-set N3c1e800 [stack 0]
+set N2aff3c00 [stack 0]
  Shuffle2 {
   inputs 2
   fromInput1 {{1} B A}
@@ -209,7 +207,7 @@ set N3c1e800 [stack 0]
   xpos 124
   ypos 1317
  }
-push $N3c1e800
+push $N2aff3c00
  Switch {
   inputs 2
   which {{"vec_blur > 0"}}
@@ -222,9 +220,11 @@ push $N3c1e800
   box_width {{img.width}}
   box_height {{img.height}}
   box_fixed true
+  box_pixel_aspect {{img.pixel_aspect}}
   filter Mitchell
   pbb true
   name Reformat3
+  selected true
   xpos -346
   ypos 1410
  }
@@ -263,6 +263,7 @@ push $N3c1e800
   box_width {{img.width}}
   box_height {{img.height}}
   box_fixed true
+  box_pixel_aspect {{img.pixel_aspect}}
   name Reformat22
   xpos -719
   ypos 104
@@ -272,6 +273,6 @@ push $N3c1e800
   calc_output true
   name Reconcile3D
   xpos -883
-  ypos 174
+  ypos 178
  }
 end_group
