@@ -1,0 +1,78 @@
+Group {
+name Subframer
+selected true
+addUserKnob {20 User}
+addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Subframer"}
+addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {26 _1 l "Local GPU:" T ""}
+addUserKnob {26 gpuName l "" -STARTLINE T "NVIDIA RTX A4500"}
+addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T OFlow2.useGPUIfAvailable}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {41 input.first l "Input Range" T OFlow2.input.first}
+addUserKnob {41 input.last l "" -STARTLINE T OFlow2.input.last}
+addUserKnob {41 resetInputRange l Reset -STARTLINE T OFlow2.resetInputRange}
+addUserKnob {3 subframes l Subframes}
+subframes 10
+addUserKnob {7 vector_detail l "Vector Detail"}
+vector_detail 0.3
+addUserKnob {7 vector_strength l Strength}
+vector_strength 1.5
+}
+Input {
+inputs 0
+name Element
+xpos 568
+ypos 239
+}
+Dot {
+name Dot1
+xpos 602
+ypos 321
+}
+set Nbc7e8800 [stack 0]
+Kronos {
+input.first {{OFlow2.input.first}}
+input.last {{OFlow2.input.last}}
+retimedChannels all
+timingOutputSpeed {{1/parent.subframes}}
+motionEstimation Regularized
+Shutter 1
+name Kronos1
+xpos 568
+ypos 420
+}
+Retime {
+input.first {{OFlow2.input.first}}
+input.first_lock true
+input.last {{"Kronos1.input.first+ ((parent.Kronos1.input.last -Kronos1.input.first)* 1/Kronos1.timingOutputSpeed)"}}
+input.last_lock true
+output.first {{OFlow2.input.first}}
+output.first_lock true
+output.last {{OFlow2.input.last}}
+output.last_lock true
+speed 19.84297521
+filter none
+time ""
+name Retime6
+xpos 568
+ypos 510
+}
+Output {
+name Output1
+xpos 568
+ypos 700
+}
+push $Nbc7e8800
+Dot {
+name Dot2
+xpos 346
+ypos 321
+}
+OFlow2 {
+input.first 0
+name OFlow2
+xpos 312
+ypos 412
+}
+end_group
