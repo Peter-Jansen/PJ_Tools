@@ -1,0 +1,360 @@
+Group {
+ name MultiWipe
+ knobChanged "tn = nuke.thisNode()\nk = nuke.thisKnob()\n\n\nif k.name() in \[\"wipe_start\", \"wipe_duration\", \"inputChange\"]:\n    \n    start = tn\['wipe_start'].value()\n    duration = tn.knob('wipe_duration').value()\n    inputs = tn.inputs()\n    end_frame = int((inputs-1)*duration + start)\n    if inputs == 0:\n        end_frame = int(start)\n    nuke.thisNode().knob('text_3').setValue(f\"<b> \{end_frame\}\")"
+ selected true
+ addUserKnob {20 User l "multi wipe"}
+ addUserKnob {26 text_2 l "" +STARTLINE T "<font size=\"+5\">🧻 Multi Wipe🧻"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 text l "<b> Wipe"}
+ addUserKnob {3 wipe_start l "start frame"}
+ wipe_start 1001
+ addUserKnob {26 text_3 l "end frame: " -STARTLINE T "<b> 1001"}
+ addUserKnob {3 wipe_duration l duration}
+ wipe_duration 8
+ addUserKnob {7 wipe_angle l angle R 0 360}
+ addUserKnob {4 wipe_animation l animation M {linear smooth decelerating accelerating}}
+ addUserKnob {26 text_1 l "<b> Line"}
+ addUserKnob {7 line_width l width R 0 10}
+ line_width 2
+ addUserKnob {7 line_softness l softness}
+ addUserKnob {41 white l colour T Grade1.white}
+ addUserKnob {6 color_rgba_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+}
+ Input {
+  inputs 0
+  name Input10
+  xpos 94
+  ypos -280
+  number 9
+ }
+set N2c3e4400 [stack 0]
+ Input {
+  inputs 0
+  name Input9
+  xpos -5
+  ypos -280
+  number 8
+ }
+set Nb6723c00 [stack 0]
+ Input {
+  inputs 0
+  name Input8
+  xpos -97
+  ypos -279
+  number 7
+ }
+set Nb6723800 [stack 0]
+ Input {
+  inputs 0
+  name Input7
+  xpos -209
+  ypos -280
+  number 6
+ }
+set Nb6723400 [stack 0]
+ Input {
+  inputs 0
+  name Input6
+  xpos -322
+  ypos -280
+  number 5
+ }
+set Nb6723000 [stack 0]
+ Input {
+  inputs 0
+  name Input5
+  xpos -425
+  ypos -280
+  number 4
+ }
+set Nb6722c00 [stack 0]
+ Input {
+  inputs 0
+  name Input4
+  xpos -521
+  ypos -281
+  number 3
+ }
+set Nb6722800 [stack 0]
+ Input {
+  inputs 0
+  name Input3
+  xpos -633
+  ypos -280
+  number 2
+ }
+set Nb6722400 [stack 0]
+ Input {
+  inputs 0
+  name Input2
+  xpos -725
+  ypos -280
+  number 1
+ }
+set Nb6722000 [stack 0]
+ Input {
+  inputs 0
+  name Input1
+  xpos -821
+  ypos -278
+ }
+set Nb6721c00 [stack 0]
+ Switch {
+  inputs 10
+  which {{parent.inputs-1}}
+  name Switch4
+  xpos 409
+  ypos -108
+ }
+ Dot {
+  name Dot3
+  xpos 443
+  ypos 1110
+ }
+ Constant {
+  inputs 0
+  format "256 256 0 0 256 256 1 square_256"
+  name Constant14
+  xpos -126
+  ypos 181
+ }
+ Reformat {
+  type "to box"
+  box_width {{data_dot.width}}
+  box_height {{data_dot.height}}
+  box_fixed true
+  box_pixel_aspect {{data_dot.pixel_aspect}}
+  name Reformat39
+  xpos -126
+  ypos 265
+ }
+ Expression {
+  temp_name0 angleRad
+  temp_expr0 "radians(\[value parent.wipe_angle])"
+  channel0 rgba
+  expr0 "cx * cos(angleRad) - cy * sin(angleRad)"
+  name wipe_map
+  xpos -126
+  ypos 314
+ }
+ Grade {
+  channels rgba
+  blackpoint -1
+  black_clamp false
+  unpremult -rgba.alpha
+  name Grade265
+  xpos -126
+  ypos 362
+ }
+set N83357c00 [stack 0]
+ ColorLookup {
+  lut {master {curve C 0 k 1 s0}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name accelerating
+  xpos 147
+  ypos 436
+ }
+push $N83357c00
+ ColorLookup {
+  lut {master {curve C k 0 s0 l 1}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name decelerating
+  xpos 56
+  ypos 435
+ }
+push $N83357c00
+ ColorLookup {
+  lut {master {curve 0 s0 t2 1 s2 t0}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name smooth
+  xpos -38
+  ypos 435
+ }
+push $N83357c00
+ Dot {
+  name Dot4
+  label linear
+  xpos -92
+  ypos 440
+ }
+ Switch {
+  inputs 4
+  which {{parent.wipe_animation}}
+  name Switch2
+  xpos -126
+  ypos 485
+ }
+ Grade {
+  channels rgba
+  blackpoint {{fmod((frame-wipe_start),wipe_duration)/wipe_duration}}
+  whitepoint {{(fmod((frame-wipe_start),wipe_duration)/wipe_duration)-.0001}}
+  white_clamp true
+  unpremult -rgba.alpha
+  name Grade284
+  xpos -126
+  ypos 603
+ }
+set N83356400 [stack 0]
+ Group {
+  name line_width
+  xpos -126
+  ypos 695
+  addUserKnob {20 User}
+  addUserKnob {41 size T Blur1.size}
+  addUserKnob {26 ""}
+  addUserKnob {26 text l "" +STARTLINE T "A simple XOR edge detect"}
+  addUserKnob {26 text_1 l "" +STARTLINE T "Probably grade your alpha to be harder beforehand."}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -641
+   ypos -478
+  }
+  Blur {
+   size {{line_width}}
+   name Blur1
+   label "\[value size]"
+   selected true
+   xpos -641
+   ypos -396
+  }
+set N83355c00 [stack 0]
+push $N83355c00
+  Merge2 {
+   inputs 2
+   operation xor
+   name Merge2
+   xpos -641
+   ypos -316
+  }
+  Grade {
+   channels alpha
+   whitepoint 0.5
+   name Grade4
+   xpos -641
+   ypos -256
+  }
+  Output {
+   name Output1
+   xpos -641
+   ypos -156
+  }
+ end_group
+ Grade {
+  channels rgba
+  whitepoint {{line_softness}}
+  white_clamp true
+  unpremult -rgba.alpha
+  name line_softness
+  xpos -126
+  ypos 789
+ }
+ Grade {
+  black_clamp false
+  unpremult -rgba.alpha
+  name Grade1
+  xpos -126
+  ypos 827
+ }
+ Dot {
+  name Dot2
+  xpos -92
+  ypos 883
+ }
+push $N83356400
+push $N2c3e4400
+push $Nb6723c00
+push $Nb6723800
+push $Nb6723400
+push $Nb6723000
+push $Nb6722c00
+push $Nb6722800
+push $Nb6722400
+push $Nb6722000
+push $Nb6721c00
+ Switch {
+  inputs 10
+  which {{"floor((frame - wipe_start +wipe_duration)/wipe_duration)"}}
+  name Switch5
+  xpos -172
+  ypos -42
+ }
+push $N2c3e4400
+push $Nb6723c00
+push $Nb6723800
+push $Nb6723400
+push $Nb6723000
+push $Nb6722c00
+push $Nb6722800
+push $Nb6722400
+push $Nb6722000
+push $Nb6721c00
+ Switch {
+  inputs 10
+  which {{"floor((frame - wipe_start)/wipe_duration)"}}
+  name Switch7
+  xpos -493
+  ypos -28
+ }
+ Dot {
+  name data_dot
+  label data_dot
+  xpos -459
+  ypos 325
+ }
+ AddChannels {
+  channels rgba
+  format_size true
+  name AddChannels1
+  xpos -493
+  ypos 415
+ }
+ Keymix {
+  inputs 3
+  name Keymix7
+  xpos -493
+  ypos 597
+ }
+ Merge2 {
+  inputs 2
+  name Merge35
+  xpos -493
+  ypos 880
+  disable {{parent.line_width==0}}
+ }
+push $Nb6721c00
+ Dot {
+  name Dot1
+  xpos -787
+  ypos 1064
+ }
+ Switch {
+  inputs 2
+  which {{frame>=wipe_start}}
+  name Switch1
+  xpos -493
+  ypos 1061
+ }
+ Switch {
+  inputs 2
+  which {{"frame >= ((parent.inputs-1) * parent.wipe_duration) + parent.wipe_start"}}
+  name Switch3
+  xpos -493
+  ypos 1107
+ }
+ Output {
+  name Output1
+  xpos -493
+  ypos 1600
+ }
+end_group
