@@ -14,7 +14,7 @@ Group {
  wipe_start 1001
  addUserKnob {26 text_3 l "end frame: " -STARTLINE T "<b> 1001"}
  addUserKnob {3 wipe_end l "end frame (hidden)" +INVISIBLE}
- wipe_end {{"( ((this.inputs-1) * wipe_duration) + (this.inputs-2) * wipe_hold) + wipe_start"}}
+ wipe_end {{"this.inputs == 0? wipe_start: ( ((this.inputs-1) * wipe_duration) + (this.inputs-2) * wipe_hold) + wipe_start"}}
  addUserKnob {3 wipe_duration l duration}
  wipe_duration 12
  addUserKnob {3 wipe_hold l "frames between wipes"}
