@@ -1,16 +1,23 @@
 Group {
  name MultiWipe
- knobChanged "tn = nuke.thisNode()\nk = nuke.thisKnob()\n\n\nif k.name() in \[\"wipe_start\", \"wipe_duration\", \"inputChange\"]:\n    \n    start = tn\['wipe_start'].value()\n    duration = tn.knob('wipe_duration').value()\n    inputs = tn.inputs()\n    end_frame = int((inputs-1)*duration + start)\n    if inputs == 0:\n        end_frame = int(start)\n    nuke.thisNode().knob('text_3').setValue(f\"<b> \{end_frame\}\")"
+ knobChanged "tn = nuke.thisNode()\nk = nuke.thisKnob()\n\n\nif k.name() in \[\"wipe_start\", \"wipe_duration\", \"inputChange\", \"wipe_hold\"]:\n    \n    start = tn\['wipe_start'].value()\n    duration = tn.knob('wipe_duration').value()\n    hold = tn.knob('wipe_hold').value()\n    inputs = tn.inputs()\n    end_frame = int( ((inputs-1)*duration) + ((inputs-2)*hold) + start)\n    if inputs == 0:\n        end_frame = int(start)\n    nuke.thisNode().knob('text_3').setValue(f\"<b> \{end_frame\}\")"
+ label "range: \[value wipe_start] - \[value wipe_end]\nduration: \[value wipe_duration] (\[expression \[value wipe_duration]+\[value wipe_hold]] with hold)"
  selected true
- addUserKnob {20 User l "multi wipe"}
+ addUserKnob {20 multiwipe l "Multi Wipe"}
  addUserKnob {26 text_2 l "" +STARTLINE T "<font size=\"+5\">🧻 Multi Wipe🧻"}
- addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {4 breakdown_style l "breakdown style" M {"wipe while playing" "hold frame"}}
+ breakdown_style "hold frame"
  addUserKnob {26 text l "<b> Wipe"}
  addUserKnob {3 wipe_start l "start frame"}
  wipe_start 1001
  addUserKnob {26 text_3 l "end frame: " -STARTLINE T "<b> 1001"}
+ addUserKnob {3 wipe_end l "end frame (hidden)" +INVISIBLE}
+ wipe_end {{"( ((this.inputs-1) * wipe_duration) + (this.inputs-2) * wipe_hold) + wipe_start"}}
  addUserKnob {3 wipe_duration l duration}
- wipe_duration 8
+ wipe_duration 12
+ addUserKnob {3 wipe_hold l "frames between wipes"}
  addUserKnob {7 wipe_angle l angle R 0 360}
  addUserKnob {4 wipe_animation l animation M {linear smooth decelerating accelerating}}
  addUserKnob {26 text_1 l "<b> Line"}
@@ -22,101 +29,276 @@ Group {
 }
  Input {
   inputs 0
+  name Input15
+  xpos 606
+  ypos -721
+  number 14
+ }
+set Ne8998c00 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset15
+  label "\[value time_offset]"
+  xpos 1875
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
+ Input {
+  inputs 0
+  name Input14
+  xpos 504
+  ypos -719
+  number 13
+ }
+set Ne8999000 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset14
+  label "\[value time_offset]"
+  xpos 1802
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
+ Input {
+  inputs 0
+  name Input13
+  xpos 402
+  ypos -714
+  number 12
+ }
+set Ne8999400 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset13
+  label "\[value time_offset]"
+  xpos 1730
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
+ Input {
+  inputs 0
+  name Input12
+  xpos 300
+  ypos -716
+  number 11
+ }
+set Ne8999800 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset12
+  label "\[value time_offset]"
+  xpos 1657
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
+ Input {
+  inputs 0
+  name Input11
+  xpos 198
+  ypos -712
+  number 10
+ }
+set Ne8999c00 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset11
+  label "\[value time_offset]"
+  xpos 1585
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
+ Input {
+  inputs 0
   name Input10
-  xpos 94
-  ypos -280
+  xpos 95
+  ypos -716
   number 9
  }
-set N2c3e4400 [stack 0]
+set Ne779c800 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset10
+  label "\[value time_offset]"
+  xpos 1512
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
  Input {
   inputs 0
   name Input9
   xpos -5
-  ypos -280
+  ypos -716
   number 8
  }
-set Nb6723c00 [stack 0]
+set Ne779c400 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset9
+  label "\[value time_offset]"
+  xpos 1440
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
  Input {
   inputs 0
   name Input8
-  xpos -97
-  ypos -279
+  xpos -107
+  ypos -713
   number 7
  }
-set Nb6723800 [stack 0]
+set Ne8abbc00 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset1
+  label "\[value time_offset]"
+  xpos 1367
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
  Input {
   inputs 0
   name Input7
   xpos -209
-  ypos -280
+  ypos -716
   number 6
  }
-set Nb6723400 [stack 0]
+set Ne8abb800 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset8
+  label "\[value time_offset]"
+  xpos 1295
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
  Input {
   inputs 0
   name Input6
-  xpos -322
-  ypos -280
+  xpos -312
+  ypos -716
   number 5
  }
-set Nb6723000 [stack 0]
+set Ne8abb400 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset7
+  label "\[value time_offset]"
+  xpos 1222
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
  Input {
   inputs 0
   name Input5
-  xpos -425
-  ypos -280
+  xpos -413
+  ypos -716
   number 4
  }
-set Nb6722c00 [stack 0]
+set Ne8abb000 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset6
+  label "\[value time_offset]"
+  xpos 1150
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
  Input {
   inputs 0
   name Input4
-  xpos -521
-  ypos -281
+  xpos -515
+  ypos -717
   number 3
  }
-set Nb6722800 [stack 0]
+set Ne8abac00 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset5
+  label "\[value time_offset]"
+  xpos 1077
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
  Input {
   inputs 0
   name Input3
-  xpos -633
-  ypos -280
+  xpos -617
+  ypos -716
   number 2
  }
-set Nb6722400 [stack 0]
+set Ne8aba800 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset4
+  label "\[value time_offset]"
+  xpos 1005
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
  Input {
   inputs 0
   name Input2
-  xpos -725
-  ypos -280
+  xpos -719
+  ypos -716
   number 1
  }
-set Nb6722000 [stack 0]
+set Ne8aba400 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset3
+  label "\[value time_offset]"
+  xpos 932
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
  Input {
   inputs 0
   name Input1
   xpos -821
-  ypos -278
+  ypos -713
  }
-set Nb6721c00 [stack 0]
+set Ne8aba000 [stack 0]
+ TimeOffset {
+  time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
+  time ""
+  name TimeOffset2
+  label "\[value time_offset]"
+  xpos 860
+  ypos -498
+  disable {{1-breakdown_style}}
+ }
  Switch {
-  inputs 10
+  inputs 15
   which {{parent.inputs-1}}
   name Switch4
-  xpos 409
-  ypos -108
+  xpos 1367
+  ypos 14
  }
  Dot {
   name Dot3
-  xpos 443
-  ypos 1110
+  xpos 1408
+  ypos 1371
  }
  Constant {
   inputs 0
   format "256 256 0 0 256 256 1 square_256"
   name Constant14
   xpos -126
-  ypos 181
+  ypos 243
  }
  Reformat {
   type "to box"
@@ -126,7 +308,7 @@ set Nb6721c00 [stack 0]
   box_pixel_aspect {{data_dot.pixel_aspect}}
   name Reformat39
   xpos -126
-  ypos 265
+  ypos 327
  }
  Expression {
   temp_name0 angleRad
@@ -135,7 +317,7 @@ set Nb6721c00 [stack 0]
   expr0 "cx * cos(angleRad) - cy * sin(angleRad)"
   name wipe_map
   xpos -126
-  ypos 314
+  ypos 376
  }
  Grade {
   channels rgba
@@ -144,9 +326,9 @@ set Nb6721c00 [stack 0]
   unpremult -rgba.alpha
   name Grade265
   xpos -126
-  ypos 362
+  ypos 425
  }
-set N83357c00 [stack 0]
+set Ne8ab8400 [stack 0]
  ColorLookup {
   lut {master {curve C 0 k 1 s0}
     red {}
@@ -155,9 +337,9 @@ set N83357c00 [stack 0]
     alpha {}}
   name accelerating
   xpos 147
-  ypos 436
+  ypos 521
  }
-push $N83357c00
+push $Ne8ab8400
  ColorLookup {
   lut {master {curve C k 0 s0 l 1}
     red {}
@@ -166,9 +348,9 @@ push $N83357c00
     alpha {}}
   name decelerating
   xpos 56
-  ypos 435
+  ypos 520
  }
-push $N83357c00
+push $Ne8ab8400
  ColorLookup {
   lut {master {curve 0 s0 t2 1 s2 t0}
     red {}
@@ -177,37 +359,37 @@ push $N83357c00
     alpha {}}
   name smooth
   xpos -38
-  ypos 435
+  ypos 520
  }
-push $N83357c00
+push $Ne8ab8400
  Dot {
   name Dot4
   label linear
   xpos -92
-  ypos 440
+  ypos 525
  }
  Switch {
   inputs 4
   which {{parent.wipe_animation}}
   name Switch2
   xpos -126
-  ypos 485
+  ypos 571
  }
  Grade {
   channels rgba
-  blackpoint {{fmod((frame-wipe_start),wipe_duration)/wipe_duration}}
-  whitepoint {{(fmod((frame-wipe_start),wipe_duration)/wipe_duration)-.0001}}
+  blackpoint {{clamp(fmod((frame-wipe_start),(wipe_duration+wipe_hold))/wipe_duration)}}
+  whitepoint {{clamp(fmod((frame-wipe_start),(wipe_duration+wipe_hold))/wipe_duration)-.0001}}
   white_clamp true
   unpremult -rgba.alpha
-  name Grade284
+  name Grade2
   xpos -126
-  ypos 603
+  ypos 658
  }
-set N83356400 [stack 0]
+set Ne8a72800 [stack 0]
  Group {
   name line_width
   xpos -126
-  ypos 695
+  ypos 780
   addUserKnob {20 User}
   addUserKnob {41 size T Blur1.size}
   addUserKnob {26 ""}
@@ -228,8 +410,8 @@ set N83356400 [stack 0]
    xpos -641
    ypos -396
   }
-set N83355c00 [stack 0]
-push $N83355c00
+set Ne8a71c00 [stack 0]
+push $Ne8a71c00
   Merge2 {
    inputs 2
    operation xor
@@ -257,104 +439,253 @@ push $N83355c00
   unpremult -rgba.alpha
   name line_softness
   xpos -126
-  ypos 789
+  ypos 874
  }
  Grade {
   black_clamp false
   unpremult -rgba.alpha
   name Grade1
   xpos -126
-  ypos 827
+  ypos 912
  }
  Dot {
   name Dot2
   xpos -92
-  ypos 883
+  ypos 968
  }
-push $N83356400
-push $N2c3e4400
-push $Nb6723c00
-push $Nb6723800
-push $Nb6723400
-push $Nb6723000
-push $Nb6722c00
-push $Nb6722800
-push $Nb6722400
-push $Nb6722000
-push $Nb6721c00
+push $Ne8a72800
+push $Ne8998c00
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold15
+  xpos 606
+  ypos -442
+  disable {{1-breakdown_style}}
+ }
+set N31823900 [stack 0]
+push $Ne8999000
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold14
+  xpos 504
+  ypos -434
+  disable {{1-breakdown_style}}
+ }
+set N31844800 [stack 0]
+push $Ne8999400
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold13
+  xpos 402
+  ypos -431
+  disable {{1-breakdown_style}}
+ }
+set N31844f00 [stack 0]
+push $Ne8999800
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold12
+  xpos 300
+  ypos -427
+  disable {{1-breakdown_style}}
+ }
+set N31845600 [stack 0]
+push $Ne8999c00
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold11
+  xpos 198
+  ypos -426
+  disable {{1-breakdown_style}}
+ }
+set N31845d00 [stack 0]
+push $Ne779c800
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold10
+  xpos 95
+  ypos -422
+  disable {{1-breakdown_style}}
+ }
+set N31846400 [stack 0]
+push $Ne779c400
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold9
+  xpos -5
+  ypos -417
+  disable {{1-breakdown_style}}
+ }
+set N31846b00 [stack 0]
+push $Ne8abbc00
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold8
+  xpos -107
+  ypos -415
+  disable {{1-breakdown_style}}
+ }
+set N31847200 [stack 0]
+push $Ne8abb800
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold7
+  xpos -209
+  ypos -414
+  disable {{1-breakdown_style}}
+ }
+set N31847900 [stack 0]
+push $Ne8abb400
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold6
+  xpos -312
+  ypos -412
+  disable {{1-breakdown_style}}
+ }
+set Nea918100 [stack 0]
+push $Ne8abb000
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold5
+  xpos -413
+  ypos -407
+  disable {{1-breakdown_style}}
+ }
+set Nea918800 [stack 0]
+push $Ne8abac00
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold4
+  xpos -515
+  ypos -409
+  disable {{1-breakdown_style}}
+ }
+set Nea918f00 [stack 0]
+push $Ne8aba800
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold3
+  xpos -617
+  ypos -411
+  disable {{1-breakdown_style}}
+ }
+set Nea919600 [stack 0]
+push $Ne8aba400
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold2
+  xpos -719
+  ypos -412
+  disable {{1-breakdown_style}}
+ }
+set Nea919d00 [stack 0]
+push $Ne8aba000
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold1
+  xpos -821
+  ypos -411
+  disable {{1-breakdown_style}}
+ }
+set Nc8a8800 [stack 0]
  Switch {
-  inputs 10
-  which {{"floor((frame - wipe_start +wipe_duration)/wipe_duration)"}}
+  inputs 15
+  which {{"floor((frame - wipe_start +wipe_duration + wipe_hold)/(wipe_duration+wipe_hold))"}}
   name Switch5
-  xpos -172
-  ypos -42
+  xpos -33
+  ypos 14
  }
-push $N2c3e4400
-push $Nb6723c00
-push $Nb6723800
-push $Nb6723400
-push $Nb6723000
-push $Nb6722c00
-push $Nb6722800
-push $Nb6722400
-push $Nb6722000
-push $Nb6721c00
+push $N31823900
+push $N31844800
+push $N31844f00
+push $N31845600
+push $N31845d00
+push $N31846400
+push $N31846b00
+push $N31847200
+push $N31847900
+push $Nea918100
+push $Nea918800
+push $Nea918f00
+push $Nea919600
+push $Nea919d00
+push $Nc8a8800
  Switch {
-  inputs 10
-  which {{"floor((frame - wipe_start)/wipe_duration)"}}
-  name Switch7
+  inputs 15
+  which {{"floor((frame - wipe_start)/(wipe_duration+wipe_hold))"}}
+  name Switch6
   xpos -493
-  ypos -28
+  ypos 14
  }
  Dot {
   name data_dot
   label data_dot
   xpos -459
-  ypos 325
+  ypos 410
  }
  AddChannels {
   channels rgba
   format_size true
   name AddChannels1
   xpos -493
-  ypos 415
+  ypos 500
  }
  Keymix {
   inputs 3
   name Keymix7
   xpos -493
-  ypos 597
+  ypos 652
  }
  Merge2 {
   inputs 2
   name Merge35
   xpos -493
-  ypos 880
+  ypos 965
   disable {{parent.line_width==0}}
  }
-push $Nb6721c00
+push $Ne8aba000
+ Dot {
+  name Dot5
+  xpos -958
+  ypos -710
+ }
  Dot {
   name Dot1
-  xpos -787
-  ypos 1064
+  xpos -958
+  ypos 1200
  }
  Switch {
   inputs 2
   which {{frame>=wipe_start}}
   name Switch1
   xpos -493
-  ypos 1061
+  ypos 1197
  }
  Switch {
   inputs 2
-  which {{"frame >= ((parent.inputs-1) * parent.wipe_duration) + parent.wipe_start"}}
+  which {{"frame >= ( ( (parent.inputs-1) * wipe_duration) + (parent.inputs-2) * wipe_hold) + parent.wipe_start"}}
   name Switch3
   xpos -493
-  ypos 1107
+  ypos 1368
  }
  Output {
   name Output1
   xpos -493
-  ypos 1600
+  ypos 1556
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "If current frame is before start frame,\njust show input 1"
+  xpos -539
+  ypos 1224
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote2
+  label "If current frame is after the calculated breakdown length\nwipes + hold frames + start frame\nswitch to final input"
+  xpos -572
+  ypos 1393
  }
 end_group
