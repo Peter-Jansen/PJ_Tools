@@ -47,3 +47,6 @@ p_tools.addCommand('ParticleFade', 'nuke.createNode(\'ParticleFade.nk\')', icon 
 p_tools.addCommand('Fuse', 'nuke.createNode(\'Fuse.nk\')', icon = 'p.png')
 p_tools.addCommand('Subframer', 'nuke.createNode(\'Subframer.nk\')', icon = 'p.png')
 p_tools.addCommand('MultiWipe', 'nuke.createNode(\'MultiWipe.nk\')', icon = 'p.png')
+
+#particles
+p_tools.addCommand('ParticleCurlNoise', 'nuke.createNode(\'ParticleCurlNoise.nk\')', icon = 'p.png')
