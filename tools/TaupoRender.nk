@@ -1,0 +1,121 @@
+Group {
+ name TaupoRender
+ tile_color 0x9c0000ff
+ selected true
+ addUserKnob {20 User l "Taupo Render"}
+ addUserKnob {26 taupo_render_title l "" t "Because Krakatoa used to be a sweet particle renderer, and Taupo is a supervolcano in New Zealand. " +STARTLINE T "<font size=\"+5\"> Taupo Render"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v0.13 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {4 merge_operation l "merge mode" M {additive over}}
+ merge_operation over
+ addUserKnob {26 size_text l <b>Size}
+ addUserKnob {4 size_mode l "size mode" M {2D 3D ""}}
+ size_mode 3D
+ addUserKnob {7 size_mult l "size multiplier" R 0 10}
+ size_mult 1
+ addUserKnob {26 dist_fade_text l "<b>Fade by Distance"}
+ addUserKnob {41 near T ParticleBlinkScriptRender1.near}
+ addUserKnob {41 near_falloff l "near falloff" T ParticleBlinkScriptRender1.near_falloff}
+ addUserKnob {41 far T ParticleBlinkScriptRender1.far}
+ addUserKnob {41 far_falloff l "far falloff" T ParticleBlinkScriptRender1.far_falloff}
+ addUserKnob {26 mb_text l "<b>Motion Blur"}
+ addUserKnob {7 shutter}
+ shutter 0.5
+ addUserKnob {3 max_steps l "max steps"}
+ max_steps 64
+ addUserKnob {7 spacing R 0 10}
+ spacing 1
+}
+ Input {
+  inputs 0
+  name cam
+  xpos 359
+  ypos 221
+  number 1
+ }
+ Camera {
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {{"\[expression \[value the_cam]far(\[value the_frame])]"}}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
+  name DummyCam
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nadrianpueyo.com, 2019-2020"
+  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
+  xpos 369
+  ypos 319
+  addUserKnob {20 DummyCam l Defaults}
+  addUserKnob {43 the_cam +INVISIBLE}
+  the_cam "\[\n#DummyCam v1.1. Updated 5 April 2020.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame +INVISIBLE}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
+  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 50
+  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
+  d_haperture 24.576
+  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
+  d_vaperture 18.672
+  addUserKnob {7 d_near l near R 0 10}
+  d_near 0.1
+  addUserKnob {7 d_far l far R 0 10000}
+  d_far 10000
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
+  d_win_scale {1 1}
+  addUserKnob {7 d_winroll l "window roll" R 0 45}
+  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
+  d_focal_point 2
+  addUserKnob {7 d_fstop l fstop R 0 30}
+  d_fstop 16
+  addUserKnob {26 version l " " t "Updated 5 April 2020" T "<span style=\"color:#666\"><br/><b>DummyCam v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2020</span>"}
+ }
+ Input {
+  inputs 0
+  name particles
+  xpos 568
+  ypos 222
+ }
+ ParticleBlinkScriptRender {
+  inputs 2
+  kernelSourceGroup 1
+  kernelSource "// By Peter Jansen.\n// Based off the default ParticleBlinkScriptRender node in nuke (it's a hidden node).\n// note to self - this is v013\n\nkernel ParticleRenderKernel : ImageComputationKernel<ePixelWise>\{\n  Image<eRead, eAccessPoint> p_position;\n  Image<eRead, eAccessPoint> p_color;\n  Image<eRead, eAccessPoint> p_size;\n  Image<eRead, eAccessPoint> p_velocity;\n//   Image<eRead, eAccessRandom, eEdgeConstant> texture;\n  Image<eWrite, eAccessRandom> output;\n  param:\n    float4x4 _worldToScreen;\n\n    float _size;\n    int _steps;\n    float spacing;\n    float _shutter;\n    int _merge_operation;\n    int _screen_space_scale;\n\n    float haperture;\n    float focal;\n\n    float near;\n    float near_falloff;\n    float far;\n    float far_falloff;\n\n  local:\n    int _w, _h;\n    // int tex_w, tex_h;\n    float pixelsPerWorldUnit;\n  void define() \{\n    defineParam(_worldToScreen, \"_worldToScreen\", float4x4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) );\n    // where the fuck did that spawn from\n    defineParam(_size, \"paSize\", 3.0f);\n    defineParam(_steps, \"Steps\", 10);\n    defineParam(spacing, \"spacing\", 1.0f);\n    defineParam(_shutter, \"shutter\", 0.5f);\n    defineParam(_merge_operation, \"merge_operation\", 0);\n    defineParam(_screen_space_scale, \"screen_space_scale\", 0);\n    defineParam(haperture, \"haperture\", 24.576f);\n    defineParam(focal, \"focal\", 24.0f);\n    defineParam(near, \"near\", 0.0f);\n    defineParam(near_falloff, \"near_falloff\", 0.0f);\n    defineParam(far, \"far\", 1000.0f);\n    defineParam(far_falloff, \"far_falloff\", 0.0f);\n    \n  \}\n  float4 srcOver( float4 a, float4 b ) \{\n    return (1.0f-a.w)*b + a;\n  \}\n\n  float3 transformz( float3 p )\{\n    float4 r = _worldToScreen*float4(p.x, p.y, p.z, 1.0);\n    float2 xy = float2(r.x, r.y)/r.w;\n    float depth = r.w;\n    return float3(xy, depth);\n  \}  \n  float smoothstep( float a, float b, float x ) \{\n    float t = clamp((x - a) / (b - a), 0.0, 1.0);\n    return t*t * (3.0f - 2.0f*t);\n  \}\n  void init()\n  \{\n    _w = output.bounds.width();\n    _h = output.bounds.height();\n\n    // tex_w = texture.bounds.width();\n    // tex_h = texture.bounds.height();\n\n    pixelsPerWorldUnit = (_w*0.5) / haperture;\n\n  \}\n  void renderPoint( float2 xy, float4 pcolor, float pointSize, float falloff )\{\n\n    float sizeSquared = pointSize*pointSize;\n    float2 f = xy-floor(xy);                            //fractional part of screen coordinate?\n    float2 g = float2(1.0f) - f;                        // complement/invert of fractional part\n    //xy = floor(xy);\n    int size = ceil(pointSize);\n    int minX = max(0, int(xy.x)-size);                  // min x coord is clamped to image x=0\n    int maxX = min(_w-1, int(xy.x)+size);               // max x coord is clamped to max image x coord\n    int minY = max(0, int(xy.y)-size);                  // etc for y coord\n    int maxY = min(_h-1, int(xy.y)+size);\n    // for loop that runs over the expected size of the point to be rendered.\n    for ( int y = minY; y <= maxY; y++ ) \{              // starting at min y until max y\n      for ( int x = minX ; x <= maxX; x++ ) \{           // starting at min x until max x\n        float2 p = float2(x, y);                        // current position in the iteration space\n        float2 d = p-xy;                                // vector from center point to the current pixel\n        float r2 = dot(d, d);                           // squared distance to from p to xy\n        // work with squares, ie squared distance and squared radius because it's faster to calculate.\n        if ( r2 < sizeSquared ) \{                       // if radius squared is smaller than size squared\n         float t = 1.0f-smoothstep(0, sizeSquared, r2);\n        t *= falloff;\n          if (_merge_operation == 0) \{\n            output(p.x, p.y) += pcolor*t;\n          \}\n          if (_merge_operation == 1)\{\n          float4 colourToAdd = pcolor * t;\n          float4 existingColour = output(p.x,p.y);\n          output(p.x, p.y) = srcOver(colourToAdd, existingColour);\n          \}\n                           // after we calculate the pixels distance, and smooth it with smoothstep\n                                                        // we write it to the output buffer with a simple plus.\n        \}\n      \}\n    \}\n  \}\n//   void renderTex( float2 xy, float4 pcolor, float pointSize, float falloff )\{\n\n//     float sizeSquared = pointSize*pointSize;\n//     float2 f = xy-floor(xy);                            //fractional part of screen coordinate?\n//     float2 g = float2(1.0f) - f;                        // complement/invert of fractional part\n//     //xy = floor(xy);\n//     int size = ceil(pointSize);\n//     int minX = max(0, int(xy.x)-size);                  // min x coord is clamped to image x=0\n//     int maxX = min(_w-1, int(xy.x)+size);               // max x coord is clamped to max image x coord\n//     int minY = max(0, int(xy.y)-size);                  // etc for y coord\n//     int maxY = min(_h-1, int(xy.y)+size);\n//     // for loop that runs over the expected size of the point to be rendered.\n//     for ( int y = minY; y <= maxY; y++ ) \{              // starting at min y until max y\n//       for ( int x = minX ; x <= maxX; x++ ) \{           // starting at min x until max x\n//         float2 p = float2(x, y);                        // current position in the iteration space\n//         //float2 uv = float2( (p.x/float(_w))*float(tex_w), ( p.y/float(_h))*float(tex_h));\n//         float u = (float(x - minX) / size) * float(tex_w);\n//         float v = (float(y - minY) / size) * float(tex_h);\n//         //float2 uv = float2(u,v);\n//         //float2 uv = float2((float(size)/p.x) * float(tex_w), (float(size)/p.y) * float(tex_h));\n        \n//         float4 texLookup = bilinear(texture, u, v);\n//           if (_merge_operation == 0) \{\n//             output(p.x, p.y) += texLookup;\n//           \}\n//           if (_merge_operation == 1)\{\n//           float4 colourToAdd = texLookup;\n//           float4 existingColour = output(p.x,p.y);\n//           output(p.x, p.y) = srcOver(colourToAdd, existingColour);\n//           \}\n//                            // after we calculate the pixels distance, and smooth it with smoothstep\n//                                                         // we write it to the output buffer with a simple plus.\n//         \}\n//       \}\n//     \}\n\n  float minMaxSmooth(float n,float ns,float f,float fs,float v)\{\n      // input variables are near, near soft, far, far soft and value\n      float output = 0.0;\n      float near = min(n, f);\n      float near_soft = max(ns, 0.0);\n      float far = max(n, f);\n      float far_soft = max(fs, 0.0);\n\n      float near_soft_absolute = near-near_soft;\n      float far_soft_absolute = far+far_soft;\n\n      if (v <= near)\{\n        output = smoothstep(near_soft_absolute,near,v);\n        \}\n      else\{\n        output = 1-smoothstep(far,far_soft_absolute,v);\n        \}\n      return output;\n  \}\n\n\n\n    float screenSpaceSize(float focal, float pixelsPerWorldUnit, float p_size, float distance)\{\n        float particleSizeOnImagePlane = (focal * p_size) / distance;\n        float particleSizeInPixels = (particleSizeOnImagePlane * pixelsPerWorldUnit);\n    return particleSizeInPixels;\n  \}  \n\n\n  void process() \{\n\n    float3 P = p_position();\n    float3 v = p_velocity();\n    float3 xyz = transformz(P);\n\n\n    float dist = xyz.z;\n\n    if (xyz.x >0.0 && xyz.x < float(_w) && xyz.y >0.0 && xyz.y <float(_h) && dist>0.0f )\{\n\n\n\n\n        float depth_fade = minMaxSmooth(near, near_falloff, far, far_falloff, dist);\n\n        float size = _size * p_size().x;\n        if (_screen_space_scale)\{\n        size = screenSpaceSize(focal, pixelsPerWorldUnit, size, dist);\n        \}\n        size = min(size,100.0f);\n        \n        // find blur length in 2d pixels\n        float3 xyz_end = transformz(P + v);\n        float blur_dist = length(float2(xyz.x-xyz_end.x, xyz.y-xyz_end.y));\n        int steps = max(1,min(_steps, int(ceil(blur_dist/size/spacing))));       // adaptive steps, setting min to 1 and max to _steps\n        //int steps = _steps;\n        float4 pcolor = p_color()/ float(steps);\n        for (int i=0; i <=steps; i++)\{\n            float3 P2 = P + ((v/float(steps)) * float(i)*_shutter);\n            float3 screenSpace = transformz(P2);\n            float2 xy = float2(screenSpace.x, screenSpace.y);\n            renderPoint(xy, pcolor, size, depth_fade);\n            //renderTex(xy, pcolor, size, depth_fade);\n\n\n        \}\n    \}\n\n  \}\n\};"
+  name ParticleBlinkScriptRender1
+  xpos 568
+  ypos 340
+  addUserKnob {20 User}
+  addUserKnob {7 paSize l size}
+  paSize {{parent.size_mult}}
+  addUserKnob {3 Steps}
+  Steps {{parent.max_steps}}
+  addUserKnob {7 spacing}
+  spacing {{parent.spacing}}
+  addUserKnob {7 shutter}
+  shutter {{parent.shutter}}
+  addUserKnob {3 merge_operation l "merge operation"}
+  merge_operation {{parent.merge_operation}}
+  addUserKnob {3 screen_space_scale l "screen space scale"}
+  screen_space_scale {{parent.size_mode}}
+  addUserKnob {7 haperture}
+  haperture {{input1.haperture}}
+  addUserKnob {7 focal}
+  focal {{input1.focal}}
+  addUserKnob {7 near R 0.1 100}
+  near 0.1
+  addUserKnob {7 near_falloff l "near falloff" R 0 100}
+  addUserKnob {7 far R 0 1000}
+  far 1000
+  addUserKnob {7 far_falloff l "far falloff" R 0 100}
+ }
+ Output {
+  name Output1
+  xpos 568
+  ypos 513
+ }
+end_group

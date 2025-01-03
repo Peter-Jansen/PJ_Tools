@@ -50,3 +50,4 @@ p_tools.addCommand('MultiWipe', 'nuke.createNode(\'MultiWipe.nk\')', icon = 'p.p
 
 #particles
 p_tools.addCommand('ParticleCurlNoise', 'nuke.createNode(\'ParticleCurlNoise.nk\')', icon = 'p.png')
+p_tools.addCommand('TaupoRender', 'nuke.createNode(\'TaupoRender.nk\')', icon = 'p.png')
