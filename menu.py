@@ -2,6 +2,7 @@ import nuke
 import os
 
 nuke.pluginAddPath('./tools')
+nuke.pluginAddPath('./tools/ParticleBlinks')
 nuke.pluginAddPath('./icons')
 
 ##########################################################################################################################################
@@ -39,15 +40,25 @@ p_tools.addSeparator()
 
 # Keying
 
+# TaupoRender
+taupo = p_tools.addMenu('Taupo')
+taupo.addCommand('TaupoRender', 'nuke.createNode(\'TaupoRender.nk\')', icon = 'p.png')
+p_tools.addSeparator()
+
+# Particle Blinkscripts
+p_blinks = p_tools.addMenu('Particle Blinks')
+p_blinks.addCommand('ParticleCurlNoise', 'nuke.createNode(\'ParticleCurlNoise.nk\')', icon = 'p.png')
+p_blinks.addCommand('Random Rotation', 'nuke.createNode(\'random_rotation.nk\')', icon = 'p.png')
+p_blinks.addCommand('ParticleFade', 'nuke.createNode(\'ParticleFade.nk\')', icon = 'p.png')
+p_tools.addSeparator()
+
 # Tansform
 p_tools.addCommand('CopyAndTransform', 'nuke.createNode(\'CopyAndTransform.nk\')', icon = 'p.png')
 p_tools.addSeparator()
 # Other
-p_tools.addCommand('ParticleFade', 'nuke.createNode(\'ParticleFade.nk\')', icon = 'p.png')
+
 p_tools.addCommand('Fuse', 'nuke.createNode(\'Fuse.nk\')', icon = 'p.png')
 p_tools.addCommand('Subframer', 'nuke.createNode(\'Subframer.nk\')', icon = 'p.png')
 p_tools.addCommand('MultiWipe', 'nuke.createNode(\'MultiWipe.nk\')', icon = 'p.png')
 
-#particles
-p_tools.addCommand('ParticleCurlNoise', 'nuke.createNode(\'ParticleCurlNoise.nk\')', icon = 'p.png')
-p_tools.addCommand('TaupoRender', 'nuke.createNode(\'TaupoRender.nk\')', icon = 'p.png')
+
