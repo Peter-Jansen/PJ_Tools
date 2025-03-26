@@ -3,6 +3,7 @@ import os
 
 nuke.pluginAddPath('./tools')
 nuke.pluginAddPath('./tools/ParticleBlinks')
+nuke.pluginAddPath('./tools/Taupo')
 nuke.pluginAddPath('./icons')
 
 ##########################################################################################################################################
