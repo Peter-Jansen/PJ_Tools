@@ -1,0 +1,130 @@
+set cut_paste_input [stack 0]
+version 15.1 v5
+push $cut_paste_input
+Group {
+ name TaupoParticleCache
+ tile_color 0x9c0000ff
+ selected true
+ xpos -483
+ ypos 252
+ addUserKnob {20 User}
+ addUserKnob {26 taupo_render_title l "" +STARTLINE T "<font size=\"+5\"> Taupo Particle Cache"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v0.2 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 ""}
+ addUserKnob {41 format T position.format}
+}
+ Camera3 {
+  inputs 0
+  name Camera1
+  xpos 736
+  ypos -204
+ }
+set N57a6c800 [stack 0]
+ Input {
+  inputs 0
+  name particles
+  xpos 347
+  ypos -278
+ }
+set N57a6cc00 [stack 0]
+ ParticleBlinkScriptRender {
+  inputs 2
+  format {{{position.format}}}
+  kernelFile C:/Users/petes/Documents/Nuke_Blinkscripts/Particle_Blink_default_node/ParticleToImageBlink_v006.cpp
+  kernelSourceGroup 1
+  kernelSource "kernel ParticleRenderKernel : ImageComputationKernel<ePixelWise>\n\{\n    Image<eRead, eAccessRandom,eEdgeClamped> p_position;\n    Image<eRead, eAccessRandom> p_id;\n\n    Image<eRead, eAccessRandom> p_color;\n\n\n    Image<eRead, eAccessRandom> p_size;\n    Image<eRead, eAccessRandom> p_life;\n    Image<eRead, eAccessRandom> p_startTime;\n\n\n    Image<eWrite, eAccessRandom, eEdgeClamped> output;\n\n    param:\n        float4x4 _worldToScreen;\n        float _size;\n        int outputMode;\n        float _systemTime;\n\n    local:\n        int _w, _h;\n        int _numParticles;\n        int sqSize;\n\n\n\n    void define() \{\n        defineParam(_worldToScreen, \"_worldToScreen\", float4x4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) );\n        defineParam(_size, \"paSize\", 3.0f);\n        defineParam(_systemTime, \"_systemTime\", 1.0f);\n        defineParam(outputMode, \"outputMode\", 0);\n    \}\n\n    float4 srcOver( float4 a, float4 b ) \{\n        return (1.0f-a.w)*b + a;\n    \}\n\n    float2 transform( float3 p )\{\n        float4 r = _worldToScreen*float4(p.x, p.y, p.z, 1.0);\n        return float2(r.x, r.y)/r.w;\n    \}\n\n    float smoothstep( float a, float b, float x ) \{\n        float t = clamp((x - a) / (b - a), 0.0, 1.0);\n        return t*t * (3.0f - 2.0f*t);\n    \}\n\n    void init()\n    \{\n        _w = output.bounds.width();\n        _h = output.bounds.height();\n        _numParticles = p_position.bounds.height();\n        sqSize = ceil( sqrt(_numParticles) );\n  \}\n\n  void process(int2 pos) \{\n\n    //sq num\n\n    int id = p_id(0, pos.y);\n    int id_loop = fmod(id, _w*_h);\n    int x = fmod(id_loop, _w);\n    int y = floor(id_loop / _h);\n\n\n    // position and ID\n    if (outputMode == 0) \{\n        float written_id = output(x,y).w;\n        if (written_id < id) \{\n        output(x, y)= float4(p_position(0, pos.y), id);            \n        \}\n   \}\n\n    // colour\n    if (outputMode == 1) \{\n        output(x, y)= p_color(0, pos.y);            \n    \}\n\n    // utility: size, age, life\n    \n    if (outputMode == 2) \{\n    float size = p_size(0, pos.y)\[0];\n    float age = _systemTime-p_startTime(0, pos.y);\n    float life = p_life(0, pos.y);\n    float nage = 1-(age/life);\n    output(x, y)= float4(size, age, life, nage);            \n    \}\n\n    \n\n    //int x_id = x + _w*0.5;\n    //output(x_id, y) = float(p_id(0, pos.y));\n    //output(1,1) = sqSize;\n\n\n    // colour\n    //int x_col = x + _w*0.5;\n    //output(x_col, y) = p_color(0, pos.y);\n  \}\n\};\n"
+  name utility
+  xpos 726
+  ypos -105
+  addUserKnob {20 User}
+  addUserKnob {7 paSize l size}
+  paSize 3
+  addUserKnob {3 outputMode}
+  outputMode 2
+ }
+ Dot {
+  name Dot1
+  xpos 760
+  ypos 20
+ }
+push $N57a6c800
+push $N57a6cc00
+ ParticleBlinkScriptRender {
+  inputs 2
+  format {{{position.format}}}
+  kernelFile C:/Users/petes/Documents/Nuke_Blinkscripts/Particle_Blink_default_node/ParticleToImageBlink_v006.cpp
+  kernelSourceGroup 1
+  kernelSource "kernel ParticleRenderKernel : ImageComputationKernel<ePixelWise>\n\{\n    Image<eRead, eAccessRandom,eEdgeClamped> p_position;\n    Image<eRead, eAccessRandom> p_id;\n\n    Image<eRead, eAccessRandom> p_color;\n\n\n    Image<eRead, eAccessRandom> p_size;\n    Image<eRead, eAccessRandom> p_life;\n    Image<eRead, eAccessRandom> p_startTime;\n\n\n    Image<eWrite, eAccessRandom, eEdgeClamped> output;\n\n    param:\n        float4x4 _worldToScreen;\n        float _size;\n        int outputMode;\n        float _systemTime;\n\n    local:\n        int _w, _h;\n        int _numParticles;\n        int sqSize;\n\n\n\n    void define() \{\n        defineParam(_worldToScreen, \"_worldToScreen\", float4x4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) );\n        defineParam(_size, \"paSize\", 3.0f);\n        defineParam(_systemTime, \"_systemTime\", 1.0f);\n        defineParam(outputMode, \"outputMode\", 0);\n    \}\n\n    float4 srcOver( float4 a, float4 b ) \{\n        return (1.0f-a.w)*b + a;\n    \}\n\n    float2 transform( float3 p )\{\n        float4 r = _worldToScreen*float4(p.x, p.y, p.z, 1.0);\n        return float2(r.x, r.y)/r.w;\n    \}\n\n    float smoothstep( float a, float b, float x ) \{\n        float t = clamp((x - a) / (b - a), 0.0, 1.0);\n        return t*t * (3.0f - 2.0f*t);\n    \}\n\n    void init()\n    \{\n        _w = output.bounds.width();\n        _h = output.bounds.height();\n        _numParticles = p_position.bounds.height();\n        sqSize = ceil( sqrt(_numParticles) );\n  \}\n\n  void process(int2 pos) \{\n\n    //sq num\n\n    int id = p_id(0, pos.y);\n    int id_loop = fmod(id, _w*_h);\n    int x = fmod(id_loop, _w);\n    int y = floor(id_loop / _h);\n\n\n    // position and ID\n    if (outputMode == 0) \{\n        float written_id = output(x,y).w;\n        if (written_id < id) \{\n        output(x, y)= float4(p_position(0, pos.y), id);            \n        \}\n   \}\n\n    // colour\n    if (outputMode == 1) \{\n        output(x, y)= p_color(0, pos.y);            \n    \}\n\n    // utility: size, age, life\n    \n    if (outputMode == 2) \{\n    float size = p_size(0, pos.y)\[0];\n    float age = _systemTime-p_startTime(0, pos.y);\n    float life = p_life(0, pos.y);\n    float nage = 1-(age/life);\n    output(x, y)= float4(size, age, life, nage);            \n    \}\n\n    \n\n    //int x_id = x + _w*0.5;\n    //output(x_id, y) = float(p_id(0, pos.y));\n    //output(1,1) = sqSize;\n\n\n    // colour\n    //int x_col = x + _w*0.5;\n    //output(x_col, y) = p_color(0, pos.y);\n  \}\n\};\n"
+  name colour
+  xpos 562
+  ypos -114
+  addUserKnob {20 User}
+  addUserKnob {7 paSize l size}
+  paSize 3
+  addUserKnob {3 outputMode}
+  outputMode 1
+ }
+ Dot {
+  name Dot2
+  xpos 596
+  ypos -27
+ }
+push $N57a6c800
+push $N57a6cc00
+ ParticleBlinkScriptRender {
+  inputs 2
+  format "512 512 0 0 512 512 1 square_512"
+  kernelFile C:/Users/petes/Documents/Nuke_Blinkscripts/Particle_Blink_default_node/ParticleToImageBlink_v006.cpp
+  kernelSourceGroup 1
+  kernelSource "kernel ParticleRenderKernel : ImageComputationKernel<ePixelWise>\n\{\n    Image<eRead, eAccessRandom,eEdgeClamped> p_position;\n    Image<eRead, eAccessRandom> p_id;\n\n    Image<eRead, eAccessRandom> p_color;\n\n\n    Image<eRead, eAccessRandom> p_size;\n    Image<eRead, eAccessRandom> p_life;\n    Image<eRead, eAccessRandom> p_startTime;\n\n\n    Image<eWrite, eAccessRandom, eEdgeClamped> output;\n\n    param:\n        float4x4 _worldToScreen;\n        float _size;\n        int outputMode;\n        float _systemTime;\n\n    local:\n        int _w, _h;\n        int _numParticles;\n        int sqSize;\n\n\n\n    void define() \{\n        defineParam(_worldToScreen, \"_worldToScreen\", float4x4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) );\n        defineParam(_size, \"paSize\", 3.0f);\n        defineParam(_systemTime, \"_systemTime\", 1.0f);\n        defineParam(outputMode, \"outputMode\", 0);\n    \}\n\n    float4 srcOver( float4 a, float4 b ) \{\n        return (1.0f-a.w)*b + a;\n    \}\n\n    float2 transform( float3 p )\{\n        float4 r = _worldToScreen*float4(p.x, p.y, p.z, 1.0);\n        return float2(r.x, r.y)/r.w;\n    \}\n\n    float smoothstep( float a, float b, float x ) \{\n        float t = clamp((x - a) / (b - a), 0.0, 1.0);\n        return t*t * (3.0f - 2.0f*t);\n    \}\n\n    void init()\n    \{\n        _w = output.bounds.width();\n        _h = output.bounds.height();\n        _numParticles = p_position.bounds.height();\n        sqSize = ceil( sqrt(_numParticles) );\n  \}\n\n  void process(int2 pos) \{\n\n    //sq num\n\n    int id = p_id(0, pos.y);\n    int id_loop = fmod(id, _w*_h);\n    int x = fmod(id_loop, _w);\n    int y = floor(id_loop / _h);\n\n\n    // position and ID\n    if (outputMode == 0) \{\n        float written_id = output(x,y).w;\n        if (written_id < id) \{\n        output(x, y)= float4(p_position(0, pos.y), id);            \n        \}\n   \}\n\n    // colour\n    if (outputMode == 1) \{\n        output(x, y)= p_color(0, pos.y);            \n    \}\n\n    // utility: size, age, life\n    \n    if (outputMode == 2) \{\n    float size = p_size(0, pos.y)\[0];\n    float age = _systemTime-p_startTime(0, pos.y);\n    float life = p_life(0, pos.y);\n    float nage = 1-(age/life);\n    output(x, y)= float4(size, age, life, nage);            \n    \}\n\n    \n\n    //int x_id = x + _w*0.5;\n    //output(x_id, y) = float(p_id(0, pos.y));\n    //output(1,1) = sqSize;\n\n\n    // colour\n    //int x_col = x + _w*0.5;\n    //output(x_col, y) = p_color(0, pos.y);\n  \}\n\};\n"
+  name position
+  xpos 347
+  ypos -183
+  addUserKnob {20 User}
+  addUserKnob {7 paSize l size}
+  paSize 3
+  addUserKnob {3 outputMode}
+ }
+add_layer {taupo_col taupo_col.red taupo_col.green taupo_col.blue taupo_col.alpha}
+ Shuffle2 {
+  inputs 2
+  fromInput1 {{1} B A}
+  out1 taupo_col
+  fromInput2 {{0} B A}
+  mappings "4 rgba.red 0 0 taupo_col.red 0 0 rgba.green 0 1 taupo_col.green 0 1 rgba.blue 0 2 taupo_col.blue 0 2 rgba.alpha 0 3 taupo_col.alpha 0 3"
+  name Shuffle1
+  xpos 347
+  ypos -30
+ }
+add_layer {taupo_utility taupo_utility.size taupo_utility.age taupo_utility.life taupo_utility.norm_age}
+ Shuffle2 {
+  inputs 2
+  fromInput1 {{1} B A}
+  out1 taupo_utility
+  fromInput2 {{0} B A}
+  mappings "4 rgba.red 0 0 taupo_utility.size 0 0 rgba.green 0 1 taupo_utility.age 0 1 rgba.blue 0 2 taupo_utility.life 0 2 rgba.alpha 0 3 taupo_utility.norm_age 0 3"
+  name Shuffle2
+  xpos 347
+  ypos 17
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  format {{{position.format}}}
+  name Constant1
+  xpos 134
+  ypos 123
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input0]"}}
+  name Switch1
+  xpos 347
+  ypos 147
+ }
+ Output {
+  name Output1
+  xpos 347
+  ypos 369
+ }
+end_group

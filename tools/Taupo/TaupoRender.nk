@@ -1,45 +1,232 @@
+set cut_paste_input [stack 0]
+version 15.1 v5
+push $cut_paste_input
 Group {
  name TaupoRender
  tile_color 0x9c0000ff
  selected true
+ xpos -493
+ ypos 396
  addUserKnob {20 User l "Taupo Render"}
  addUserKnob {26 taupo_render_title l "" t "Because Krakatoa used to be a sweet particle renderer, and Taupo is a supervolcano in New Zealand. " +STARTLINE T "<font size=\"+5\"> Taupo Render"}
- addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v0.20 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v0.5 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {41 reloadKernelSourceFile l Load T BlinkScript3.reloadKernelSourceFile}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" -STARTLINE T BlinkScript3.useGPUIfAvailable}
+ addUserKnob {41 kernelSourceFile l "Kernel File" T BlinkScript3.kernelSourceFile}
  addUserKnob {26 ""}
- addUserKnob {41 format_1 l "output format" T Reformat1.format}
- addUserKnob {4 merge_operation l "merge mode" M {additive over}}
+ addUserKnob {41 format T BlinkScript3.format}
+ addUserKnob {4 merge_operation l "merge mode" M {additive over ""}}
+ addUserKnob {4 holdout_style l "holdout depth math" -STARTLINE M {real 1/z}}
  addUserKnob {26 size_text l <b>Size}
- addUserKnob {4 size_mode l "size mode" M {2D 3D ""}}
- size_mode 3D
  addUserKnob {7 size_mult l "size multiplier" R 0 10}
  size_mult 1
  addUserKnob {7 min_size l "min size" R 0 2}
+ addUserKnob {7 softness}
+ softness 0.5
+ addUserKnob {4 scene_units l "scene units" M {mm cm dm m inch ft}}
+ scene_units m
+ addUserKnob {6 enable_dof l "enable DoF" -STARTLINE}
+ addUserKnob {7 cateye R -1 1}
  addUserKnob {26 text l <b>Replicator}
  addUserKnob {3 duplicates}
  addUserKnob {7 duplicate_radius l radius}
- duplicate_radius 1
+ duplicate_radius 0.1
  addUserKnob {26 dist_fade_text l "<b>Fade by Distance"}
- addUserKnob {41 near T ParticleBlinkScriptRender1.near}
- addUserKnob {41 near_falloff l "near falloff" T ParticleBlinkScriptRender1.near_falloff}
- addUserKnob {41 far T ParticleBlinkScriptRender1.far}
- addUserKnob {41 far_falloff l "far falloff" T ParticleBlinkScriptRender1.far_falloff}
+ addUserKnob {7 fade_near l near R 0 100}
+ addUserKnob {7 fade_near_falloff l "near falloff" R 0 100}
+ fade_near_falloff 1
+ addUserKnob {7 fade_far l far R 0 1000}
+ fade_far 1000
+ addUserKnob {7 fade_far_falloff l "far falloff" R 0 100}
  addUserKnob {7 falloff_gamma l gamma}
  falloff_gamma 1
  addUserKnob {26 mb_text l "<b>Motion Blur"}
- addUserKnob {7 shutter}
- shutter 0.5
- addUserKnob {4 shutter_type l "shutter offset" M {start centered end ""}}
+ addUserKnob {7 shutter R 0 2}
+ shutter 1
+ addUserKnob {4 shutter_type l "shutter offset" +INVISIBLE M {start centered end ""}}
  shutter_type centered
- addUserKnob {3 max_steps l "max steps"}
+ addUserKnob {41 blink_render__minSteps l "min steps" T BlinkScript3.blink_render__minSteps}
+ addUserKnob {3 max_steps l "max steps" -STARTLINE}
  max_steps 64
  addUserKnob {7 spacing R 0 10}
  spacing 1
+ addUserKnob {6 diagnosticsMode l "diagnostics mode" +STARTLINE}
 }
  Input {
   inputs 0
+  name holdout
+  xpos 274
+  ypos 460
+  number 2
+ }
+ Expression {
+  expr0 "isinf(1/z)? 100000 : 1/z"
+  name Expression1
+  xpos 274
+  ypos 534
+ }
+ Dot {
+  name Dot4
+  xpos 308
+  ypos 617
+ }
+ Input {
+  inputs 0
+  name cache
+  xpos 705
+  ypos -132
+ }
+ Dot {
+  name Dot5
+  xpos 739
+  ypos 269
+ }
+set N57a13000 [stack 0]
+ Dot {
+  name Dot6
+  xpos 1008
+  ypos 269
+ }
+set N57a13400 [stack 0]
+ Dot {
+  name Dot7
+  xpos 1167
+  ypos 269
+ }
+add_layer {taupo_utility taupo_utility.size taupo_utility.age taupo_utility.life taupo_utility.norm_age}
+ Shuffle2 {
+  fromInput1 {{0} B}
+  in1 taupo_utility
+  fromInput2 {{0} B}
+  mappings "4 taupo_utility.size 0 0 rgba.red 0 0 taupo_utility.age 0 1 rgba.green 0 1 taupo_utility.life 0 2 rgba.blue 0 2 taupo_utility.norm_age 0 3 rgba.alpha 0 3"
+  name Shuffle2
+  xpos 1133
+  ypos 354
+ }
+ Dot {
+  name Dot2
+  xpos 1167
+  ypos 753
+ }
+push $N57a13400
+add_layer {taupo_col taupo_col.red taupo_col.green taupo_col.blue taupo_col.alpha}
+ Shuffle2 {
+  fromInput1 {{0} B}
+  in1 taupo_col
+  fromInput2 {{0} B}
+  mappings "4 taupo_col.red 0 0 rgba.red 0 0 taupo_col.green 0 1 rgba.green 0 1 taupo_col.blue 0 2 rgba.blue 0 2 taupo_col.alpha 0 3 rgba.alpha 0 3"
+  name Shuffle1
+  xpos 974
+  ypos 361
+ }
+ Dot {
+  name Dot3
+  xpos 1008
+  ypos 617
+ }
+push $N57a13000
+ Dot {
+  name Dot1
+  xpos 739
+  ypos 410
+ }
+set N57a34c00 [stack 0]
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset2
+  xpos 825
+  ypos 429
+ }
+push $N57a34c00
+ TimeOffset {
+  time_offset 1
+  time ""
+  name TimeOffset1
+  xpos 587
+  ypos 428
+ }
+push $N57a34c00
+ BlinkScript {
+  inputs 6
+  kernelSourceFile C:/Users/petes/Documents/Nuke_Blinkscripts/Particle_Blink_default_node/Particle_Blink_default_node_v023.cpp
+  recompileCount 412
+  ProgramGroup 1
+  KernelDescription "3 \"blink_render\" iterate pixelWise 8cb4c23eb6ef3e2068799c2ad1e69a1f7a85602c748b6707fb114aa5301cbeae 7 \"src\" Read Random \"src_prev\" Read Random \"src_next\" Read Random \"col\" Read Random \"util\" Read Random \"holdout\" Read Random \"dst\" Write Random 35 \"paSize\" Float 1 AABAQA== \"minSize\" Float 1 AACAPw== \"softness\" Float 1 AACAPw== \"merge_operation\" Int 1 AAAAAA== \"camera_matrix\" Float 16 AACAPwAAAAAAAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAAAAAAAAAAACAPw== \"camera_matrix_prev\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"camera_matrix_next\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"haperture\" Float 1 ppvEQQ== \"focal\" Float 1 AADAQQ== \"focal_prev\" Float 1 AAAAAA== \"focal_next\" Float 1 AAAAAA== \"fStop\" Float 1 MzOzQA== \"focus_distance\" Float 1 AADIQg== \"focus_distance_prev\" Float 1 AAAAAA== \"focus_distance_next\" Float 1 AAAAAA== \"pixel_aspect\" Float 1 AACAPw== \"cam_near\" Float 1 zczMPQ== \"cam_far\" Float 1 AAB6RA== \"scene_units\" Int 1 AgAAAA== \"enable_dof\" Int 1 AAAAAA== \"cateye_amount\" Float 1 AAAAAA== \"_duplicates_num\" Int 1 AAAAAA== \"duplicate_radius\" Float 1 AAAAPw== \"Steps\" Int 1 CgAAAA== \"_minSteps\" Int 1 AAAAAA== \"spacing\" Float 1 AACAPw== \"_shutter\" Float 1 AAAAPw== \"clip_padding\" Float 1 AAAAAA== \"near\" Float 1 AAAAAA== \"near_falloff\" Float 1 AAAAAA== \"far\" Float 1 AAB6RA== \"far_falloff\" Float 1 AAAAAA== \"falloff_gamma\" Float 1 AACAPw== \"_diagnosticMode\" Int 1 AAAAAA== \"holdout_toggle\" Int 1 AAAAAA== 35 \"_size\" 1 1 Default \"_minSize\" 1 1 Default \"softness\" 1 1 Default \"_merge_operation\" 1 1 Default \"camera_matrix\" 16 1 Default \"camera_matrix_prev\" 16 1 Default \"camera_matrix_next\" 16 1 Default \"haperture\" 1 1 Default \"focal\" 1 1 Default \"focal_prev\" 1 1 Default \"focal_next\" 1 1 Default \"fStop\" 1 1 Default \"focus_distance\" 1 1 Default \"focus_distance_prev\" 1 1 Default \"focus_distance_next\" 1 1 Default \"pixel_aspect\" 1 1 Default \"cam_near\" 1 1 Default \"cam_far\" 1 1 Default \"scene_units\" 1 1 Default \"enable_dof\" 1 1 Default \"cateye_amount\" 1 1 Default \"_duplicates_num\" 1 1 Default \"_duplicate_radius\" 1 1 Default \"_maxSteps\" 1 1 Default \"_minSteps\" 1 1 Default \"_spacing\" 1 1 Default \"_shutter\" 1 1 Default \"clip_padding\" 1 1 Default \"near\" 1 1 Default \"near_falloff\" 1 1 Default \"far\" 1 1 Default \"far_falloff\" 1 1 Default \"falloff_gamma\" 1 1 Default \"_diagnosticMode\" 1 1 Default \"_holdout_toggle\" 1 1 Default 31 \"srcconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"src_prevconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"src_nextconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"colconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"utilconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"holdoutconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"_w\" Int 1 1 AAAAAA== \"_h\" Int 1 1 AAAAAA== \"src_w\" Int 1 1 AAAAAA== \"src_h\" Int 1 1 AAAAAA== \"sqSize\" Int 1 1 AAAAAA== \"image_aspect\" Float 1 1 AAAAAA== \"pixelsPerWorldUnit\" Float 1 1 AAAAAA== \"scene_multiplier\" Float 1 1 AAAAAA== \"scene_focus_distance\" Float 1 1 AAAAAA== \"scene_focus_distance_prev\" Float 1 1 AAAAAA== \"scene_focus_distance_next\" Float 1 1 AAAAAA== \"img_center\" Float 2 1 AAAAAAAAAAA= \"img_radius\" Float 1 1 AAAAAA== \"enable_cateye\" Bool 1 1 AA== \"p_matrix\" Float 16 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"p_matrix_prev\" Float 16 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"p_matrix_next\" Float 16 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"t\" Float 16 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"s\" Float 16 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"w2s\" Float 16 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"w2s_prev\" Float 16 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"w2s_next\" Float 16 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"clip_matrix\" Float 16 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"clip_matrix_prev\" Float 16 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"clip_matrix_next\" Float 16 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "\n\nkernel blink_render : ImageComputationKernel<ePixelWise> \{\n\n    Image<eRead, eAccessRandom, eEdgeConstant> src; \n    Image<eRead, eAccessRandom, eEdgeConstant> src_prev;  \n    Image<eRead, eAccessRandom, eEdgeConstant> src_next;\n\n    Image<eRead, eAccessRandom, eEdgeConstant> col; \n    Image<eRead, eAccessRandom, eEdgeConstant> util; \n\n    Image<eRead, eAccessRandom, eEdgeConstant> holdout; \n\n    \n\n    // Image<eRead, eAccessRandom, eEdgeConstant> col_prev;  \n    // Image<eRead, eAccessRandom, eEdgeConstant> col_next;    \n\n    Image<eWrite, eAccessRandom, eEdgeClamped> dst; \n\nparam:\n    float _size;\n    float _minSize;\n    float softness;\n    int _merge_operation;\n\n    float4x4 camera_matrix;\n    float4x4 camera_matrix_prev;\n    float4x4 camera_matrix_next;\n\n    float haperture;\n    float focal, focal_prev, focal_next;\n    float fStop;\n    float focus_distance, focus_distance_prev, focus_distance_next;\n    float pixel_aspect;\n    float cam_near;\n    float cam_far;\n    int scene_units;\n    int enable_dof;\n\n    float cateye_amount;\n\n    int _duplicates_num;\n    float _duplicate_radius;\n\n    int _maxSteps;\n    int _minSteps;\n    float _spacing;\n    float _shutter;\n    float clip_padding;\n\n    float near;\n    float near_falloff;\n    float far;\n    float far_falloff;\n    float falloff_gamma;\n\n    int _diagnosticMode;\n    int _holdout_toggle;\nlocal:\n\n    int _w, _h;\n    int src_w, src_h;\n    int sqSize;\n    float image_aspect;\n    float pixelsPerWorldUnit;\n    float scene_multiplier;\n    float scene_focus_distance;\n    float scene_focus_distance_prev;\n    float scene_focus_distance_next;\n    float2 img_center;\n    float img_radius;\n\n    bool enable_cateye;\n\n    // projection matrix stuff. This is copying the one nuke provides in nukescripts.snap3d.py\n    float4x4 p_matrix, p_matrix_prev, p_matrix_next;         // projection matrix\n    float4x4 t;         // translate projected points into normalsed pixel coords (from 0,0 to -2,2 instead of -1,-1 to 1,1)\n    float4x4 s;         // scale normalised screen coords to actual pixel coords\n    float4x4 w2s;       // final world to screen matrix. This matches the one provided by this node (ParticleBlinkScriptRender),\n    float4x4 w2s_prev;  // world to screen matrix of previous frame\n    float4x4 w2s_next;  // world to screen matrix of next frame\n\n    float4x4 clip_matrix;\n    float4x4 clip_matrix_prev;\n    float4x4 clip_matrix_next;\n\n\n\n  void define()\{\n\n    defineParam(_size, \"paSize\", 3.0f);\n    defineParam(_minSize, \"minSize\", 1.0f);\n    defineParam(softness, \"softness\", 1.0f);\n    defineParam(_merge_operation, \"merge_operation\", 0);\n\n    defineParam(camera_matrix, \"camera_matrix\", float4x4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) );\n    defineParam(haperture, \"haperture\", 24.576f);\n    defineParam(focal, \"focal\", 24.0f);\n    defineParam(fStop, \"fStop\", 5.6f);\n    defineParam(focus_distance, \"focus_distance\", 100.0f);\n    defineParam(pixel_aspect, \"pixel_aspect\", 1.0f);\n    defineParam(cam_near, \"cam_near\", 0.1f);\n    defineParam(cam_far, \"cam_far\", 1000.0f);\n    defineParam(scene_units, \"scene_units\", 2);\n    defineParam(enable_dof, \"enable_dof\", 0);\n\n    defineParam(cateye_amount, \"cateye_amount\", 0.0f);\n\n    defineParam(_duplicates_num, \"_duplicates_num\", 0);\n    defineParam(_duplicate_radius, \"duplicate_radius\", 0.5f);\n\n    defineParam(_maxSteps, \"Steps\", 10);\n    defineParam(_spacing, \"spacing\", 1.0f);\n    defineParam(_shutter, \"_shutter\", 0.5f);\n    \n    defineParam(clip_padding, \"clip_padding\", 0.0f);\n\n    //fade params\n    defineParam(near, \"near\", 0.0f);\n    defineParam(near_falloff, \"near_falloff\", 0.0f);\n    defineParam(far, \"far\", 1000.0f);\n    defineParam(far_falloff, \"far_falloff\", 0.0f);\n    defineParam(falloff_gamma, \"falloff_gamma\", 1.0f);\n\n    defineParam(_diagnosticMode, \"_diagnosticMode\", 0);\n    defineParam(_holdout_toggle, \"holdout_toggle\", 0);\n  \}\n\n  float4 srcOver( float4 a, float4 b ) \{\n    return (1.0f-a.w)*b + a;\n  \}\n\n  float2 transform( float3 p,float4x4 world_to_screen )\n  \{\n    float4 r = world_to_screen*float4(p.x, p.y, p.z, 1.0);\n    return float2(r.x, r.y)/r.w;\n  \}\nfloat3 transformz( float3 p, float4x4 world_to_screen )\{\n    float4 r = world_to_screen*float4(p.x, p.y, p.z, 1.0);\n    float2 xy = float2(r.x, r.y)/r.w;\n    float depth = r.w;\n    return float3(xy, depth);\n  \}  \n\nfloat4 toClipSpace(float3 P, float4x4 clip_matrix)\{\n    float4 homogeneous_P = float4(P.x, P.y, P.z, 1.0);\n    return clip_matrix*homogeneous_P;\n\}\n\nfloat3 clipToNDC(float4 clip)\{\n    float4 clip_to_screen = s * t * clip;\n    return (float3(clip_to_screen.x/clip_to_screen.w, clip_to_screen.y/clip_to_screen.w, clip_to_screen.w));      // but keep w coordinate for depth. I like it more.. lol.\n\}\n\n// Function to check if a 4D position is within the frustum with padding\nbool isInsideFrustum(float4 position, float padding) \{\n\n    // Clip space coordinates\n    float x = position.x;\n    float y = position.y;\n    float z = position.z;\n    float w = position.w;\n\n    // Frustum boundaries with padding\n    bool insideX = (x >= -w - padding) && (x <= w + padding);\n    bool insideY = (y >= -w - padding) && (y <= w + padding);\n    bool insideZ = (z >= -w) && (z <= w);\n    // bool insideZ = (z >= 0) && (z <= w);\n    return insideX && insideY && insideZ; \n\}\n\nbool isInsideFrustumWithFlip(float4 position, float padding) \{\n    // Clip space coordinates\n    float x = position.x;\n    float y = position.y;\n    float z = position.z;\n    float w = position.w;\n\n    // Correct flipped coordinates if behind the camera\n    if (w < 0) \{\n        z = -z;\n        w = -w;\n    \}\n\n    // Frustum boundaries with padding\n    bool insideX = (x >= -w - padding) && (x <= w + padding);\n    bool insideY = (y >= -w - padding) && (y <= w + padding);\n    bool insideZ = (z >= -w) && (z <= w);\n\n    return insideX && insideY && insideZ;\n\}\n\n\n\n  float smoothstep( float a, float b, float x ) \{\n    float t = clamp((x - a) / (b - a), 0.0, 1.0);\n    return t*t * (3.0f - 2.0f*t);\n  \}\n\n  // overloaded lerp with float, float2 and float3\n    float lerp(float a, float b, float t)\{\n        return a + t * (b-a);\n  \}\n    float2 lerp(float2 a, float2 b, float t) \{\n        return a + t * (b - a);\n  \}\n    float3 lerp(float3 a, float3 b, float t) \{\n        return a + t * (b - a);\n    \}\nfloat4x4 projectionMatrix(\n        const float focalLength,\n        const float horizontalAperture,\n        const float nearPlane,\n        const float farPlane)\n\{\n    float farMinusNear = farPlane - nearPlane;\n    return float4x4(\n        2 * focalLength / horizontalAperture, 0, 0, 0,\n        0, 2 * focalLength / horizontalAperture, 0, 0,\n        0, 0, -(farPlane + nearPlane) / farMinusNear, -2 * (farPlane * nearPlane) / farMinusNear,\n        0, 0, -1, 0\n    );\n\}\n\n// thanks Erwan Leroy - https://erwanleroy.com/making-3d-lightning-in-nuke-using-blinkscript/\ninline float fract (float x) \{return x-floor(x);\}\ninline float random(float co) \{ return fract(sin(co*(91.3458f)) * 47453.5453f); \}\n\ninline float3 randomv(float3 seed)\{\n  float scramble = random(seed.x + seed.y * seed.z);\n  float3 rand;\n  rand.x = random(seed.x + scramble + 0.14557f + 0.47917f * seed.z)*2-1;\n  rand.y = random(seed.y * 0.214447f + scramble * 47.241f * seed.x)*2-1;\n  rand.z = random(seed.z * scramble + 3.147855f + 0.2114f * seed.y)*2-1;\n  return normalize(rand);\n\}\n\ninline float3 randomv2(float seed)\{\n    //float scramble = random(seed + seed * seed);\n    float3 rand;\n    rand.x = random(seed + 0.215568f)*2.0-1.0;\n    rand.y = random(seed + 2.112408f)*2.0-1.0;\n    rand.z = random(seed + 68.13384f)*2.0-1.0;\n    return rand;\n\}\n\n\n\n\n  void init() \{\n    _w = dst.bounds.width();\n    _h = dst.bounds.height();\n    src_w = src.bounds.width();\n    src_h = src.bounds.height();\n    sqSize = src_w / 2;\n    img_center = float2(float(_w) * 0.5, float(_h) * 0.5);\n    img_radius = length(img_center);\n\n    enable_cateye = enable_dof && cateye_amount != 0.0;\n\n    image_aspect = float(_h) / float(_w);\n    pixelsPerWorldUnit = (_w*0.5) / haperture;\n\n    // camera projection matrix\n    p_matrix = projectionMatrix(focal, haperture, cam_near, cam_far);\n    p_matrix_prev = projectionMatrix(focal_prev, haperture, cam_near, cam_far);\n    p_matrix_next = projectionMatrix(focal_next, haperture, cam_near, cam_far);\n\n    // Matrix to scale normalised pixel coords into actual pixel coords.\n    float x_scale = float(_w) * 0.5;\n    float y_scale = x_scale *pixel_aspect;\n    s.setIdentity();\n    s.scale(float4(x_scale, y_scale, 1.0f,1.0f));\n\n    // Matrix to translate the projected points into normalised pixel coords\n    t.setIdentity();\n    t.translate(float4(1.0, 1.0 - (1.0 - image_aspect / pixel_aspect), 0.0f, 1.0f));\n\n    // view matrix is inverted camera world matrix\n    float4x4 view =  camera_matrix.invert();\n    float4x4 view_prev =  camera_matrix_prev.invert();\n    float4x4 view_next =  camera_matrix_next.invert();\n    \n    clip_matrix = p_matrix * view;\n    clip_matrix_prev = p_matrix_prev * view_prev;\n    clip_matrix_next = p_matrix_next * view_next;\n\n    // world to screen matrix is the concatenation of above matrices, from right to left.\n    // TO DO: maybe add screen scale/roll all that crap that the snap3d projection matrix provides. Could be useful for overscan..?\n    w2s = s * t * p_matrix * view;\n    w2s_prev = s * t * p_matrix_prev * view_prev;\n    w2s_next = s * t * p_matrix_next * view_next;\n\n\n    float cm = 10.0f;\n    float dm = 100.0f;\n    float m = 1000.0f;\n    float inch = 25.4f;\n    float feet = 304.8f;\n    \n    scene_multiplier = (scene_units == 1) ? cm :\n                   (scene_units == 2) ? dm :\n                   (scene_units == 3) ? m :\n                   (scene_units == 4) ? inch :\n                   (scene_units == 5) ? feet : 1;\n    scene_focus_distance = focus_distance * scene_multiplier;\n    scene_focus_distance_prev = focus_distance_prev * scene_multiplier;\n    scene_focus_distance_next = focus_distance_next * scene_multiplier;\n    \n  \}\n\n// Thanks Jed Smith for OpticalZDefocus - circle of confusion math taken from there.\n// float CoC(float depth)\{\n//     float scene_depth = depth * scene_multiplier;\n//     float coc = (fabs(scene_focus_distance - scene_depth) * pow(focal, 2) / (fStop * scene_depth * (scene_focus_distance - focal)));\n//     float coc_pixels = fabs(coc / haperture * float(_w) );\n//     return coc_pixels;\n// \}\nfloat CoC(float depth, float f, float fd)\{\n    float scene_depth = depth * scene_multiplier;\n    float coc = (fabs(fd - scene_depth) * pow(f, 2) / (fStop * scene_depth * (fd - f)));\n    float coc_pixels = fabs(coc / haperture * float(_w) );\n    return coc_pixels;\n\}\n\n\n// variation of the renderPoint function from the default code inside the ParticleBlinkScriptRender node. \n// Modified to do CoC calculations and take in a falloff\nvoid renderPoint( float2 xy, float4 pcolor, float pointSize, float coc, float falloff, float depth )\n\{\n    float effectiveRadius;\n    float effectiveRadius2;\n    float energyScale;\n    float2 cat_vec;\n    float cateye_limit;\n    float2 cateye_xy;\n\n    \n    // Effective radius (original particle size plus defocus)\n    if (enable_dof)\{\n        effectiveRadius = pointSize + coc;\n        effectiveRadius2 = effectiveRadius * effectiveRadius;\n        energyScale = (pointSize * pointSize) / (effectiveRadius2);\n    \}\n    else\{\n        effectiveRadius = pointSize;\n        effectiveRadius2 = pointSize*pointSize;\n        energyScale = 1.0f;\n    \}\n    if (enable_cateye)\{\n        cat_vec = float2(xy - img_center);\n\n        cateye_limit = cateye_amount * effectiveRadius *2.0;\n\n        cateye_xy = xy + (((xy - img_center) / img_radius) * cateye_limit);\n    \}\n\n    int intRadius = int(ceil(effectiveRadius));\n    int minX = max(0, int(xy.x) - intRadius);\n    int maxX = min(_w - 1, int(xy.x) + intRadius);\n    int minY = max(0, int(xy.y) - intRadius);\n    int maxY = min(_h - 1, int(xy.y) + intRadius);\n\n    float soft_thresh = effectiveRadius2 * (1.0 - softness);\n\n    // Loop over all pixels in the bounding box.\n    for (int y = minY; y <= maxY; y++) \{\n        for (int x = minX; x <= maxX; x++) \{\n            float2 p = float2(x, y);\n            float2 d = p - xy;\n            float r2 = dot(d, d);\n            float2 cat;\n            float cat2;\n            bool render_mask; \n\n\n            if (enable_cateye)\{\n                cat = p - cateye_xy;\n                cat2 = dot(cat, cat);\n                render_mask = r2 < effectiveRadius2 && cat2 < effectiveRadius2;\n            \}\n            else\{\n                render_mask = r2 < effectiveRadius2;\n            \}\n\n            if (render_mask) \{\n\n                float w = 1.0 - smoothstep(soft_thresh, effectiveRadius2, r2);\n                if (enable_cateye)\{\n                    float c = 1.0 - smoothstep( soft_thresh, effectiveRadius2, cat2);\n                    w=w*c;\n                \}\n\n                if (_holdout_toggle)\{\n                float4 read_holdout = holdout(x,y);\n                float holdout_depth = read_holdout.x;\n                float holdout_alpha = read_holdout.w;\n                if ( depth > holdout_depth )\{\n                    if (holdout_alpha >=.99999) break;\n                    else w*= (1-holdout_alpha);\n                \}\}\n\n                w *= energyScale * falloff ;\n\n                // additive  \n                if (_merge_operation == 0) \{ \n                    dst(p.x, p.y) += pcolor * w;\n                \}\n\n                // over\n                if (_merge_operation == 1) \{\n                    float4 colourToAdd = pcolor * w;\n                    float4 existingColour = dst(p.x,p.y);\n                    dst(p.x, p.y) = srcOver(colourToAdd, existingColour);\n                \}\n            \}\n        \}\n    \}\n\}\n\n// Copilot \"think deeper\" finally gave me a function that will make a curve between 3 points\n// and ensure that the curve goes through all three. Thanks little AI!\nfloat2 quadraticInterpolation(float2 p0, float2 p1, float2 p2, float t) \{\n    // Lagrange basis polynomials\n    float l0 = (t - 0.5f) * (t - 1.0f) / ((0.0f - 0.5f) * (0.0f - 1.0f));\n    float l1 = (t - 0.0f) * (t - 1.0f) / ((0.5f - 0.0f) * (0.5f - 1.0f));\n    float l2 = (t - 0.0f) * (t - 0.5f) / ((1.0f - 0.0f) * (1.0f - 0.5f));\n    \n    // Interpolated point\n    return l0 * p0 + l1 * p1 + l2 * p2;\n\}\n\n  float minMaxSmooth(float n,float ns,float f,float fs,float v)\{\n      // input variables are near, near soft, far, far soft and value\n      float output = 0.0;\n      float near = min(n, f);\n      float near_soft = max(ns, 0.0);\n      float far = max(n, f);\n      float far_soft = max(fs, 0.0);\n\n      float near_soft_absolute = near-near_soft;\n      float far_soft_absolute = far+far_soft;\n\n      if (v <= near)\{\n        output = smoothstep(near_soft_absolute,near,v);\n        \}\n      else\{\n        output = 1-smoothstep(far,far_soft_absolute,v);\n        \}\n      return output;\n  \}\n\n\n//     float screenSpaceSize(float focal, float p_size, float distance)\{\n//         float particleSizeOnImagePlane = (focal * p_size) / distance;\n//         float particleSizeInPixels = (particleSizeOnImagePlane * pixelsPerWorldUnit);\n//     return particleSizeInPixels;\n//   \}  \n\n    float screenSpaceSize(float f, float p_size, float distance)\{\n        float particleSizeOnImagePlane = (f * p_size) / distance;\n        float particleSizeInPixels = (particleSizeOnImagePlane * pixelsPerWorldUnit);\n    return particleSizeInPixels;\n  \}  \n\n\n  void process(int2 pos) \{\n\n    \n    // blink runs on each pixel of the dst image. Every pixel, we'll sample the corresponding pixel in the src image (cache).\n    // But in the unlikely but not impossible scenario that the cache is larger than the destination image, then we won't hit\n    // those samples in the cache (say the cache is 2048x2048 and dst image is 1280x720. The cache is larger in both dimensions.\n    /*\n                _______________________              _______________________       \n                |                     |              |\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\|       \n                |         DST         |              |\\\\\\\\\\\\\\ CACHE \\\\\\\\\\\\\\|       \n                |__________           |              |\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\|       \n    Normally:   |         |           |   Oversized  |               |\\\\\\\\\\|       \n                |  CACHE  |           |     Cache:   |      DST      |\\\\\\\\\\|       \n                |         |           |              |               |\\\\\\\\\\|       \n                |_________|___________|              |_______________|_____|       \n    */\n    // The pixels in the shaded area of the cache will never be sampled.\n    // So we set up some batching, so that multiple pixels of the cache image will be sampled per dst image.\n    // We lose a little bit of concurrency, but there is an added benefit...\n    // There are fewer GPU scheduling conflicts causing artifacts when samples are overlapping in the 2d image.\n    // For this reason, we can also expose a batch size override, higher values = slower but less artifacts.\n    // Still, CPU gives best, artifact free results.\n\n    int batch_size_x = ceil( float(src_w) / float(_w)); \n    int batch_size_y = ceil( float(src_h) / float(_h)); \n    // batch_size_x = 3;\n    // batch_size_y = 3;\n    int2 batch_start = int2 ( pos.x * batch_size_x, pos.y * batch_size_y);\n    int2 batch_end = int2( batch_start.x + (batch_size_x-1), batch_start.y + (batch_size_y-1));\n\n    if (batch_start.x < src_w && batch_start.y < src_h)\{\n\n    for (int cache_x = batch_start.x; cache_x <= batch_end.x; cache_x++)\{\n        if (cache_x > src_w) break;\n\t    for (int cache_y = batch_start.y; cache_y <= batch_end.y; cache_y++)\{\n            if (cache_y > src_h) break; \n    \n\n    int id = int(src(cache_x, cache_y).w);\n    if(id == 0) return;                                           // also don't bother if the id=0, ie, there's no particle\n    int id_prev = int(src_prev(cache_x, cache_y).w);\n    int id_next = int(src_next(cache_x, cache_y).w);\n    \n\n    float4 read_pos_id = src(cache_x, cache_y);\n    float4 read_pos_id_prev = src_prev(cache_x, cache_y);    \n    float4 read_pos_id_next = src_next(cache_x, cache_y);   \n\n    float4 read_col = col(pos.x, pos.y);\n    float4 read_util = util(pos.x, pos.y);\n\n    float nage = read_util.w;\n\n    //float4 read_col_prev = col_prev(pos.x, pos.y);\n    //float4 read_col_next = col_next(pos.x, pos.y);\n\n\n\n    float3 P = float3(read_pos_id.x, read_pos_id.y, read_pos_id.z);\n    float3 P_prev = float3(read_pos_id_prev.x, read_pos_id_prev.y, read_pos_id_prev.z);\n    float3 P_next = float3(read_pos_id_next.x, read_pos_id_next.y, read_pos_id_next.z);\n\n\n    if (id_prev != id)\{                                      // if the particle is new, ie, it didn't exist last frame.\n        float3 vel = P_next - P;\n        P_prev = P - vel;\n    \}\n    if (id_next != id)\{                                     // if the particle is about to die, ie, won't exist next frame\n        float3 vel =  P - P_prev;\n        P_next = P+vel;\n    \}\n\n\n\n    float dist = transformz(P, w2s).z;\n\n    if (dist<0.0f)\{ return; \}\n\n        for (int pt = 0; pt <= _duplicates_num; pt++)\{            // duplicate points\n\n        if (pt !=0)\{\n            // P += randomv2(float(pt) + float(id)*0.02)*_duplicate_radius * (1.0-nage);\n            // P_prev += randomv2(float(pt) + float(id)*0.02)*_duplicate_radius * (1.0-nage);\n            // P_next += randomv2(float(pt) + float(id)*0.02)*_duplicate_radius * (1.0-nage);\n            P += randomv2(float(pt) + float(id)*0.02)*_duplicate_radius;\n            P_prev += randomv2(float(pt) + float(id)*0.02)*_duplicate_radius;\n            P_next += randomv2(float(pt) + float(id)*0.02)*_duplicate_radius;\n        \}\n\n\n        // this part is  a mess. \n\n        // Move P to clip space\n        float4 clip = toClipSpace(P, clip_matrix);\n        float4 clip_prev = toClipSpace(P_prev, clip_matrix_prev);\n        float4 clip_next = toClipSpace(P_next, clip_matrix_next);\n\n        // very simple clip check\n        \n        // if (!isInsideFrustum(clip,clip_padding) && !isInsideFrustum(clip_prev,clip_padding) && !isInsideFrustum(clip_next,clip_padding))\{\n        //     break;\n        // \}\n\n        // if (!isInsideFrustumWithFlip(clip,clip_padding) && !isInsideFrustumWithFlip(clip_prev,clip_padding) && !isInsideFrustumWithFlip(clip_next,clip_padding))\{\n        //     break;\n        // \}\n\n        //if (!isInsideFrustum(clip,clip_padding)) break;\n        // if (!isInsideFrustum(clip_next,clip_padding)) break;\n        //if (!isInsideFrustum(clip_prev,clip_padding)) break;\n\n\n\n        // move to NDC space\n        float3 ndc = clipToNDC(clip);\n        float3 ndc_prev = clipToNDC(clip_prev);\n        float3 ndc_next =  clipToNDC(clip_next);\n\n        float4 clip_to_screen = s * t * clip;\n        float z_divide = clip.z / clip_to_screen.w;\n\n        float2 xy = float2(ndc.x, ndc.y);\n        float2 xy_prev = float2(ndc_prev.x, ndc_prev.y);\n        float2 xy_next = float2(ndc_next.x, ndc_next.y);\n\n        \n        // float size = max(_minSize,min(100.0f, screenSpaceSize(focal, pixelsPerWorldUnit, _size, ndc.z)));\n\n        float incoming_size = read_util.x * _size;\n        float size = max(_minSize, min(100.0f, screenSpaceSize(focal, incoming_size, ndc.z)));\n        float size_prev = max(_minSize, screenSpaceSize(focal_prev, incoming_size, ndc_prev.z));\n        float size_next = max(_minSize, screenSpaceSize(focal_next, incoming_size, ndc_next.z));\n\n\n\n        float coc, coc_prev, coc_next;\n        \n        if (enable_dof)\{\n        coc = max(0.0,min(200.0f, CoC(ndc.z, focal, scene_focus_distance)));\n        coc_prev = max(0.0,min(200.0f, CoC(ndc_prev.z, focal_prev, scene_focus_distance_prev)));\n        coc_next = max(0.0,min(200.0f, CoC(ndc_next.z, focal_next, scene_focus_distance_next)));\n        \}\n\n        float blur_length = (length(xy - xy_prev) + length(xy - xy_next) * _shutter ); // approximate\n\n        float shutter_start = 0.5 - (_shutter*0.25);\n        float shutter_end = 0.5 + (_shutter*0.25);\n\n        float depth_fade = minMaxSmooth(near, near_falloff, far, far_falloff, ndc.z);\n        depth_fade = pow(depth_fade, falloff_gamma);\n        float4 render_col = float4(float3(1.0), 1.0);// /float(steps);\n        render_col = read_col;\n\n        int adaptive_from_size;\n\n        int steps;\n        if (_maxSteps <= 1)\{\n            renderPoint(xy,render_col , size, coc, depth_fade, dist );\n        \}\n        else\{\n            float blur_length = (length(xy - xy_prev) + length(xy - xy_next) * _shutter );\n            steps = max(2 , min(_maxSteps, int(ceil(blur_length/max(2.0f, min(size_prev, size_next)+coc)*2.0/_spacing))));\n            adaptive_from_size = min(32, ceil(fabs(coc_prev-coc_next)*2.0));\n            // steps = max(_minSteps, steps);\n            steps += adaptive_from_size;\n            steps -= 1;\n\n            //steps = 32;\n\n            float shutter_start = 0.5 - (_shutter*0.25);\n            float shutter_end = 0.5 + (_shutter*0.25);\n\n\n            render_col /= float(steps)+1;\n\n\n            for (int step = 0; step <= steps; step++)\{\n                float step_position = float(step)/float(steps);\n                float shutter_step = lerp(shutter_start, shutter_end, step_position);\n                float2 xy_render = quadraticInterpolation(xy_prev, xy, xy_next, shutter_step);\n                float coc_render = lerp(coc_prev, coc_next, shutter_step); \n                // float coc_render = coc_next;\n                float size_render = lerp(size_prev, size_next, shutter_step);\n                renderPoint(xy_render,render_col , size, coc_render, depth_fade, dist );\n            \}\n        \}\n\n        if (_diagnosticMode)\{\n            \n        float4 col = float4(1.0, 1.0, 1.0, 1.0);\n        float4 red = float4(1.f, 0.f, 0.f, 1.f);\n        float4 green = float4(0.f, 1.f, 0.f, 1.f);\n        float4 blue = float4(0.f, 0.f, 1.f, 1.f);\n\n        // renderPoint(xy, green, size, coc, 1.0);\n        // renderPoint(xy_prev, red, size, coc, 1.0);\n        // renderPoint(xy_next, blue, size, coc, 1.0);\n\n        //dst(10,1) = float4(fabs(size_prev ));\n\n\n\n        //renderPoint(xy_next, blue, size, 1.0);\n        //renderPoint(xy_next, blue, size, 1.0);\n        \}\n        // dst(10,10) = max( dst(10,10), float4(steps));\n        // dst(20,20) = float4(size_prev);\n        // dst(21,21) = float4(size_next);\n        // dst(22,22) = float4(adaptive_from_size);\n        \n        \}\n\n\n  \}\} // end of batch loops\n\n\n\n\n    \} // end of outside of the src bounds condition\n  \}  // end of process()\n  \}; // end of kernel"
+  rebuild ""
+  blink_render_paSize {{parent.size_mult}}
+  blink_render_minSize {{parent.min_size}}
+  blink_render_softness {{parent.softness}}
+  blink_render_merge_operation {{parent.merge_operation}}
+  group_blink_render_camera_matrix 1
+  blink_render_camera_matrix {
+      {{parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix}}
+      {{parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix}}
+      {{parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix}}
+      {{parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix}}
+    }
+  blink_render_camera_matrix_prev {
+      {{parent.DummyCam.world_matrix(frame-1)} {parent.DummyCam.world_matrix(frame-1)} {parent.DummyCam.world_matrix(frame-1)} {parent.DummyCam.world_matrix(frame-1)}}
+      {{parent.DummyCam.world_matrix(frame-1)} {parent.DummyCam.world_matrix(frame-1)} {parent.DummyCam.world_matrix(frame-1)} {parent.DummyCam.world_matrix(frame-1)}}
+      {{parent.DummyCam.world_matrix(frame-1)} {parent.DummyCam.world_matrix(frame-1)} {parent.DummyCam.world_matrix(frame-1)} {parent.DummyCam.world_matrix(frame-1)}}
+      {{parent.DummyCam.world_matrix(frame-1)} {parent.DummyCam.world_matrix(frame-1)} {parent.DummyCam.world_matrix(frame-1)} {parent.DummyCam.world_matrix(frame-1)}}
+    }
+  blink_render_camera_matrix_next {
+      {{parent.DummyCam.world_matrix(frame+1)} {parent.DummyCam.world_matrix(frame+1)} {parent.DummyCam.world_matrix(frame+1)} {parent.DummyCam.world_matrix(frame+1)}}
+      {{parent.DummyCam.world_matrix(frame+1)} {parent.DummyCam.world_matrix(frame+1)} {parent.DummyCam.world_matrix(frame+1)} {parent.DummyCam.world_matrix(frame+1)}}
+      {{parent.DummyCam.world_matrix(frame+1)} {parent.DummyCam.world_matrix(frame+1)} {parent.DummyCam.world_matrix(frame+1)} {parent.DummyCam.world_matrix(frame+1)}}
+      {{parent.DummyCam.world_matrix(frame+1)} {parent.DummyCam.world_matrix(frame+1)} {parent.DummyCam.world_matrix(frame+1)} {parent.DummyCam.world_matrix(frame+1)}}
+    }
+  blink_render_haperture {{DummyCam.haperture}}
+  blink_render_focal {{DummyCam.focal}}
+  blink_render_focal_prev {{DummyCam.focal(frame-1)}}
+  blink_render_focal_next {{DummyCam.focal(frame+1)}}
+  blink_render_fStop {{DummyCam.fstop}}
+  blink_render_focus_distance {{DummyCam.focal_point}}
+  blink_render_focus_distance_prev {{"\[value DummyCam.focal_point 50]"}}
+  blink_render_focus_distance_next {{"DummyCam.focal_point(frame + 1)"}}
+  blink_render_cam_near {{DummyCam.near}}
+  blink_render_cam_far {{DummyCam.far}}
+  blink_render_scene_units {{parent.scene_units}}
+  blink_render_enable_dof {{parent.enable_dof}}
+  blink_render_cateye_amount {{parent.cateye}}
+  blink_render__duplicates_num {{parent.duplicates}}
+  blink_render_duplicate_radius {{parent.duplicate_radius}}
+  blink_render_Steps {{parent.max_steps}}
+  blink_render__minSteps 1
+  blink_render_spacing {{parent.spacing}}
+  blink_render__shutter {{parent.shutter}}
+  blink_render_near {{parent.fade_near}}
+  blink_render_near_falloff {{parent.fade_near_falloff}}
+  blink_render_far {{parent.fade_far}}
+  blink_render_far_falloff {{parent.fade_far_falloff}}
+  blink_render_falloff_gamma {{1/parent.falloff_gamma}}
+  blink_render__diagnosticMode {{parent.diagnosticsMode}}
+  blink_render_holdout_toggle {{"\[exists parent.input2]"}}
+  specifiedFormat true
+  rebuild_finalise ""
+  name BlinkScript3
+  xpos 705
+  ypos 608
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos 705
+  ypos 764
+ }
+ Output {
+  name Output1
+  xpos 705
+  ypos 1031
+ }
+ Input {
+  inputs 0
   name cam
-  xpos 359
-  ypos 221
+  xpos 454
+  ypos -108
   number 1
  }
  Camera {
@@ -58,11 +245,11 @@ Group {
   help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nadrianpueyo.com, 2019-2020"
   onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
   label "\[value \[value the_cam]name]"
-  xpos 369
-  ypos 350
+  xpos 464
+  ypos 310
   addUserKnob {20 DummyCam l Defaults}
   addUserKnob {43 the_cam}
-  the_cam "\[\n#DummyCam v1.1. Updated 5 April 2020.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Camera3\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera3\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  the_cam "\[\n#DummyCam v1.1. Updated 5 April 2020.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Camera3\" && \[class \$x] != \"Camera4\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera3\"||\[class \$x]==\"Camera\"||\[class \$x]==\"Camera4\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
   addUserKnob {43 the_frame}
   the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
   addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
@@ -73,9 +260,9 @@ Group {
   addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
   d_vaperture 18.672
   addUserKnob {7 d_near l near R 0 10}
-  d_near 4.85
+  d_near 1
   addUserKnob {7 d_far l far R 0 10000}
-  d_far 10000
+  d_far 1000
   addUserKnob {30 d_win_translate l "window translate"}
   addUserKnob {30 d_win_scale l "window scale"}
   d_win_scale {1 1}
@@ -85,92 +272,5 @@ Group {
   addUserKnob {7 d_fstop l fstop R 0 30}
   d_fstop 16
   addUserKnob {26 version l " " t "Updated 5 April 2020" T "<span style=\"color:#666\"><br/><b>DummyCam v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2020</span>"}
- }
-set N3abec400 [stack 0]
- Constant {
-  inputs 0
-  channels rgb
-  format "512 512 0 0 512 512 1 square_512"
-  name Constant1
-  xpos 197
-  ypos 410
- }
- Reformat {
-  name Reformat1
-  xpos 197
-  ypos 482
- }
- MotionBlur3D {
-  inputs 2
-  shutteroffset centred
-  name MotionBlur3D1
-  xpos 359
-  ypos 482
- }
- Shuffle2 {
-  fromInput1 {{0} B}
-  in1 forward
-  fromInput2 {{0} B}
-  mappings "4 forward.u 0 0 rgba.red 0 0 forward.v 0 1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 black -1 -1 rgba.alpha 0 3"
-  name Shuffle1
-  label "\[value in1] -> \[value out1]"
-  xpos 359
-  ypos 585
- }
-push $N3abec400
- Input {
-  inputs 0
-  name particles
-  xpos 568
-  ypos 222
- }
- ParticleBlinkScriptRender {
-  inputs 3
-  format {{{Reformat1.format}}}
-  kernelFile C:/Users/petes/Documents/Nuke_Blinkscripts/particle_blinkscript_render/particle_blinkscript_render_v020.cpp
-  kernelSourceGroup 1
-  kernelSource "inline float fract (float x) \{return x-floor(x);\}\ninline float random(float co) \{ return fract(sin(co*(91.3458f)) * 47453.5453f); \}\n\ninline float3 randomv(float3 seed)\{\n  float scramble = random(seed.x + seed.y * seed.z);\n  float3 rand;\n  rand.x = random(seed.x + scramble + 0.14557f + 0.47917f * seed.z)*2-1;\n  rand.y = random(seed.y * 0.214447f + scramble * 47.241f * seed.x)*2-1;\n  rand.z = random(seed.z * scramble + 3.147855f + 0.2114f * seed.y)*2-1;\n  return normalize(rand);\n\}\n\ninline float3 randomv2(float seed)\{\n    //float scramble = random(seed + seed * seed);\n    float3 rand;\n    rand.x = random(seed + 0.215568f)*2.0-1.0;\n    rand.y = random(seed + 2.112408f)*2.0-1.0;\n    rand.z = random(seed + 68.13384f)*2.0-1.0;\n    return rand;\n\}\n\n\nint fastfloor( const float x ) \{ return x > 0 ? (int) x : (int) x - 1; \}\ninline float raw_noise_4d( const float x, const float y, const float z, const float w ) \n\{\nint simplex\[64]\[4] = \{\n    \{0,1,2,3\},\{0,1,3,2\},\{0,0,0,0\},\{0,2,3,1\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{1,2,3,0\},\n    \{0,2,1,3\},\{0,0,0,0\},\{0,3,1,2\},\{0,3,2,1\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{1,3,2,0\},\n    \{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\n    \{1,2,0,3\},\{0,0,0,0\},\{1,3,0,2\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{2,3,0,1\},\{2,3,1,0\},\n    \{1,0,2,3\},\{1,0,3,2\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{2,0,3,1\},\{0,0,0,0\},\{2,1,3,0\},\n    \{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\n    \{2,0,1,3\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{3,0,1,2\},\{3,0,2,1\},\{0,0,0,0\},\{3,1,2,0\},\n    \{2,1,0,3\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{3,1,0,2\},\{0,0,0,0\},\{3,2,0,1\},\{3,2,1,0\}\n\};\n    int perm\[512] = \{\n        151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,\n        8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,\n        35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,\n        134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,\n        55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208, 89,\n        18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,\n        250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,\n        189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,\n        172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,\n        228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,\n        107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,\n        138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180,\n\n        151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,\n        8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,\n        35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,\n        134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,\n        55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208, 89,\n        18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,\n        250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,\n        189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,\n        172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,\n        228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,\n        107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,\n        138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180\n    \};\n   int grad4\[32]\[4]= \{\n    \{0,1,1,1\},  \{0,1,1,-1\},  \{0,1,-1,1\},  \{0,1,-1,-1\},\n    \{0,-1,1,1\}, \{0,-1,1,-1\}, \{0,-1,-1,1\}, \{0,-1,-1,-1\},\n    \{1,0,1,1\},  \{1,0,1,-1\},  \{1,0,-1,1\},  \{1,0,-1,-1\},\n    \{-1,0,1,1\}, \{-1,0,1,-1\}, \{-1,0,-1,1\}, \{-1,0,-1,-1\},\n    \{1,1,0,1\},  \{1,1,0,-1\},  \{1,-1,0,1\},  \{1,-1,0,-1\},\n    \{-1,1,0,1\}, \{-1,1,0,-1\}, \{-1,-1,0,1\}, \{-1,-1,0,-1\},\n    \{1,1,1,0\},  \{1,1,-1,0\},  \{1,-1,1,0\},  \{1,-1,-1,0\},\n    \{-1,1,1,0\}, \{-1,1,-1,0\}, \{-1,-1,1,0\}, \{-1,-1,-1,0\}\n   \};\n    float F4 = (sqrt(5.0f)-1.0)/4.0;\n    float G4 = (5.0-sqrt(5.0f))/20.0;\n    float n0, n1, n2, n3, n4;\n    float s = (x + y + z + w) * F4;\n    int i = fastfloor(x + s);\n    int j = fastfloor(y + s);\n    int k = fastfloor(z + s);\n    int l = fastfloor(w + s);\n    float t = (i + j + k + l) * G4;\n    float X0 = i - t;\n    float Y0 = j - t;\n    float Z0 = k - t;\n    float W0 = l - t;\n\n    float x0 = x - X0;\n    float y0 = y - Y0;\n    float z0 = z - Z0;\n    float w0 = w - W0;\n    int c1 = (x0 > y0) ? 32 : 0;\n    int c2 = (x0 > z0) ? 16 : 0;\n    int c3 = (y0 > z0) ? 8 : 0;\n    int c4 = (x0 > w0) ? 4 : 0;\n    int c5 = (y0 > w0) ? 2 : 0;\n    int c6 = (z0 > w0) ? 1 : 0;\n    int c = c1 + c2 + c3 + c4 + c5 + c6;\n\n    int i1, j1, k1, l1;\n    int i2, j2, k2, l2;\n    int i3, j3, k3, l3;\n    i1 = simplex\[c]\[0]>=3 ? 1 : 0;\n    j1 = simplex\[c]\[1]>=3 ? 1 : 0;\n    k1 = simplex\[c]\[2]>=3 ? 1 : 0;\n    l1 = simplex\[c]\[3]>=3 ? 1 : 0;\n    i2 = simplex\[c]\[0]>=2 ? 1 : 0;\n    j2 = simplex\[c]\[1]>=2 ? 1 : 0;\n    k2 = simplex\[c]\[2]>=2 ? 1 : 0;\n    l2 = simplex\[c]\[3]>=2 ? 1 : 0;\n    i3 = simplex\[c]\[0]>=1 ? 1 : 0;\n    j3 = simplex\[c]\[1]>=1 ? 1 : 0;\n    k3 = simplex\[c]\[2]>=1 ? 1 : 0;\n    l3 = simplex\[c]\[3]>=1 ? 1 : 0;\n    float x1 = x0 - i1 + G4;\n    float y1 = y0 - j1 + G4;\n    float z1 = z0 - k1 + G4;\n    float w1 = w0 - l1 + G4;\n    float x2 = x0 - i2 + 2.0*G4;\n    float y2 = y0 - j2 + 2.0*G4;\n    float z2 = z0 - k2 + 2.0*G4;\n    float w2 = w0 - l2 + 2.0*G4;\n    float x3 = x0 - i3 + 3.0*G4;\n    float y3 = y0 - j3 + 3.0*G4;\n    float z3 = z0 - k3 + 3.0*G4;\n    float w3 = w0 - l3 + 3.0*G4;\n    float x4 = x0 - 1.0 + 4.0*G4;\n    float y4 = y0 - 1.0 + 4.0*G4;\n    float z4 = z0 - 1.0 + 4.0*G4;\n    float w4 = w0 - 1.0 + 4.0*G4;\n    int ii = i & 255;\n    int jj = j & 255;\n    int kk = k & 255;\n    int ll = l & 255;\n    int gi0 = perm\[ii+perm\[jj+perm\[kk+perm\[ll]]]] % 32;\n    int gi1 = perm\[ii+i1+perm\[jj+j1+perm\[kk+k1+perm\[ll+l1]]]] % 32;\n    int gi2 = perm\[ii+i2+perm\[jj+j2+perm\[kk+k2+perm\[ll+l2]]]] % 32;\n    int gi3 = perm\[ii+i3+perm\[jj+j3+perm\[kk+k3+perm\[ll+l3]]]] % 32;\n    int gi4 = perm\[ii+1+perm\[jj+1+perm\[kk+1+perm\[ll+1]]]] % 32;\n    float t0 = 0.6 - x0*x0 - y0*y0 - z0*z0 - w0*w0;\n    if(t0<0) n0 = 0.0;\n    else \{\n        t0 *= t0;\n        n0 = t0 * t0 * dot(float4(grad4\[gi0]\[0],grad4\[gi0]\[2],grad4\[gi0]\[3],grad4\[gi0]\[3]), float4(x0, y0, z0, w0));\n    \}\n    float t1 = 0.6 - x1*x1 - y1*y1 - z1*z1 - w1*w1;\n    if(t1<0) n1 = 0.0;\n    else \{\n        t1 *= t1;\n        n1 = t1 * t1 * dot(float4(grad4\[gi1]\[0],grad4\[gi1]\[2],grad4\[gi1]\[3],grad4\[gi1]\[3]), float4(x1, y1, z1, w1));\n    \}\n    float t2 = 0.6 - x2*x2 - y2*y2 - z2*z2 - w2*w2;\n    if(t2<0) n2 = 0.0;\n    else \{\n        t2 *= t2;\n        n2 = t2 * t2 * dot(float4(grad4\[gi2]\[0],grad4\[gi2]\[2],grad4\[gi2]\[3],grad4\[gi2]\[3]), float4(x2, y2, z2, w2));\n    \}\n    float t3 = 0.6 - x3*x3 - y3*y3 - z3*z3 - w3*w3;\n    if(t3<0) n3 = 0.0;\n    else \{\n        t3 *= t3;\n        n3 = t3 * t3 * dot(float4(grad4\[gi3]\[0],grad4\[gi3]\[2],grad4\[gi3]\[3],grad4\[gi3]\[3]), float4(x3, y3, z3, w3));\n    \}\n    float t4 = 0.6 - x4*x4 - y4*y4 - z4*z4 - w4*w4;\n    if(t4<0) n4 = 0.0;\n    else \{\n        t4 *= t4;\n        n4 = t4 * t4 * dot(float4(grad4\[gi4]\[0],grad4\[gi4]\[2],grad4\[gi4]\[3],grad4\[gi4]\[3]), float4(x4, y4, z4, w4));\n    \}\n    return 27.0 * (n0 + n1 + n2 + n3 + n4);\n\}\n\ninline float3 Noise3D(float3 P, float w)\{\n    float x = raw_noise_4d(P.x, P.y, P.z, w);\n    float y = raw_noise_4d(P.x, P.y, P.z, w+20.0);\n    float z = raw_noise_4d(P.x, P.y, P.z, w+40.0);\n    return float3(x,y,z);\n\}\n\n\nkernel ParticleRenderKernel : ImageComputationKernel<ePixelWise>\{\n  Image<eRead, eAccessPoint> p_position;\n  Image<eRead, eAccessPoint> p_color;\n  Image<eRead, eAccessPoint> p_size;\n  Image<eRead, eAccessPoint> p_velocity;\n  Image<eRead, eAccessPoint> p_id;\n  Image<eRead, eAccessRandom, eEdgeClamped> cam_v;\n//   Image<eRead, eAccessRandom, eEdgeConstant> texture;\n  Image<eWrite, eAccessRandom> output;\n  param:\n    float4x4 _worldToScreen;\n\n    float _size;\n    float _minSize;\n    int _maxSteps;\n    float spacing;\n    float _shutter;\n    float _shutter_offset;\n    int _merge_operation;\n    int _screen_space_scale;\n    int _shutter_type;\n    int _duplicates_num;\n    float _duplicate_radius;\n\n    float haperture;\n    float focal;\n\n    float near;\n    float near_falloff;\n    float far;\n    float far_falloff;\n    float falloff_gamma;\n\n  local:\n    int _w, _h;\n    float2 out_res;\n    // int tex_w, tex_h;\n    float pixelsPerWorldUnit;\n  void define() \{\n    defineParam(_worldToScreen, \"_worldToScreen\", float4x4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f) );\n    // where the fuck did that spawn from\n    defineParam(_size, \"paSize\", 3.0f);\n    defineParam(_minSize, \"minSize\", 1.0f);\n    defineParam(_maxSteps, \"Steps\", 10);\n    defineParam(spacing, \"spacing\", 1.0f);\n    defineParam(_shutter, \"shutter\", 0.5f);\n    defineParam(_shutter_offset, \"shutter_offset\", 0.0f);\n    defineParam(_shutter_type, \"shutter_type\", 0);\n    defineParam(_duplicates_num, \"duplicates_num\", 0);\n    defineParam(_duplicate_radius, \"duplicate_radius\", 1.0f);\n    defineParam(_merge_operation, \"merge_operation\", 0);\n    defineParam(_screen_space_scale, \"screen_space_scale\", 0);\n    defineParam(haperture, \"haperture\", 24.576f);\n    defineParam(focal, \"focal\", 24.0f);\n    defineParam(near, \"near\", 0.0f);\n    defineParam(near_falloff, \"near_falloff\", 0.0f);\n    defineParam(far, \"far\", 1000.0f);\n    defineParam(far_falloff, \"far_falloff\", 0.0f);\n    defineParam(falloff_gamma, \"falloff_gamma\", 1.0f);\n    \n  \}\n  float4 srcOver( float4 a, float4 b ) \{\n    return (1.0f-a.w)*b + a;\n  \}\n  float2 transform( float3 p )\{\n    float4 r = _worldToScreen*float4(p.x, p.y, p.z, 1.0);\n    float2 xy = float2(r.x, r.y)/r.w;\n    return xy;\n  \}\n  float3 transformz( float3 p )\{\n    float4 r = _worldToScreen*float4(p.x, p.y, p.z, 1.0);\n    float2 xy = float2(r.x, r.y)/r.w;\n    float depth = r.w;\n    return float3(xy, depth);\n  \}  \n  float smoothstep( float a, float b, float x ) \{\n    float t = clamp((x - a) / (b - a), 0.0, 1.0);\n    return t*t * (3.0f - 2.0f*t);\n  \}\n\n  float lerp(float a, float b, float t)\{\n    return a + t * (b-a);\n  \}\n  float2 lerp(float2 a, float2 b, float t) \{\n     return a + t * (b - a);\n  \}\n\n\n\n  void init()\n  \{\n    _w = output.bounds.width();\n    _h = output.bounds.height();\n    out_res = float2(float(_w), float(_h));\n\n    // tex_w = texture.bounds.width();\n    // tex_h = texture.bounds.height();\n\n    pixelsPerWorldUnit = (_w*0.5) / haperture;\n\n  \}\n  void renderPoint( float2 xy, float4 pcolor, float pointSize, float falloff )\{\n\n    float sizeSquared = pointSize*pointSize;\n    float2 f = xy-floor(xy);                            //fractional part of screen coordinate?\n    float2 g = float2(1.0f) - f;                        // complement/invert of fractional part\n    //xy = floor(xy);\n    int size = ceil(pointSize);\n    int minX = max(0, int(xy.x)-size);                  // min x coord is clamped to image x=0\n    int maxX = min(_w-1, int(xy.x)+size);               // max x coord is clamped to max image x coord\n    int minY = max(0, int(xy.y)-size);                  // etc for y coord\n    int maxY = min(_h-1, int(xy.y)+size);\n    // for loop that runs over the expected size of the point to be rendered.\n    for ( int y = minY; y <= maxY; y++ ) \{              // starting at min y until max y\n      for ( int x = minX ; x <= maxX; x++ ) \{           // starting at min x until max x\n        float2 p = float2(x, y);                        // current position in the iteration space\n        float2 d = p-xy;                                // vector from center point to the current pixel\n        float r2 = dot(d, d);                           // squared distance to from p to xy\n        // work with squares, ie squared distance and squared radius because it's faster to calculate.\n        if ( r2 < sizeSquared ) \{                       // if radius squared is smaller than size squared\n         float t = 1.0f-smoothstep(0, sizeSquared, r2);\n        t *= falloff;\n          if (_merge_operation == 0) \{\n            output(p.x, p.y) += pcolor*t;\n          \}\n          if (_merge_operation == 1)\{\n          float4 colourToAdd = pcolor * t;\n          float4 existingColour = output(p.x,p.y);\n          output(p.x, p.y) = srcOver(colourToAdd, existingColour);\n          \}\n                           // after we calculate the pixels distance, and smooth it with smoothstep\n                                                        // we write it to the output buffer with a simple plus.\n        \}\n      \}\n    \}\n  \}\n//   void renderTex( float2 xy, float4 pcolor, float pointSize, float falloff )\{\n\n//     float sizeSquared = pointSize*pointSize;\n//     float2 f = xy-floor(xy);                            //fractional part of screen coordinate?\n//     float2 g = float2(1.0f) - f;                        // complement/invert of fractional part\n//     //xy = floor(xy);\n//     int size = ceil(pointSize);\n//     int minX = max(0, int(xy.x)-size);                  // min x coord is clamped to image x=0\n//     int maxX = min(_w-1, int(xy.x)+size);               // max x coord is clamped to max image x coord\n//     int minY = max(0, int(xy.y)-size);                  // etc for y coord\n//     int maxY = min(_h-1, int(xy.y)+size);\n//     // for loop that runs over the expected size of the point to be rendered.\n//     for ( int y = minY; y <= maxY; y++ ) \{              // starting at min y until max y\n//       for ( int x = minX ; x <= maxX; x++ ) \{           // starting at min x until max x\n//         float2 p = float2(x, y);                        // current position in the iteration space\n//         //float2 uv = float2( (p.x/float(_w))*float(tex_w), ( p.y/float(_h))*float(tex_h));\n//         float u = (float(x - minX) / size) * float(tex_w);\n//         float v = (float(y - minY) / size) * float(tex_h);\n//         //float2 uv = float2(u,v);\n//         //float2 uv = float2((float(size)/p.x) * float(tex_w), (float(size)/p.y) * float(tex_h));\n        \n//         float4 texLookup = bilinear(texture, u, v);\n//           if (_merge_operation == 0) \{\n//             output(p.x, p.y) += texLookup;\n//           \}\n//           if (_merge_operation == 1)\{\n//           float4 colourToAdd = texLookup;\n//           float4 existingColour = output(p.x,p.y);\n//           output(p.x, p.y) = srcOver(colourToAdd, existingColour);\n//           \}\n//                            // after we calculate the pixels distance, and smooth it with smoothstep\n//                                                         // we write it to the output buffer with a simple plus.\n//         \}\n//       \}\n//     \}\n\n  float minMaxSmooth(float n,float ns,float f,float fs,float v)\{\n      // input variables are near, near soft, far, far soft and value\n      float output = 0.0;\n      float near = min(n, f);\n      float near_soft = max(ns, 0.0);\n      float far = max(n, f);\n      float far_soft = max(fs, 0.0);\n\n      float near_soft_absolute = near-near_soft;\n      float far_soft_absolute = far+far_soft;\n\n      if (v <= near)\{\n        output = smoothstep(near_soft_absolute,near,v);\n        \}\n      else\{\n        output = 1-smoothstep(far,far_soft_absolute,v);\n        \}\n      return output;\n  \}\n\n\n\n    float screenSpaceSize(float focal, float pixelsPerWorldUnit, float p_size, float distance)\{\n        float particleSizeOnImagePlane = (focal * p_size) / distance;\n        float particleSizeInPixels = (particleSizeOnImagePlane * pixelsPerWorldUnit);\n    return particleSizeInPixels;\n  \}  \n\n\n  void process() \{\n\n    float3 P = p_position();\n    float3 v = p_velocity();\n    float3 xyz = transformz(P);\n\n    float dist = xyz.z;\n    float3 parent_P = P;\n\t\n\tfloat2 pos_2d = transform(P);\n\tfloat4 cam_vel = cam_v(pos_2d.x, pos_2d.y);\n\tfloat2 cam_vel_2d = float2(cam_vel.x, cam_vel.y);\n\n    // optimisation conditions, render only in frustum, and positive depth (in front of camera)\n    if (dist>0.0f)\{\n\n\n\n        for (int pt = 0; pt <= _duplicates_num; pt++)\{            // duplicate points\n\n        \n        // shutter stuff\n        //P += float(pt)*.005;\n        //P += Noise3D(parent_P, float(pt))*_duplicate_radius;\n        if (pt !=0)\{\n        P += randomv2(float(pt) + float(p_id())*0.02)*_duplicate_radius;\n        \}\n\n        float3 shutter_open, shutter_close;\n        if (_shutter_type == 0) \{                   // start\n            shutter_open = P;\n            shutter_close = P+(v *_shutter);\n        \}\n        else if (_shutter_type == 1) \{              // centered\n            shutter_open = P - (v *_shutter*.5);\n            //shutter_open = P;\n            shutter_close = P + (v *_shutter*.5);\n        \}\n        else if (_shutter_type == 2) \{              // end\n            shutter_open = P;\n            shutter_close = P-(v *_shutter);\n        \}\n\n        float2 shutter_open_2d, shutter_close_2d;\n        float size_start, size_end;\n        float3 shutter_open_ndc = transformz(shutter_open);\n        float3 shutter_close_ndc = transformz(shutter_close);\n\n        shutter_open_2d = float2(shutter_open_ndc.x, shutter_open_ndc.y);\n        shutter_close_2d = float2(shutter_close_ndc.x, shutter_close_ndc.y) + cam_vel_2d;\n        //size_start = shutter_open_ndc.z;\n        //size_end = shutter_close_ndc.z;\n        if (_screen_space_scale)\{\n          size_start = max(_minSize, min(100.0f, screenSpaceSize(focal, pixelsPerWorldUnit, _size * p_size().x, shutter_open_ndc.z)));\n          size_end = max(_minSize, min(100.0f, screenSpaceSize(focal, pixelsPerWorldUnit, _size * p_size().x, shutter_close_ndc.z)));\n        \}\n        else\{\n        size_start = max(_minSize, p_size().x*_size);\n        size_end = max(_minSize, p_size().x*_size);\n        \}\n\n\n        float2 blur_vector = (shutter_close_2d-shutter_open_2d);\n        float blur_length = length(blur_vector);\n\n        // adaptive steps\n        int steps = max(1 ,min(_maxSteps, int(ceil(blur_length/min(size_start, size_end)*2.0/spacing))));\n        float2 step = blur_vector/float(steps);\n\n\n        // colour stuff\n        float depth_fade = minMaxSmooth(near, near_falloff, far, far_falloff, dist);\n        depth_fade = pow(depth_fade, falloff_gamma);\n        float4 pcolor = p_color()/ float(steps);\n\n        for (int i = 0; i <= steps; i++)\{\n            float2 draw_xy = shutter_open_2d + (step * float(i));\n            float size = lerp(size_start, size_end, float(i)/float(steps));\n            if (draw_xy.x >-size && draw_xy.y>-size && draw_xy.x < out_res.x+size && draw_xy.y < out_res.y+size)\{\n            renderPoint(draw_xy, pcolor, size, depth_fade);\n            \}\n        \}\n        \}\n\n\n    \}\n    \n\n  \}\n\};"
-  name ParticleBlinkScriptRender1
-  xpos 568
-  ypos 591
-  addUserKnob {20 User}
-  addUserKnob {7 paSize l size}
-  paSize {{parent.size_mult}}
-  addUserKnob {3 Steps}
-  Steps {{parent.max_steps}}
-  addUserKnob {7 spacing}
-  spacing {{parent.spacing}}
-  addUserKnob {7 shutter}
-  shutter {{parent.shutter}}
-  addUserKnob {3 merge_operation l "merge operation"}
-  merge_operation {{parent.merge_operation}}
-  addUserKnob {3 screen_space_scale l "screen space scale"}
-  screen_space_scale {{parent.size_mode}}
-  addUserKnob {7 haperture}
-  haperture {{input1.haperture}}
-  addUserKnob {7 focal}
-  focal {{input1.focal}}
-  addUserKnob {7 near R 0.1 100}
-  near 0.1
-  addUserKnob {7 near_falloff l "near falloff" R 0 100}
-  addUserKnob {7 far R 0 1000}
-  far 1000
-  addUserKnob {7 far_falloff l "far falloff" R 0 100}
-  addUserKnob {7 minSize}
-  minSize {{parent.min_size}}
-  addUserKnob {7 shutter_offset l "shutter offset"}
-  addUserKnob {3 shutter_type l "shutter type"}
-  shutter_type {{parent.shutter_type}}
-  addUserKnob {3 duplicates_num l "duplicates num"}
-  duplicates_num {{parent.duplicates}}
-  addUserKnob {7 duplicate_radius l "duplicate radius"}
-  duplicate_radius {{parent.duplicate_radius}}
-  addUserKnob {7 falloff_gamma l "falloff gamma"}
-  falloff_gamma {{1/max(parent.falloff_gamma,0.01)}}
- }
- Output {
-  name Output1
-  xpos 568
-  ypos 678
  }
 end_group
