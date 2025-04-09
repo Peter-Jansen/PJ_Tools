@@ -1,15 +1,10 @@
-set cut_paste_input [stack 0]
-version 15.1 v5
-push $cut_paste_input
 Group {
  name TaupoCustomCache
  tile_color 0x9c0000ff
  selected true
- xpos -338
- ypos 254
  addUserKnob {20 User}
  addUserKnob {26 taupo_render_title l "" +STARTLINE T "<font size=\"+5\"> Taupo Custom Cache"}
- addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v0.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 ""}
  addUserKnob {26 text l "<b>Defaults </b>"}
  addUserKnob {19 col l colour}
@@ -17,20 +12,49 @@ Group {
  addUserKnob {6 col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 color_rgba_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {7 size}
- size 0.01
+ size 0.1
+ addUserKnob {6 unique_id l "Create unique IDs" t "Create a unique ID per point (needed for point replication)." +STARTLINE}
+ unique_id true
 }
  Input {
   inputs 0
   name pos
   xpos 347
-  ypos -355
+  ypos -451
+ }
+ Dot {
+  name Dot5
+  xpos 381
+  ypos -389
+ }
+set N62a1cc00 [stack 0]
+ Dot {
+  name Dot6
+  xpos 271
+  ypos -389
+ }
+ Expression {
+  temp_name0 exists
+  temp_expr0 "r+g+b != 0"
+  expr3 "exists ? x + (y*width) :0"
+  name Expression3
+  xpos 237
+  ypos -338
+ }
+push $N62a1cc00
+ Switch {
+  inputs 2
+  which {{parent.unique_id}}
+  name Switch3
+  xpos 347
+  ypos -338
  }
  Dot {
   name Dot1
   xpos 381
   ypos -271
  }
-set N593b0000 [stack 0]
+set Nafe02400 [stack 0]
  Grade {
   channels rgba
   multiply 0
@@ -43,7 +67,7 @@ set N593b0000 [stack 0]
   xpos 511
   ypos -239
  }
-set N593b0800 [stack 0]
+set Nafe01c00 [stack 0]
  Dot {
   name Dot3
   xpos 511
@@ -91,7 +115,7 @@ set N593b0800 [stack 0]
   xpos 654
   ypos 428
  }
-push $N593b0800
+push $Nafe01c00
  Grade {
   channels rgba
   add {{parent.col} {parent.col} {parent.col} {parent.col}}
@@ -110,10 +134,11 @@ push $N593b0800
   inputs 2
   which {{"1-\[exists parent.input1]"}}
   name Switch2
+  selected true
   xpos 621
   ypos -152
  }
-push $N593b0000
+push $Nafe02400
 add_layer {taupo_col taupo_col.red taupo_col.green taupo_col.blue taupo_col.alpha}
  Shuffle2 {
   inputs 2
@@ -140,7 +165,6 @@ add_layer {taupo_utility taupo_utility.size taupo_utility.age taupo_utility.life
   box {0 0 {width} {height}}
   crop false
   name Crop1
-  selected true
   xpos 347
   ypos 653
  }
