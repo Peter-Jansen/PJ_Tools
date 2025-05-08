@@ -1,0 +1,57 @@
+Group {
+name TaupoCull
+tile_color 0x9c0000ff
+selected true
+addUserKnob {20 User}
+addUserKnob {26 title_text l "" +STARTLINE T "<font size=\"+5\"> Taupo cull"}
+addUserKnob {26 about_text l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+addUserKnob {26 ""}
+addUserKnob {7 percent R 0 100}
+percent 50
+addUserKnob {6 color_rgba_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+addUserKnob {6 colour_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Input {
+inputs 0
+name cache
+xpos 348
+ypos -217
+}
+Dot {
+name Dot8
+xpos 382
+ypos -117
+}
+set Ne46c0400 [stack 0]
+Expression {
+temp_name0 kill
+temp_expr0 "a % 100 > \[value parent.percent]"
+channel0 rgba
+expr0 "kill ? 0 : 1"
+name Expression2
+xpos 464
+ypos -120
+}
+Dot {
+name Dot9
+xpos 498
+ypos -73
+}
+push $Ne46c0400
+Grade {
+inputs 1+1
+channels all
+multiply 0
+black_clamp false
+unpremult -rgba.alpha
+name Grade8
+xpos 348
+ypos -82
+}
+Output {
+name Output1
+xpos 348
+ypos 6
+}
+end_group
