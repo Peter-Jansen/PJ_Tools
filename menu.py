@@ -26,6 +26,7 @@ p_tools.addSeparator()
 # Filter
 
 p_tools.addCommand('Bump Displace', 'nuke.createNode(\'BumpDisplace.nk\')', icon = 'bumpDisplace.png')
+p_tools.addCommand('ImageLight', 'nuke.createNode(\'ImageLight.nk\')', icon = 'p.png')
 p_tools.addCommand('Edge Inpaint', 'nuke.createNode(\'Edge_Inpaint.nk\')', icon = 'p.png')
 p_tools.addCommand('Edge Push', 'nuke.createNode(\'EdgePush.nk\')', icon = 'EdgePush.png')
 p_tools.addCommand('Glass', 'nuke.createNode(\'Glass.nk\')', icon = 'p.png')
