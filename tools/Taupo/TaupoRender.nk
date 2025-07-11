@@ -24,7 +24,7 @@ Group {
  softness 0.5
  addUserKnob {26 text_2 l "<b>Depth of Field"}
  addUserKnob {6 enable_dof l "enable DoF" +STARTLINE}
- enable_dof true
+ enable_dof false
  addUserKnob {6 use_camera l "Use camera input" -STARTLINE}
  addUserKnob {4 scene_units l "scene units" M {mm cm dm m inch ft}}
  scene_units dm
