@@ -122,14 +122,14 @@ Group {
   ypos 455
   number 2
  }
-set Ncb587c00 [stack 0]
+set Naa336000 [stack 0]
  Expression {
   expr0 "isinf(1/z)? 100000 : 1/z"
   name Expression1
   xpos 333
   ypos 520
  }
-push $Ncb587c00
+push $Naa336000
  Expression {
   expr0 z
   name Expression2
@@ -182,13 +182,13 @@ push $Ncb587c00
   xpos 739
   ypos 264
  }
-set Ncb585c00 [stack 0]
+set Nd19f7400 [stack 0]
  Dot {
   name Dot6
   xpos 1008
   ypos 264
  }
-set Ncb585800 [stack 0]
+set Nd19f7000 [stack 0]
  Dot {
   name Dot7
   xpos 1167
@@ -209,7 +209,7 @@ add_layer {taupo_utility taupo_utility.size taupo_utility.age taupo_utility.life
   xpos 1167
   ypos 748
  }
-push $Ncb585800
+push $Nd19f7000
 add_layer {taupo_col taupo_col.red taupo_col.green taupo_col.blue taupo_col.alpha}
  Shuffle2 {
   fromInput1 {{0} B}
@@ -225,13 +225,13 @@ add_layer {taupo_col taupo_col.red taupo_col.green taupo_col.blue taupo_col.alph
   xpos 1008
   ypos 612
  }
-push $Ncb585c00
+push $Nd19f7400
  Dot {
   name Dot1
   xpos 739
   ypos 405
  }
-set Ncb53fc00 [stack 0]
+set Nd19f5800 [stack 0]
  TimeOffset {
   time_offset -1
   time ""
@@ -239,7 +239,7 @@ set Ncb53fc00 [stack 0]
   xpos 825
   ypos 424
  }
-push $Ncb53fc00
+push $Nd19f5800
  TimeOffset {
   time_offset 1
   time ""
@@ -247,7 +247,7 @@ push $Ncb53fc00
   xpos 589
   ypos 417
  }
-push $Ncb53fc00
+push $Nd19f5800
  Constant {
   inputs 0
   channels rgb
@@ -333,7 +333,6 @@ push $Ncb53fc00
   ypos 681
  }
  Reformat {
-  format "1920 1080 0 0 1920 1080 1 HD_1080"
   resize none
   pbb true
   name Reformat2
