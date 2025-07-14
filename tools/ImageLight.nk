@@ -1,11 +1,6 @@
-set cut_paste_input [stack 0]
-version 15.1 v5
-push $cut_paste_input
 Group {
  name ImageLight
  selected true
- xpos 1348
- ypos 771
  addUserKnob {20 User}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Image Light"}
  addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
@@ -15,14 +10,14 @@ Group {
  addUserKnob {7 bump_height l "Bump Height"}
  bump_height 0.5
  addUserKnob {7 bump_blur l "Bump Blur" R 0 25}
- bump_blur 2
+ bump_blur 1
  addUserKnob {26 light_text l <b>Light}
- addUserKnob {14 lightmap_res l "lightmap resolution" R 0 100}
- lightmap_res 32
  addUserKnob {7 light_height l "Light Height"}
  light_height 0.1
  addUserKnob {7 light_intensity l Intensity R 0 10}
  light_intensity 1
+ addUserKnob {14 lightmap_res l "lightmap resolution" R 0 100}
+ lightmap_res 32
  addUserKnob {26 material_text l <b>Material}
  addUserKnob {7 diffuse_intensity l Diffuse}
  diffuse_intensity 1
@@ -34,27 +29,9 @@ Group {
  addUserKnob {6 spec_tint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {26 ""}
  addUserKnob {6 effect_only l "Effect only" +STARTLINE}
+ effect_only true
  addUserKnob {6 color_rgb_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
 }
- Input {
-  inputs 0
-  name img
-  xpos 828
-  ypos -390
- }
- Dot {
-  name Dot1
-  xpos 862
-  ypos -299
- }
-set N85875000 [stack 0]
- Dot {
-  name Dot6
-  label "from input"
-  note_font "Verdana Bold"
-  xpos 862
-  ypos -145
- }
  Input {
   inputs 0
   name light_img
@@ -97,56 +74,77 @@ set N85875000 [stack 0]
   xpos 415
   ypos 254
  }
-set N8589b000 [stack 0]
-push $N85875000
+set Ndaefc00 [stack 0]
+ Dot {
+  name Dot14
+  xpos 415
+  ypos 335
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 828
+  ypos -809
+ }
+ Dot {
+  name Dot1
+  xpos 862
+  ypos -622
+ }
+set Nda87c00 [stack 0]
  Dot {
   name Dot5
-  xpos 739
-  ypos -299
+  xpos 862
+  ypos -558
  }
-set N8589b400 [stack 0]
+set Ndb20000 [stack 0]
  Shuffle2 {
   fromInput1 {{0} B}
   fromInput2 {{0} B}
   mappings "4 rgba.alpha 0 3 rgba.red 0 0 rgba.alpha 0 3 rgba.green 0 1 rgba.alpha 0 3 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3"
   name Shuffle1
-  xpos 578
-  ypos -302
+  xpos 828
+  ypos -500
  }
  Dot {
   name Dot3
   label "from alpha"
   note_font "Verdana Bold"
-  xpos 612
-  ypos -250
+  xpos 862
+  ypos -448
  }
-push $N8589b400
+push $Ndb20000
+ Dot {
+  name Dot2
+  xpos 989
+  ypos -558
+ }
  Dot {
   name Dot4
   label "from luma"
   note_font "Verdana Bold"
-  xpos 739
-  ypos -186
+  xpos 989
+  ypos -384
  }
  Switch {
   inputs 2
   which {{normal_mode}}
   name Switch1
-  xpos 578
-  ypos -189
+  xpos 828
+  ypos -387
  }
  Grade {
   multiply {{parent.bump_height}}
   black_clamp false
   name Grade1
-  xpos 578
-  ypos -154
+  xpos 828
+  ypos -352
  }
  Group {
   name CreateNormals
   tile_color 0xffbf00ff
-  xpos 578
-  ypos -115
+  xpos 828
+  ypos -313
   addUserKnob {20 prewitt_tangent_space_normals_generator_Tab l "Tangent Space Normals Generator"}
   addUserKnob {20 parameters_Group l Parameters n 1}
   addUserKnob {7 size_Floating_Point_Slider l Size R 1 5}
@@ -189,7 +187,7 @@ push $N8589b400
    xpos -603
    ypos -71
   }
-set N858cb800 [stack 0]
+set Ndb5a400 [stack 0]
   Matrix {
    matrix {
        {-3 0 3}
@@ -200,7 +198,7 @@ set N858cb800 [stack 0]
    xpos -700
    ypos 29
   }
-push $N858cb800
+push $Ndb5a400
   Matrix {
    matrix {
        {3 10 3}
@@ -258,16 +256,11 @@ push $N858cb800
    ypos 315
   }
  end_group
- Dot {
-  name Dot2
-  xpos 612
-  ypos -18
- }
  Input {
   inputs 0
   name N
-  xpos 828
-  ypos -88
+  xpos 649
+  ypos -260
   number 2
  }
  Switch {
@@ -275,15 +268,14 @@ push $N858cb800
   which {{2-normal_mode}}
   name Switch2
   xpos 828
-  ypos -21
+  ypos -260
  }
-set N858d8300 [stack 0]
+set Ndb0d200 [stack 0]
  BlinkScript {
   inputs 2
   kernelSourceFile C:/Users/petes/Documents/Nuke_Blinkscripts/image_light/image_light_specular_v001.cpp
   recompileCount 34
   ProgramGroup 1
-  KernelDescription "3 \"image_light_specular\" iterate pixelWise cb310a48ba2c989e64833cec22652baabc1a96710537bb538b9d23f2fb28d4ae 3 \"normal\" Read Point \"l\" Read Random \"dst\" Write Point 4 \"light_height\" Float 1 AAAAAA== \"specular_power\" Float 1 AAAAAA== \"specular_hardness\" Float 1 AAAAAA== \"specular_tint\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== 4 \"light_height\" 1 1 Default \"specular_power\" 1 1 Default \"specular_hardness\" 1 1 Default \"specular_tint\" 3 1 Default 11 \"l_w\" Int 1 1 AAAAAA== \"l_h\" Int 1 1 AAAAAA== \"l_w_div\" Float 1 1 AAAAAA== \"l_h_div\" Float 1 1 AAAAAA== \"_w\" Int 1 1 AAAAAA== \"_h\" Int 1 1 AAAAAA== \"_w_div\" Float 1 1 AAAAAA== \"_h_div\" Float 1 1 AAAAAA== \"lightmap_size\" Float 1 1 AAAAAA== \"l_dir\" Float 3 1 AAAAAAAAAAAAAAAAAAAAAA== \"view_dir\" Float 3 1 AAAAAAAAAAAAAAAAAAAAAA=="
   kernelSource "kernel image_light_specular : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> normal;\n  Image<eRead, eAccessRandom, eEdgeClamped> l;\n  Image<eWrite> dst;\n\n  param:\n\n    float light_height;\n    float specular_power;\n    float specular_hardness;\n    float3 specular_tint;\n\nlocal:\nint l_w;\nint l_h;\nfloat l_w_div;\nfloat l_h_div;\nint _w;\nint _h;\nfloat _w_div;\nfloat _h_div;\n\nfloat lightmap_size;\n\nfloat3 l_dir;\nfloat3 view_dir;\n\nvoid init()\{\n\n\tl_w = l.bounds.width();\n\tl_h = l.bounds.height();\n\tl_w_div = 1.0f/float(l_w);\n\tl_h_div = 1.0f/float(l_h);\n\n    _w = normal.bounds.width();\n\t_h = normal.bounds.height();\n\t_w_div = 1.0f/float(_w);\n\t_h_div = 1.0f/float(_h);\n\n    lightmap_size = 1.0f / (float(l_w) * float(l_h));\n\}\n\n  void process(int2 pos) \{\n\n\tfloat4 accum = float4(0.0, 0.0, 0.0, 0.0);\n\n\tfloat3 l_colour = float3(0.0, 0.0, 0.0);\n    float3 l_pos = float3(0.0, 0.0, 0.0);\n    float3 N = float3(normal().x, normal().y, normal().z);\n\n //normalised screen pos, from -0.5 - 0.5.\n    float3 P = float3( \n        (float(pos.x) * _w_div) - 0.5f,\n        (float(pos.y) * _h_div) - 0.5f,\n        0.0f);\n\n    view_dir = float3(0.0, 0.0, 1.0) - P;\n    view_dir = normalize(view_dir);\n\n\t// float result;\n\tfor (int x = 0; x < l_w; x++)\{\n\t\tfor (int y = 0; y < l_h; y++)\{\n            // if (int(l(x,y).w) != 1) break; // optimisation that doesn't seem to optimise anything...\n\t\t\tl_colour = float3( l(x,y).x, l(x,y).y, l(x,y).z );\n            l_pos  = float3( \n                ((float(x)/float(l_w)) - 0.5f),\n                ((float(y)/float(l_h)) - 0.5f),\n                light_height); \n            \n            // direction of light to pixel\n            l_dir = l_pos - P;\n            float distance = length(l_dir);\n            l_dir = normalize(l_dir);\n\n\n            // spec\n            float3 H = normalize(l_dir + view_dir);\n            float NdotH = dot(N, H);\n            float intensity = pow(NdotH,specular_hardness);\n            float spec_power = intensity * specular_power / distance;\n            float3 specular = specular_tint * spec_power;\n\n            // colour\n            l_colour *= specular ;\n\n\n\t\taccum += float4(l_colour, 1.0);\t\n\t\t\}\n\t\} // loop ends\n    dst() = accum * lightmap_size;\n\n  \}\n\};"
   rebuild ""
   image_light_specular_light_height {{parent.light_height}}
@@ -293,28 +285,55 @@ set N858d8300 [stack 0]
   rebuild_finalise ""
   name BlinkScript2
   xpos 828
-  ypos 302
+  ypos 326
  }
  Grade {
   multiply 10
   name Grade4
   xpos 828
-  ypos 338
+  ypos 416
  }
  Dot {
   name Dot11
   xpos 862
   ypos 555
  }
-set N8594ec00 [stack 0]
-push $N8589b000
-push $N858d8300
+set Ndba5800 [stack 0]
+ Dot {
+  name Dot13
+  xpos 862
+  ypos 817
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  format "512 512 0 0 512 512 1 square_512"
+  name Constant1
+  xpos 1199
+  ypos 212
+ }
+ Reformat {
+  type "to box"
+  box_width {{img.width}}
+  box_height {{img.height}}
+  box_fixed true
+  box_pixel_aspect {{img.pixel_aspect}}
+  name Reformat1
+  xpos 1199
+  ypos 284
+ }
+push $Ndaefc00
+push $Ndb0d200
+ Dot {
+  name Dot15
+  xpos 1069
+  ypos -257
+ }
  BlinkScript {
   inputs 2
   kernelSourceFile C:/Users/petes/Documents/Nuke_Blinkscripts/image_light/image_light_diffuse_v001.cpp
   recompileCount 34
   ProgramGroup 1
-  KernelDescription "3 \"image_light_diffuse\" iterate pixelWise dd03af4e9ded3b71c6a2a196b3a1664970e190463d9e55ef9365df14a17ffb80 3 \"normal\" Read Point \"l\" Read Random \"dst\" Write Point 1 \"light_height\" Float 1 AAAAAA== 1 \"light_height\" 1 1 Default 11 \"l_w\" Int 1 1 AAAAAA== \"l_h\" Int 1 1 AAAAAA== \"l_w_div\" Float 1 1 AAAAAA== \"l_h_div\" Float 1 1 AAAAAA== \"_w\" Int 1 1 AAAAAA== \"_h\" Int 1 1 AAAAAA== \"_w_div\" Float 1 1 AAAAAA== \"_h_div\" Float 1 1 AAAAAA== \"lightmap_size\" Float 1 1 AAAAAA== \"l_dir\" Float 3 1 AAAAAAAAAAAAAAAAAAAAAA== \"view_dir\" Float 3 1 AAAAAAAAAAAAAAAAAAAAAA=="
   kernelSource "kernel image_light_diffuse : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> normal;\n  Image<eRead, eAccessRandom, eEdgeClamped> l;\n  Image<eWrite> dst;\n\n  param:\n\n    float light_height;\n\nlocal:\nint l_w;\nint l_h;\nfloat l_w_div;\nfloat l_h_div;\nint _w;\nint _h;\nfloat _w_div;\nfloat _h_div;\n\nfloat lightmap_size;\n\nfloat3 l_dir;\nfloat3 view_dir;\n\nvoid init()\{\n\n\tl_w = l.bounds.width();\n\tl_h = l.bounds.height();\n\tl_w_div = 1.0f/float(l_w);\n\tl_h_div = 1.0f/float(l_h);\n\n    _w = normal.bounds.width();\n\t_h = normal.bounds.height();\n\t_w_div = 1.0f/float(_w);\n\t_h_div = 1.0f/float(_h);\n\n    lightmap_size = 1.0f / (float(l_w) * float(l_h));\n\}\n\n  void process(int2 pos) \{\n\n\tfloat4 accum = float4(0.0, 0.0, 0.0, 0.0);\n\n\tfloat3 l_colour = float3(0.0, 0.0, 0.0);\n    float3 l_pos = float3(0.0, 0.0, 0.0);\n    float3 N = float3(normal().x, normal().y, normal().z);\n\n //normalised screen pos, from -0.5 - 0.5.\n    float3 P = float3( \n        (float(pos.x) * _w_div) - 0.5f,\n        (float(pos.y) * _h_div) - 0.5f,\n        0.0f);\n\n    view_dir = float3(0.0, 0.0, 1.0) - P;\n    view_dir = normalize(view_dir);\n\n\t// float result;\n\tfor (int x = 0; x < l_w; x++)\{\n\t\tfor (int y = 0; y < l_h; y++)\{\n            // if (int(l(x,y).w) != 1) break; // optimisation that doesn't seem to optimise anything...\n\t\t\tl_colour = float3( l(x,y).x, l(x,y).y, l(x,y).z );\n            l_pos  = float3( \n                ((float(x)/float(l_w)) - 0.5f),\n                ((float(y)/float(l_h)) - 0.5f),\n                light_height); \n            \n            // direction of light to pixel\n            l_dir = l_pos - P;\n            float distance = length(l_dir);\n            l_dir = normalize(l_dir);\n\n            // diffuse\n            float NdotL = dot(N, l_dir);\n            NdotL = min(1.0f, max(0.0f, NdotL));\n            float diffuse = NdotL / (distance*distance);\n            // diffuse *= diffuse_intensity;\n\n\n\n            // colour\n            l_colour *= diffuse;\n\n\t\taccum += float4(l_colour, 1.0);\t\n\t\t\}\n\t\} // loop ends\n    dst() = accum * lightmap_size;\n\n  \}\n\};"
   rebuild ""
   image_light_diffuse_light_height {{parent.light_height}}
@@ -323,13 +342,20 @@ push $N858d8300
   xpos 1035
   ypos 245
  }
+ Switch {
+  inputs 2
+  which {{diffuse_intensity==0}}
+  name Switch4
+  xpos 1035
+  ypos 284
+ }
  Grade {
   multiply {{parent.diffuse_intensity}}
   name Grade3
   xpos 1035
-  ypos 330
+  ypos 417
  }
-set N8594f400 [stack 0]
+set Ndbdb000 [stack 0]
  Merge2 {
   inputs 2
   operation plus
@@ -343,63 +369,63 @@ set N8594f400 [stack 0]
   xpos 1069
   ypos 1106
  }
-push $N8594ec00
-push $N8594f400
-push $N85875000
+push $Ndba5800
+push $Ndbdb000
+push $Nda87c00
  Dot {
   name Dot8
-  xpos 1331
-  ypos -299
+  xpos 1696
+  ypos -622
  }
  Dot {
   name Dot9
-  xpos 1321
+  xpos 1696
   ypos 420
  }
-set N8598e400 [stack 0]
+set Ndc14000 [stack 0]
  Clamp {
   maximum_enable false
   name Clamp1
-  xpos 1211
+  xpos 1545
   ypos 411
  }
  Merge2 {
   inputs 2
   operation multiply
   name Merge1
-  xpos 1118
+  xpos 1395
   ypos 417
  }
  Merge2 {
   inputs 2
   operation plus
   name Merge2
-  xpos 1118
+  xpos 1395
   ypos 552
  }
  Dot {
   name Dot10
-  xpos 1152
+  xpos 1429
   ypos 795
  }
-push $N8598e400
+push $Ndc14000
  Merge2 {
   inputs 2
   operation plus
   name Merge4
-  xpos 1287
+  xpos 1662
   ypos 792
  }
  Switch {
   inputs 2
   which {{effect_only}}
   name Switch3
-  xpos 1287
+  xpos 1662
   ypos 1103
  }
  Output {
   name Output1
-  xpos 1287
+  xpos 1662
   ypos 1234
  }
 end_group
