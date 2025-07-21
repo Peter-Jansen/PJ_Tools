@@ -3,7 +3,6 @@ import os
 
 nuke.pluginAddPath('./tools')
 nuke.pluginAddPath('./tools/ParticleBlinks')
-nuke.pluginAddPath('./tools/Taupo')
 nuke.pluginAddPath('./icons')
 
 ##########################################################################################################################################
@@ -41,18 +40,6 @@ p_tools.addCommand('DiffusionRays', 'nuke.createNode(\'DiffusionRays.nk\')', ico
 p_tools.addSeparator()
 
 # Keying
-
-# TaupoRender
-taupo = p_tools.addMenu('Taupo')
-taupo.addCommand('TaupoRender', 'nuke.createNode(\'TaupoRender.nk\')', icon = 'p.png')
-taupo.addCommand('TaupoParticlePreview', 'nuke.createNode(\'TaupoParticlePreview.nk\')', icon = 'p.png')
-taupo.addSeparator()
-taupo.addCommand('TaupoParticleCache', 'nuke.createNode(\'TaupoParticleCache.nk\')', icon = 'p.png')
-taupo.addCommand('TaupoCustomCache', 'nuke.createNode(\'TaupoCustomCache.nk\')', icon = 'p.png')
-taupo.addSeparator()
-taupo.addCommand('TaupoAdjustColour', 'nuke.createNode(\'TaupoAdjustColour.nk\')', icon = 'p.png')
-taupo.addCommand('TaupoCull', 'nuke.createNode(\'TaupoCull.nk\')', icon = 'p.png')
-p_tools.addSeparator()
 
 # Particle Blinkscripts
 p_blinks = p_tools.addMenu('Particle Blinks')
