@@ -1,0 +1,212 @@
+Group {
+ name Wire3D
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Wire 3D"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 ""}
+ addUserKnob {41 translate_1 l start T start_axis.translate}
+ addUserKnob {41 translate l end T end_axis.translate}
+ addUserKnob {26 ""}
+ addUserKnob {41 rows l rows/columns T Cylinder1.rows}
+ addUserKnob {41 columns l "" -STARTLINE T Cylinder1.columns}
+ addUserKnob {7 thickness}
+ thickness 0.05
+ addUserKnob {7 sag R 0 10}
+ sag 1
+}
+ Input {
+  inputs 0
+  name mat
+  xpos 72
+  ypos -75
+  number 2
+ }
+ Cylinder {
+  close_top true
+  close_bottom true
+  translate {0 1 0}
+  rotate {90 0 0}
+  scaling {{parent.thickness} {"sqrt(pow2(Axis4.world_matrix.3-Axis6.world_matrix.3) + pow2(Axis4.world_matrix.7-Axis6.world_matrix.7) + pow2(Axis4.world_matrix.11-Axis6.world_matrix.11))/2"} {scaling.x}}
+  pivot_translate {0 -1 0}
+  name Cylinder1
+  xpos 72
+  ypos -1
+ }
+ TransformGeo {
+  useMatrix true
+  matrix {
+      {{parent.Axis7.world_matrix} {parent.Axis7.world_matrix} {parent.Axis7.world_matrix} {parent.Axis7.world_matrix}}
+      {{parent.Axis7.world_matrix} {parent.Axis7.world_matrix} {parent.Axis7.world_matrix} {parent.Axis7.world_matrix}}
+      {{parent.Axis7.world_matrix} {parent.Axis7.world_matrix} {parent.Axis7.world_matrix} {parent.Axis7.world_matrix}}
+      {{parent.Axis7.world_matrix} {parent.Axis7.world_matrix} {parent.Axis7.world_matrix} {parent.Axis7.world_matrix}}
+    }
+  name TransformGeo6
+  xpos 72
+  ypos 411
+ }
+ Dot {
+  name Dot250
+  xpos 106
+  ypos 670
+ }
+set N38333400 [stack 0]
+ Reformat {
+  inputs 0
+  format "256 256 0 0 256 256 1 square_256"
+  name Reformat43
+  xpos -53
+  ypos 599
+ }
+add_layer {P P.x P.y P.z P.red P.green P.blue P.alpha}
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  projection_mode uv
+  shutteroffset centred
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel P
+  name ScanlineRender15
+  xpos -53
+  ypos 667
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  in1 P
+  fromInput2 {{0} B}
+  mappings "4 P.x 0 0 rgba.red 0 0 P.y 0 1 rgba.green 0 1 P.z 0 2 rgba.blue 0 2 black -1 -1 rgba.alpha 0 3"
+  name Shuffle89
+  label "\[value in1] -> \[value out1]"
+  xpos -53
+  ypos 743
+ }
+set N38330c00 [stack 0]
+ Expression {
+  channel0 rgba
+  expr0 (y/height)
+  name Expression3
+  xpos -200
+  ypos 749
+ }
+ ColorLookup {
+  lut {master {curve C 0 s4 x0.5 1 0 s-3.099999905}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookup8
+  xpos -200
+  ypos 897
+ }
+push $N38330c00
+ Grade {
+  inputs 1+1
+  white {1 1 1 1}
+  white_panelDropped true
+  add {0 {-parent.sag} 0 0}
+  add_panelDropped true
+  black_clamp false
+  unpremult -rgba.alpha
+  name Grade153
+  xpos -53
+  ypos 897
+ }
+ Dot {
+  name Dot1
+  xpos -19
+  ypos 1065
+ }
+push $N38333400
+ DisplaceGeo {
+  inputs 2
+  source "rgb absolute"
+  scale 1
+  name DisplaceGeo1
+  xpos 72
+  ypos 1062
+ }
+ Output {
+  name Output1
+  xpos 72
+  ypos 1330
+ }
+ Input {
+  inputs 0
+  name end
+  xpos -373
+  ypos -37
+ }
+ Axis3 {
+  name Axis1
+  label "input end"
+  xpos -363
+  ypos 13
+ }
+ Axis3 {
+  inputs 0
+  translate {0 2 10}
+  name end_axis
+  label "ui end"
+  xpos -507
+  ypos 98
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input0]"}}
+  name Switch1
+  xpos -373
+  ypos 119
+ }
+ Axis3 {
+  name Axis6
+  xpos -363
+  ypos 263
+ }
+ Input {
+  inputs 0
+  name start
+  xpos -752
+  ypos -25
+  number 1
+ }
+ Axis3 {
+  name Axis5
+  label "input start"
+  xpos -742
+  ypos 29
+ }
+ Axis3 {
+  inputs 0
+  name start_axis
+  label "ui start"
+  xpos -890
+  ypos 95
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input1]"}}
+  name Switch2
+  xpos -752
+  ypos 116
+ }
+ Axis3 {
+  name Axis4
+  xpos -742
+  ypos 250
+ }
+ Axis3 {
+  inputs 2
+  name Axis7
+  xpos -574
+  ypos 389
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "Expression linked to the transform geo\nso that all these axis don't show up in the \n3d viewer"
+  note_font "Verdana Bold"
+  xpos -676
+  ypos 461
+ }
+end_group

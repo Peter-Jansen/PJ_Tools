@@ -70,5 +70,6 @@ p_tools.addSeparator()
 # Other
 other = p_tools.addMenu('Other')
 other.addCommand('Fuse', 'nuke.createNode(\'Fuse.nk\')', icon = 'p.png')
+other.addCommand('Wire3D', 'nuke.createNode(\'Wire3D.nk\')', icon = 'p.png')
 other.addCommand('Subframer', 'nuke.createNode(\'Subframer.nk\')', icon = 'p.png')
 other.addCommand('MultiWipe', 'nuke.createNode(\'MultiWipe.nk\')', icon = 'p.png')
