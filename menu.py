@@ -57,6 +57,7 @@ p_tools.addSeparator()
 # Particle Blinkscripts
 p_blinks = p_tools.addMenu('Particle Blinks')
 p_blinks.addCommand('ParticleCurlNoise', 'nuke.createNode(\'ParticleCurlNoise.nk\')', icon = 'p.png')
+p_blinks.addCommand('ParticleWindNoise', 'nuke.createNode(\'ParticleWindNoise.nk\')', icon = 'p.png')
 p_blinks.addCommand('ParticleVelocityProjection', 'nuke.createNode(\'ParticleVelocityProjection.nk\')', icon = 'p.png')
 p_blinks.addCommand('Random Rotation', 'nuke.createNode(\'random_rotation.nk\')', icon = 'p.png')
 p_blinks.addCommand('ParticleFade', 'nuke.createNode(\'ParticleFade.nk\')', icon = 'p.png')
