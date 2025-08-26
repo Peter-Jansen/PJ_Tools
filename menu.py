@@ -66,6 +66,8 @@ p_tools.addSeparator()
 # Tansform
 transform = p_tools.addMenu('Transform')
 transform.addCommand('CopyAndTransform', 'nuke.createNode(\'CopyAndTransform.nk\')', icon = 'p.png')
+transform.addCommand('CardPlacer', 'nuke.createNode(\'Card_Placer.nk\')', icon = 'p.png')
+
 p_tools.addSeparator()
 
 # Other

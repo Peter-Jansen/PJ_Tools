@@ -1,0 +1,312 @@
+set cut_paste_input [stack 0]
+version 13.2 v1
+push $cut_paste_input
+add_layer {Pworld Pworld.red Pworld.green Pworld.blue Pworld.alpha __Pworld.z}
+add_layer {Nworld Nworld.red Nworld.green Nworld.blue}
+Group {
+ name Card_Placer7
+ selected true
+ xpos 7191
+ ypos 1164
+ addUserKnob {20 User}
+ addUserKnob {41 img_in l "" +STARTLINE +HIDDEN T aPMatte.img_in}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Card Placer"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 setup_text l <b>Setup}
+ addUserKnob {41 in_1 l position T position.in}
+ addUserKnob {41 in l normals T normals.in}
+ addUserKnob {26 preview_text l "<b> Preview"}
+ addUserKnob {6 preview_card l "preview card" +STARTLINE}
+ preview_card true
+ addUserKnob {6 preview_axis l "preview axis" -STARTLINE}
+ preview_axis true
+ addUserKnob {6 wireframe -STARTLINE}
+ addUserKnob {26 pick_text l <b>Pick}
+ addUserKnob {41 P l "Pick position" T Grade1.P}
+ addUserKnob {41 N +INVISIBLE T Grade1.N}
+ addUserKnob {6 calc_rotation l "Calculate rotation with normals" +STARTLINE}
+ calc_rotation true
+ addUserKnob {6 pivot_at_bottom l "Place pivot at bottom of card" +STARTLINE}
+ addUserKnob {26 adjust_text l <b>Adjust}
+ addUserKnob {13 extra_rot l "extra rotation"}
+ addUserKnob {22 reset_rotation l Reset -STARTLINE T "n = nuke.thisNode()\nn.knob('extra_rot').setValue((0,0,0))"}
+ addUserKnob {13 scaling l scale}
+ scaling {1 1 1}
+ addUserKnob {22 reset_scale l Reset -STARTLINE T "n = nuke.thisNode()\nn.knob('scaling').setValue((1,1,1))"}
+ addUserKnob {7 scale l "uniform scale"}
+ scale 1000
+ addUserKnob {41 image_aspect l "image aspect" -STARTLINE T Card1.image_aspect}
+ addUserKnob {26 export_text l "<b> Bake!"}
+ addUserKnob {22 export_card l Card T "nuke.thisNode().begin()\n\npreview_card = nuke.toNode('Card1')\ntranslate = preview_card.knob('translate').value()\nrotate = preview_card.knob('rotate').value()\nuniform_scale =  preview_card.knob('uniform_scale').value()\nscaling = preview_card.knob('scaling').value()\nimage_aspect = preview_card.knob('image_aspect').value()\npivot = preview_card.knob('pivot_translate').value()\nnuke.thisNode().end()\n\nfor node in nuke.selectedNodes():\n    node.setSelected(False)\n\nexport_card = nuke.createNode('Card2', inpanel = False)\n\nexport_card.knob('translate').setValue(translate)\nexport_card.knob('rotate').setValue(rotate)\nexport_card.knob('uniform_scale').setValue(uniform_scale)\nexport_card.knob('scaling').setValue(scaling)\nexport_card.knob('pivot_translate').setValue(pivot)\n\nexport_card.knob('image_aspect').setValue(image_aspect)\nexport_card.knob('rows').setValue(1)\nexport_card.knob('columns').setValue(1)" +STARTLINE}
+ addUserKnob {22 export_axis l Axis -STARTLINE T "nuke.thisNode().begin()\n\npreview_card = nuke.toNode('Card1')\ntranslate = preview_card.knob('translate').value()\nrotate = preview_card.knob('rotate').value()\nuniform_scale =  preview_card.knob('uniform_scale').value()\nscaling = preview_card.knob('scaling').value()\npivot = preview_card.knob('pivot_translate').value()\nnuke.thisNode().end()\n\nfor node in nuke.selectedNodes():\n    node.setSelected(False)\n\nexport_axis = nuke.createNode('Axis3', inpanel = False)\n\nexport_axis.knob('translate').setValue(translate)\nexport_axis.knob('rotate').setValue(rotate)\nexport_axis.knob('uniform_scale').setValue(uniform_scale)\nexport_axis.knob('scaling').setValue(scaling)\nexport_axis.knob('pivot_translate').setValue(pivot)\n"}
+}
+ Input {
+  inputs 0
+  name cam
+  xpos 435
+  ypos 557
+  number 1
+ }
+ Camera {
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {{"\[expression \[value the_cam]far(\[value the_frame])]"}}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
+  name DummyCam
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nadrianpueyo.com, 2019-2020"
+  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
+  label "\[value \[value the_cam]name]"
+  xpos 445
+  ypos 631
+  addUserKnob {20 DummyCam l Defaults}
+  addUserKnob {43 the_cam}
+  the_cam "\[\n#DummyCam v1.1. Updated 5 April 2020.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Camera3\" && \[class \$x] != \"Camera4\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera3\"||\[class \$x]==\"Camera\"||\[class \$x]==\"Camera4\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
+  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 49
+  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
+  d_haperture 30
+  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
+  d_vaperture 18.672
+  addUserKnob {7 d_near l near R 0 10}
+  d_near 1
+  addUserKnob {7 d_far l far R 0 10000}
+  d_far 1000
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
+  d_win_scale {1 1}
+  addUserKnob {7 d_winroll l "window roll" R 0 45}
+  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
+  d_focal_point 2
+  addUserKnob {7 d_fstop l fstop R 0 30}
+  d_fstop 16
+  addUserKnob {26 version l " " t "Updated 5 April 2020" T "<span style=\"color:#666\"><br/><b>DummyCam v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2020</span>"}
+ }
+ Constant {
+  inputs 0
+  color {1 0 0 1}
+  name Constant1
+  xpos 681
+  ypos -91
+ }
+ Cube {
+  rows 1
+  columns 1
+  translate {0.5 0.5 0.5}
+  scaling {25 1 1}
+  uniform_scale 0.03
+  pivot_translate {-0.5 -0.5 -0.5}
+  name Cube1
+  xpos 681
+  ypos 3
+  disable {{!preview_axis}}
+ }
+ Constant {
+  inputs 0
+  color {0 1 0 1}
+  name Constant2
+  xpos 778
+  ypos -91
+ }
+ Cube {
+  rows 1
+  columns 1
+  translate {0.5 0.5 0.5}
+  scaling {1 25 1}
+  uniform_scale 0.03
+  pivot_translate {-0.5 -0.5 -0.5}
+  name Cube2
+  xpos 778
+  disable {{!preview_axis}}
+ }
+ Constant {
+  inputs 0
+  color {0 0 1 1}
+  name Constant3
+  xpos 868
+  ypos -88
+ }
+ Cube {
+  rows 1
+  columns 1
+  translate {0.5 0.5 0.5}
+  scaling {1 1 25}
+  uniform_scale 0.03
+  pivot_translate {-0.5 -0.5 -0.5}
+  name Cube3
+  xpos 868
+  ypos -3
+  disable {{!preview_axis}}
+ }
+ MergeGeo {
+  inputs 3
+  name MergeGeo1
+  xpos 756
+  ypos 125
+ }
+ MergeGeo {
+  name MergeGeo3
+  xpos 756
+  ypos 164
+ }
+ TransformGeo {
+  uniform_scale 0.25
+  name TransformGeo2
+  xpos 756
+  ypos 260
+ }
+ TransformGeo {
+  translate {{parent.Grade1.P x1001 11861.86621} {parent.Grade1.P x1001 3097.661621} {parent.Grade1.P x1001 3986.701904}}
+  rotate {{"calc_rotation? degrees(asin(-Grade1.N.g)) + extra_rot.x : 0" x1001 -38.36199188} {"calc_rotation? degrees(atan2(Grade1.N.r, Grade1.N.b))  + extra_rot.y : extra_rot.y" x1001 -79.4311142} {extra_rot.z}}
+  uniform_scale {{parent.scale}}
+  pivot_translate {{0 x1001 12.05548573} 0 {0 x1001 -0.0002759695053}}
+  name TransformGeo1
+  selected true
+  xpos 756
+  ypos 318
+ }
+ Wireframe {
+  inputs 0
+  operation "see through"
+  line_width {{img.width/4000}}
+  line_color {1 1 1 1}
+  name Wireframe2
+  xpos 542
+  ypos 97
+ }
+ Input {
+  inputs 0
+  name texture
+  xpos 388
+  ypos -15
+  number 2
+ }
+ Wireframe {
+  operation over
+  line_width {{img.width/4000}}
+  line_color {1 1 1 1}
+  name Wireframe1
+  xpos 388
+  ypos 94
+ }
+ Switch {
+  inputs 2
+  which {{"1-\[exists parent.input2]"}}
+  name Switch1
+  xpos 388
+  ypos 151
+ }
+ Card2 {
+  image_aspect false
+  rows {{"wireframe? 4:1"}}
+  columns {{"wireframe? 4:1"}}
+  translate {{parent.Grade1.P x1001 639.8261719 x1071 -0.1545908302} {parent.Grade1.P x1001 25640.37695 x1071 0.09935443848} {parent.Grade1.P x1001 -5624.532715 x1071 1.012665749}}
+  rotate {{"calc_rotation? degrees(asin(-Grade1.N.g)) + extra_rot.x : 0" x1001 24.67238045} {"calc_rotation? degrees(atan2(Grade1.N.r, Grade1.N.b))  + extra_rot.y : extra_rot.y" x1001 -102.5796814} {extra_rot.z x1001 0}}
+  scaling {{parent.scaling} {parent.scaling} {parent.scaling}}
+  uniform_scale {{parent.scale}}
+  pivot_translate {0 {"pivot_at_bottom ? parent.image_aspect ? \[exists parent.input2] ? -(1/(texture.width/texture.height*texture.pixel_aspect))/2 : -(1/(root.width/root.height*root.pixel_aspect))/2  : -0.5 : 0" x1001 41.14891052} 0}
+  control_points {3 3 3 6 
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0} 
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0} 
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0} 
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0} 
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0} 
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0} 
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0} 
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0} 
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card1
+  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"pivot_translate\":\n    k.setValue(0,0)\n    k.setValue(0,2)"
+  xpos 388
+  ypos 238
+  disable {{!preview_card}}
+ }
+ Scene {
+  inputs 2
+  name Scene1
+  xpos 398
+  ypos 341
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{img.width}}
+  box_height {{img.height}}
+  box_fixed true
+  box_pixel_aspect {{img.pixel_aspect}}
+  name Reformat1
+  xpos 131
+  ypos 553
+ }
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  shutteroffset centred
+  motion_vectors_type distance
+  name ScanlineRender1
+  xpos 131
+  ypos 643
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 0
+ }
+set Nf1be9800 [stack 0]
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos 0
+  ypos 643
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 767
+ }
+push $Nf1be9800
+ Shuffle {
+  in Nworld
+  in2 rgba
+  alpha alpha2
+  name normals
+  xpos 212
+  ypos 111
+ }
+push $Nf1be9800
+ Shuffle {
+  in Pworld
+  in2 rgba
+  alpha alpha2
+  name position
+  xpos 112
+  ypos 113
+ }
+ Grade {
+  black_clamp false
+  unpremult -rgba.alpha
+  name Grade1
+  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"P\":\n    #nuke.message(str(nuke.thisParent().name()))\n    parent = nuke.thisParent().input(0)\n    viewer = nuke.activeViewer()\n    N_layer = nuke.toNode('normals').knob('in').value()\n    N_channels = nuke.Layer(N_layer).channels()\n    #nuke.message(str(N_channel))\n    v = viewer.node()\n    bbox = v\['colour_sample_bbox']\n    par = n.format().pixelAspect()\n    n = v.input(0)\n    w = n.width()\n    h = n.height()\n    ratio = float(w)/float(h)*par\n    bboxX = bbox.x()\n    bboxY = bbox.y()*ratio\n    wd = w / 2\n    hd = h / 2\n    # sample x and y\n    sx = int(round(bboxX * wd + wd))\n    sy = int(round(bboxY * hd + hd))\n\n    \n    #x = n.sample('N.red', sx, sy)\n    #y = n.sample('N.green', sx, sy)\n    #z = n.sample('N.blue', sx, sy)\n    #x = parent.sample(f'\{N_layer\}.X', sx, sy)\n    #y = parent.sample(f'\{N_layer\}.Y', sx, sy)\n    #z = parent.sample(f'\{N_layer\}.Z', sx, sy)\n    x = parent.sample(N_channels\[0], sx, sy)\n    y = parent.sample(N_channels\[1], sx, sy)\n    z = parent.sample(N_channels\[2], sx, sy)\n    #nuke.message(str(f'\{N_layer\}.red'))\n    n.knob('N').setValue((x,y,z))\n    #nuke.message(str(x))"
+  xpos 112
+  ypos 198
+  addUserKnob {20 User}
+  addUserKnob {18 P}
+  P {1929.768921 6937.196777 -70170.46094}
+  addUserKnob {6 P_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 N}
+  N {0.02424763702 0.02770347148 0.9994136691}
+  addUserKnob {6 N_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_rgb_1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+end_group
