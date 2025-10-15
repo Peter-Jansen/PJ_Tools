@@ -1,0 +1,46 @@
+Group {
+ name ParticleLookAtXZ
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {26 taupo_render_title l "" +STARTLINE T "<font size=\"+5\"> Particle LookAt XZ"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 ""}
+ addUserKnob {26 text l "" +STARTLINE T "Like the ParticleLookat node, but doesn't affect\nthe X or Z axis, only Y.\n\nUsage example: You have trees on cards that\nyou want facing the camera, but they can't be\ntilting down towards camera. Use this."}
+}
+ Input {
+  inputs 0
+  name Axis_or_Cam
+  xpos 72
+  ypos 21
+  number 1
+ }
+ Axis3 {
+  name Axis2
+  xpos 82
+  ypos 150
+ }
+ Input {
+  inputs 0
+  name particles
+  xpos 210
+  ypos 7
+ }
+ ParticleBlinkScript {
+  kernelSourceGroup 1
+  kernelSource "float4x4 quaternionToMatrix(float4 quaternion) \{\n    // Extract quaternion components\n    float x = quaternion.x;\n    float y = quaternion.y;\n    float z = quaternion.z;\n    float w = quaternion.w;\n\n    // Calculate terms to avoid redundant calculations\n    float xx = x * x;\n    float yy = y * y;\n    float zz = z * z;\n    float xy = x * y;\n    float xz = x * z;\n    float yz = y * z;\n    float wx = w * x;\n    float wy = w * y;\n    float wz = w * z;\n\n    // Construct the rotation matrix\n    float4x4 matrix = float4x4(\n        1.0f - 2.0f * (yy + zz), 2.0f * (xy - wz),       2.0f * (xz + wy),       0.0f,\n        2.0f * (xy + wz),       1.0f - 2.0f * (xx + zz), 2.0f * (yz - wx),       0.0f,\n        2.0f * (xz - wy),       2.0f * (yz + wx),       1.0f - 2.0f * (xx + yy), 0.0f,\n        0.0f,                   0.0f,                   0.0f,                   1.0f\n    );\n\n    return matrix;\n\}\n\nfloat4 matrixToQuaternion(float4x4 matrix) \{\n    // Extract the 3x3 rotation component from the 4x4 matrix\n    float3x3 rotationMatrix = float3x3(\n        matrix\[0]\[0], matrix\[0]\[1], matrix\[0]\[2],\n        matrix\[1]\[0], matrix\[1]\[1], matrix\[1]\[2],\n        matrix\[2]\[0], matrix\[2]\[1], matrix\[2]\[2]\n    );\n\n    // Compute the trace of the matrix\n    float trace = rotationMatrix\[0]\[0] + rotationMatrix\[1]\[1] + rotationMatrix\[2]\[2];\n    float4 quaternion;\n\n    // Compute the quaternion based on the matrix trace and dominant diagonal element\n    if (trace > 0.0f) \{\n        float s = sqrt(trace + 1.0f) * 2.0f; // s = 4 * qw\n        quaternion.w = 0.25f * s;\n        quaternion.x = (rotationMatrix\[2]\[1] - rotationMatrix\[1]\[2]) / s;\n        quaternion.y = (rotationMatrix\[0]\[2] - rotationMatrix\[2]\[0]) / s;\n        quaternion.z = (rotationMatrix\[1]\[0] - rotationMatrix\[0]\[1]) / s;\n    \} else if ((rotationMatrix\[0]\[0] > rotationMatrix\[1]\[1]) && (rotationMatrix\[0]\[0] > rotationMatrix\[2]\[2])) \{\n        float s = sqrt(1.0f + rotationMatrix\[0]\[0] - rotationMatrix\[1]\[1] - rotationMatrix\[2]\[2]) * 2.0f; // s = 4 * qx\n        quaternion.w = (rotationMatrix\[2]\[1] - rotationMatrix\[1]\[2]) / s;\n        quaternion.x = 0.25f * s;\n        quaternion.y = (rotationMatrix\[0]\[1] + rotationMatrix\[1]\[0]) / s;\n        quaternion.z = (rotationMatrix\[0]\[2] + rotationMatrix\[2]\[0]) / s;\n    \} else if (rotationMatrix\[1]\[1] > rotationMatrix\[2]\[2]) \{\n        float s = sqrt(1.0f + rotationMatrix\[1]\[1] - rotationMatrix\[0]\[0] - rotationMatrix\[2]\[2]) * 2.0f; // s = 4 * qy\n        quaternion.w = (rotationMatrix\[0]\[2] - rotationMatrix\[2]\[0]) / s;\n        quaternion.x = (rotationMatrix\[0]\[1] + rotationMatrix\[1]\[0]) / s;\n        quaternion.y = 0.25f * s;\n        quaternion.z = (rotationMatrix\[1]\[2] + rotationMatrix\[2]\[1]) / s;\n    \} else \{\n        float s = sqrt(1.0f + rotationMatrix\[2]\[2] - rotationMatrix\[0]\[0] - rotationMatrix\[1]\[1]) * 2.0f; // s = 4 * qz\n        quaternion.w = (rotationMatrix\[1]\[0] - rotationMatrix\[0]\[1]) / s;\n        quaternion.x = (rotationMatrix\[0]\[2] + rotationMatrix\[2]\[0]) / s;\n        quaternion.y = (rotationMatrix\[1]\[2] + rotationMatrix\[2]\[1]) / s;\n        quaternion.z = 0.25f * s;\n    \}\n\n    // Normalize the quaternion\n    float magnitude = sqrt(quaternion.x * quaternion.x + quaternion.y * quaternion.y + \n                           quaternion.z * quaternion.z + quaternion.w * quaternion.w);\n    quaternion.x /= magnitude;\n    quaternion.y /= magnitude;\n    quaternion.z /= magnitude;\n    quaternion.w /= magnitude;\n\n    return quaternion;\n\}\n\nfloat radians(float degrees) \{\n    return degrees * (3.14159265f / 180.0f);\n\}\n\n\nfloat degrees(float radians) \{\n    return radians * (180.0f / 3.14159265f);\n\}\n\n\n\nkernel lookatXZ : ImageComputationKernel<ePixelWise>\n\{\n  // Declare the particle attributes as Images:\n\n  Image<eReadWrite> p_orientation;\n  Image<eReadWrite> p_position;\n  Image<eReadWrite> p_id;\n  // Declare our parameter storage\n  param:\n\nfloat3 random_rot;\nfloat3 lookat;\n\n  // Define the parameters to the outside world\n  void define() \{\n  defineParam(lookat, \"lookat\", float3(0.0f, 0.0f, 0.0f));\n\n  \}\n\n\n\n\n  // Process the particle attributes\n  void process() \{\nfloat id = float(p_id());\n  float3 pos = p_position();\n\n    float4x4 rotMat;\n    rotMat.setIdentity();\n    float2 lookatVector = float2(pos.x-lookat.x, pos.z-lookat.z);\n    lookatVector  = normalize(lookatVector);\n    //rotMat = ;\n    \n    \n    rotMat.rotateY(atan2(lookatVector.x, lookatVector.y));\n    rotMat.rotateX(radians(180));\n    rotMat.rotateZ(0);\n\n\n float4 quat = matrixToQuaternion(rotMat);\n    \n\n//    float3 rand = randomv(p_id());\n\n   p_orientation() = quat;\n  \}\n\};\n\n"
+  name ParticleBlinkScript1
+  xpos 210
+  ypos 162
+  addUserKnob {20 User}
+  addUserKnob {6 orient_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+  addUserKnob {13 amount}
+  addUserKnob {13 lookat}
+  lookat {{parent.Axis2.world_matrix.3} {parent.Axis2.world_matrix.7} {parent.Axis2.world_matrix.11}}
+  addUserKnob {13 random_rot l "random rot"}
+ }
+ Output {
+  name Output1
+  xpos 210
+  ypos 311
+ }
+end_group

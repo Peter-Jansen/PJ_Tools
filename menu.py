@@ -19,7 +19,7 @@ nuke.menu('Viewer').addCommand('cryptoKick', 'cryptoKick.cryptoKick()', 'ctrl+sp
 
 ##########################################################################################################################################
 
-toolbar = nuke.toolbar('Nodes') # The default nuke nodes toolbaron the left hand side of screen
+toolbar = nuke.toolbar('Nodes') # The default nuke nodes toolbar on the left hand side of screen
 p_tools = toolbar.addMenu('Peter Tools', icon = 'p.png') # add menu for Peter Tools
 
 ##########################################################################################################################################
@@ -61,6 +61,7 @@ p_blinks.addCommand('ParticleWindNoise', 'nuke.createNode(\'ParticleWindNoise.nk
 p_blinks.addCommand('ParticleVelocityProjection', 'nuke.createNode(\'ParticleVelocityProjection.nk\')', icon = 'p.png')
 p_blinks.addCommand('Random Rotation', 'nuke.createNode(\'random_rotation.nk\')', icon = 'p.png')
 p_blinks.addCommand('ParticleFade', 'nuke.createNode(\'ParticleFade.nk\')', icon = 'p.png')
+p_blinks.addCommand('ParticleLookatXZ', 'nuke.createNode(\'ParticleLookatXZ.nk\')', icon = 'p.png')
 p_tools.addSeparator()
 
 # Tansform
