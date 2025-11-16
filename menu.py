@@ -25,6 +25,10 @@ p_tools = toolbar.addMenu('Peter Tools', icon = 'p.png') # add menu for Peter To
 ##########################################################################################################################################
 
 # Draw
+draw = p_tools.addMenu('Draw')
+draw.addCommand('CellNoise', 'nuke.createNode(\'CellNoise.nk\')', icon = 'p.png')
+p_tools.addSeparator()
+
 # Colour
 colour = p_tools.addMenu('Colour')
 colour.addCommand('GradeAOV', 'nuke.createNode(\'GradeAOV.nk\')', icon = 'p.png')
@@ -77,3 +81,6 @@ other.addCommand('Fuse', 'nuke.createNode(\'Fuse.nk\')', icon = 'p.png')
 other.addCommand('Wire3D', 'nuke.createNode(\'Wire3D.nk\')', icon = 'p.png')
 other.addCommand('Subframer', 'nuke.createNode(\'Subframer.nk\')', icon = 'p.png')
 other.addCommand('MultiWipe', 'nuke.createNode(\'MultiWipe.nk\')', icon = 'p.png')
+other.addCommand('Arri_Grain', 'nuke.createNode(\'Arri_Grain.nk\')', icon = 'p.png')
+other.addCommand('DeepThicknessTextured', 'nuke.createNode(\'DeepThicknessTextured.nk\')', icon = 'p.png')
+

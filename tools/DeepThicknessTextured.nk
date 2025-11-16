@@ -1,0 +1,82 @@
+Group {
+ name DeepThicknessTextured
+ tile_color 0x60ff
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Deep Thickness <font size=\"+0\"> (textured) "}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 ""}
+ addUserKnob {7 thickness R 0 100}
+ thickness 1
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {4 texture_chan l "texture channel" M {rgba.red rgba.green rgba.blue rgba.alpha}}
+ texture_chan rgba.alpha
+ addUserKnob {7 texture R 0 10}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 563
+  ypos 272
+ }
+set N217d1400 [stack 0]
+ DeepExpression {
+  temp_name0 width
+  temp_expr0 "(\[value thickness]/2) * (1+rgba.alpha * texture)"
+  chans1 deep
+  deep.front "deep.front - width"
+  deep.back "deep.back + width"
+  name DeepExpression4
+  label alpha
+  xpos 828
+  ypos 386
+ }
+push $N217d1400
+ DeepExpression {
+  temp_name0 width
+  temp_expr0 "(\[value thickness]/2) * (1+rgba.blue * texture)"
+  chans1 deep
+  deep.front "deep.front - width"
+  deep.back "deep.back + width"
+  name DeepExpression2
+  label blue
+  xpos 729
+  ypos 387
+ }
+push $N217d1400
+ DeepExpression {
+  temp_name0 width
+  temp_expr0 "(\[value thickness]/2) * (1+rgba.green * texture)"
+  chans1 deep
+  deep.front "deep.front - width"
+  deep.back "deep.back + width"
+  name DeepExpression1
+  label green
+  xpos 646
+  ypos 384
+ }
+push $N217d1400
+ DeepExpression {
+  temp_name0 width
+  temp_expr0 "(\[value thickness]/2) * (1+rgba.red * texture)"
+  chans1 deep
+  deep.front "deep.front - width"
+  deep.back "deep.back + width"
+  name DeepExpression3
+  label red
+  xpos 563
+  ypos 390
+ }
+ Switch {
+  inputs 4
+  which {{parent.texture_chan}}
+  name Switch1
+  xpos 563
+  ypos 504
+ }
+ Output {
+  name Output1
+  xpos 563
+  ypos 607
+ }
+end_group
