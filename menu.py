@@ -54,6 +54,9 @@ filter.addCommand('Sharpie', 'nuke.createNode(\'Sharpie.nk\')', icon = 'p.png')
 filter.addCommand('Vignette', 'nuke.createNode(\'Vignette.nk\')', icon = 'p.png')
 filter.addCommand('VectorBlurOverscan', 'nuke.createNode(\'VectorBlurOverscan.nk\')', icon = 'p.png')
 filter.addCommand('DiffusionRays', 'nuke.createNode(\'DiffusionRays.nk\')', icon = 'p.png')
+filter.addCommand('Confocus', 'nuke.createNode(\'Confocus.nk\')', icon = 'p.png')
+filter.addCommand('InpaintFaster', 'nuke.createNode(\'InpaintFaster.nk\')', icon = 'p.png')
+
 p_tools.addSeparator()
 
 # Keying

@@ -1,0 +1,142 @@
+Group {
+name InpaintFaster
+tile_color 0xcc804eff
+selected true
+addUserKnob {20 User}
+addUserKnob {26 "" l "Local GPU:" T ""}
+addUserKnob {26 gpuName l "" -STARTLINE T "NVIDIA RTX 6090"}
+addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T Inpaint2.useGPUIfAvailable}
+addUserKnob {26 ""}
+addUserKnob {41 channels l Channels T Inpaint2.channels}
+addUserKnob {41 fillRegion l "Fill Region" T Inpaint2.fillRegion}
+addUserKnob {41 smoothness l Smoothness T Inpaint2.smoothness}
+addUserKnob {41 LABColourSpace l "L*a*b* Colorspace" T Inpaint2.LABColourSpace}
+addUserKnob {26 "" l "@b;Stretch"}
+addUserKnob {41 stretchAmount l Amount T Inpaint2.stretchAmount}
+addUserKnob {41 stretchDirection l Direction T Inpaint2.stretchDirection}
+addUserKnob {26 "" l "@b;Detail"}
+addUserKnob {41 detailSource l Source T Inpaint2.detailSource}
+addUserKnob {41 detailAmount l Amount T Inpaint2.detailAmount}
+addUserKnob {41 translate l Translate T Inpaint2.translate}
+addUserKnob {41 rotate l Rotate T Inpaint2.rotate}
+addUserKnob {41 scale l Scale T Inpaint2.scale}
+addUserKnob {41 center l Center T Inpaint2.center}
+addUserKnob {26 text l <b>Bbox}
+addUserKnob {7 expand_bbox l Expand R 0 100}
+expand_bbox 25
+addUserKnob {26 ""}
+addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | Optimised by <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+}
+Input {
+inputs 0
+name Detail
+xpos -464
+ypos 541
+number 2
+}
+Input {
+inputs 0
+name Matte
+xpos -971
+ypos 184
+number 1
+}
+Dot {
+name Dot16
+xpos -937
+ypos 379
+}
+set N9d1e6800 [stack 0]
+Dot {
+name Dot4
+xpos -937
+ypos 544
+}
+push $N9d1e6800
+AdjBBox {
+numpixels {{parent.expand_bbox}}
+name AdjBBox1
+xpos -869
+ypos 376
+}
+Input {
+inputs 0
+name Source
+xpos -356
+ypos 178
+}
+Dot {
+name Dot10
+xpos -322
+ypos 271
+}
+set N9d1e5800 [stack 0]
+add_layer {temp_alpha temp_alpha.alpha}
+AddChannels {
+channels temp_alpha
+color 1
+name AddChannels1
+xpos -601
+ypos 262
+}
+set N9d1e5400 [stack 0]
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos -711
+ypos 376
+}
+push $N9d1e5400
+Switch {
+inputs 2
+which {{"Inpaint2.fillRegion > 2"}}
+name Switch1
+xpos -601
+ypos 376
+}
+BlackOutside {
+name BlackOutside1
+xpos -601
+ypos 465
+}
+Inpaint2 {
+inputs 3
+fillRegion "Matte Alpha"
+center {2550 1159}
+name Inpaint2
+xpos -601
+ypos 541
+}
+Dot {
+name Dot2
+xpos -567
+ypos 628
+}
+set Nf4b1fc00 [stack 0]
+Dot {
+name Dot3
+xpos -401
+ypos 628
+}
+push $Nf4b1fc00
+Dot {
+name Dot1
+xpos -567
+ypos 690
+}
+push $N9d1e5800
+Keymix {
+inputs 3
+maskChannel temp_alpha.alpha
+bbox B
+name Keymix1
+selected true
+xpos -356
+ypos 681
+}
+Output {
+name Output1
+xpos -356
+ypos 816
+}
+end_group

@@ -1,0 +1,122 @@
+Group {
+name Confocus
+knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"inputChange\":\n    n.begin()\n    defocus = nuke.toNode('Defocus')\n    convolve = nuke.toNode('Convolve1')\n    if n.input(1):\n        n.knobs()\['defocus_text'].setFlag(nuke.DISABLED)\n        n.knobs()\['quality'].setFlag(nuke.DISABLED)\n        n.knobs()\['method'].setFlag(nuke.DISABLED)\n        \n        n.knobs()\['convolve_text'].clearFlag(nuke.DISABLED)\n        n.knobs()\['filter_channel'].clearFlag(nuke.DISABLED)\n        n.knobs()\['use_input_channels'].clearFlag(nuke.DISABLED)\n\n        \n    else:\n        n.knobs()\['defocus_text'].clearFlag(nuke.DISABLED)\n        n.knobs()\['quality'].clearFlag(nuke.DISABLED)\n        n.knobs()\['method'].clearFlag(nuke.DISABLED)\n        \n        n.knobs()\['convolve_text'].setFlag(nuke.DISABLED)\n        n.knobs()\['filter_channel'].setFlag(nuke.DISABLED)\n        n.knobs()\['use_input_channels'].setFlag(nuke.DISABLED)\n        \n        \n        \n        \n    n.end()\n#nuke.message(k.name())"
+selected true
+addUserKnob {20 User l Confocus}
+addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Confocus"}
+addUserKnob {26 about l "" t "1.1 - Added nice transition to defocus for convolve values below 3. Made convolve scale based off of a transform. A little slower, a lot smoother." +STARTLINE T "<font style=\"color: #666666;\">v1.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+addUserKnob {26 ""}
+addUserKnob {41 channels T Defocus.channels}
+addUserKnob {41 defocus T Defocus.defocus}
+addUserKnob {41 ratio l "aspect ratio" T Defocus.ratio}
+addUserKnob {41 scale l scaling T Defocus.scale}
+addUserKnob {26 defocus_text l <b>Defocus}
+addUserKnob {41 quality T Defocus.quality}
+addUserKnob {41 method T Defocus.method}
+addUserKnob {26 convolve_text l <b>Convolve +DISABLED}
+addUserKnob {41 filter_channel l "filter channel" +DISABLED T Convolve1.filter_channel}
+addUserKnob {41 use_input_channels l "use input channels" -STARTLINE +DISABLED T Convolve1.use_input_channels}
+addUserKnob {26 ""}
+addUserKnob {26 text_1 l "" +STARTLINE T "<font style=\"color: #666666;\">It's a defocus. Plug in a filter, it's a convolve,<br> but with the same size as the defocus."}
+}
+Input {
+inputs 0
+name mask
+xpos 166
+ypos 573
+number 2
+}
+Invert {
+channels alpha
+name Invert1
+xpos 166
+ypos 626
+}
+Input {
+inputs 0
+name img
+xpos 1
+ypos 169
+}
+set Nc7b81800 [stack 0]
+Dot {
+name Dot2
+xpos -203
+ypos 172
+}
+Dot {
+name Dot1
+xpos -203
+ypos 635
+}
+push $Nc7b81800
+Defocus {
+defocus 10
+name Defocus
+xpos -62
+ypos 275
+}
+set Nc7b80c00 [stack 0]
+Input {
+inputs 0
+name filter
+xpos 219
+ypos 143
+number 1
+}
+set Nc7b80800 [stack 0]
+Transform {
+scale {{(1/(width/defocus/2))*Defocus.scale}}
+center {{width/2} {height/2}}
+name Transform1
+xpos 333
+ypos 269
+}
+push $Nc7b81800
+Convolve2 {
+inputs 2
+channels {{{Defocus.channels}}}
+filter_bounds format
+name Convolve1
+xpos 68
+ypos 263
+}
+push $Nc7b80c00
+Dissolve {
+inputs 2
+which {{"clamp(lerp(0.25,0.0, 3, 1, parent.defocus*Defocus.scale))"}}
+name Dissolve2
+xpos 101
+ypos 357
+}
+Switch {
+inputs 2
+which {{"1-\[exists parent.input1]"}}
+name Switch1
+xpos 2
+ypos 453
+}
+Keymix {
+inputs 3
+bbox B
+name Keymix2
+xpos 2
+ypos 626
+disable {{"1-\[exists parent.input1]"}}
+}
+Output {
+name Output1
+xpos 2
+ypos 750
+}
+push $Nc7b80800
+Reformat {
+type "to box"
+box_width {{parent.Defocus.defocus*2*Defocus.ratio*Defocus.scale}}
+box_height {{parent.Defocus.defocus*2*Defocus.scale}}
+resize distort
+name Reformat1
+xpos 219
+ypos 209
+}
+end_group
