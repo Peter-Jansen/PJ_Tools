@@ -1,14 +1,21 @@
+set cut_paste_input [stack 0]
+version 13.2 v1
+push $cut_paste_input
 Group {
- name MultiWipe
- knobChanged "tn = nuke.thisNode()\nk = nuke.thisKnob()\n\n\nif k.name() in \[\"wipe_start\", \"wipe_duration\", \"inputChange\", \"wipe_hold\", \"breakdown_style\"]:\n    \n    start = tn\['wipe_start'].value()\n    breakdown_last_frame = tn\['breakdown_last_frame'].value()\n    duration = tn.knob('wipe_duration').value()\n    fifr = tn\['first_input_first_frame'].value()\n    lilf = tn\['last_input_last_frame'].value()\n    hold = tn.knob('wipe_hold').value()\n    inputs = tn.inputs()\n    end_frame = int( ((inputs-1)*duration) + ((inputs-2)*hold) + start)\n    if inputs == 0:\n        end_frame = int(start)\n    framerange_text = f'<font size=\"+3\"><font style=\"color: \\#EDBB28;\"> \{int(fifr)\}</font> | <font style=\"color: \\#31DE48;\">  \{int(start)\} - \{int(end_frame)\} </font> | <font style=\"color: \\#EDBB28;\"> \{int(breakdown_last_frame)\}'\n    # Dummy variables for the top row numbers\n\nnum1 = int(fifr)\nnum2 = int(start)\nnum3 = int(end_frame)\nnum4 = int(breakdown_last_frame)\n\nhtml_table = f\"\"\"\n<table style=\"border-collapse: collapse; font-family: sans-serif; text-align: center;\">\n  <tr style=\"font-weight: bold; font-size: 18px;\">\n    <td style=\"color: #FFA500; padding: 3px 10px; border: 1px solid #ccc;\">\{num1\}</td>\n    <td style=\"color: #008000; padding: 3px 10px; border: 1px solid #ccc;\">\{num2\}</td>\n    <td style=\"color: #008000; padding: 3px 10px; border: 1px solid #ccc;\">\{num3\}</td>\n    <td style=\"color: #FFA500; padding: 3px 10px; border: 1px solid #ccc;\">\{num4\}</td>\n  </tr>\n  <tr style=\"font-size: 12px;\">\n    <td style=\"color: #FFA500; padding: 3px 10px; border: 1px solid #ccc;\">Start</td>\n    <td style=\"color: #008000; padding: 3px 10px; border: 1px solid #ccc;\">Wipes start</td>\n    <td style=\"color: #008000; padding: 3px 10px; border: 1px solid #ccc;\">Wipes end</td>\n    <td style=\"color: #FFA500; padding: 3px 10px; border: 1px solid #ccc;\">End</td>\n  </tr>\n</table>\n\"\"\"\n\ntn\['framerange_text'].setValue(html_table)\n    #tn\['label'].setValue(framerange_text)"
+ name MultiWipeICE
+ knobChanged "tn = nuke.thisNode()\nk = nuke.thisKnob()\n\n\nif k.name() in \[\"wipe_start\", \"wipe_duration\", \"inputChange\", \"wipe_hold\", \"breakdown_style\"]:\n    inputs = tn.inputs()    \n    start = tn\['wipe_start'].value()\n    breakdown_last_frame = tn\['breakdown_last_frame'].value()\n    duration = tn.knob('wipe_duration').value()\n    \n    fifr = 0\n    lilf = 0\n    if inputs > 0:\n        fifr = tn\['first_input_first_frame'].value()\n        lilf = tn\['last_input_last_frame'].value()\n\n    hold = tn.knob('wipe_hold').value()\n    end_frame = int( ((inputs-1)*duration) + ((inputs-2)*hold) + start)\n    if inputs == 0:\n        end_frame = int(start)\n    framerange_text = f'<font size=\"+3\"><font style=\"color: \\#EDBB28;\"> \{int(fifr)\}</font> | <font style=\"color: \\#31DE48;\">  \{int(start)\} - \{int(end_frame)\} </font> | <font style=\"color: \\#EDBB28;\"> \{int(breakdown_last_frame)\}'\n    # Dummy variables for the top row numbers\n\n    num1 = int(fifr)\n    num2 = int(start)\n    num3 = int(end_frame)\n    num4 = int(breakdown_last_frame)\n    \n    html_table = f\"\"\"\n    <table style=\"border-collapse: collapse; font-family: sans-serif; text-align: center;\">\n      <tr style=\"font-weight: bold; font-size: 18px;\">\n        <td style=\"color: #FFA500; padding: 3px 10px; border: 1px solid #ccc;\">\{num1\}</td>\n        <td style=\"color: #008000; padding: 3px 10px; border: 1px solid #ccc;\">\{num2\}</td>\n        <td style=\"color: #008000; padding: 3px 10px; border: 1px solid #ccc;\">\{num3\}</td>\n        <td style=\"color: #FFA500; padding: 3px 10px; border: 1px solid #ccc;\">\{num4\}</td>\n      </tr>\n      <tr style=\"font-size: 12px;\">\n        <td style=\"color: #FFA500; padding: 3px 10px; border: 1px solid #ccc;\">Start</td>\n        <td style=\"color: #008000; padding: 3px 10px; border: 1px solid #ccc;\">Wipes start</td>\n        <td style=\"color: #008000; padding: 3px 10px; border: 1px solid #ccc;\">Wipes end</td>\n        <td style=\"color: #FFA500; padding: 3px 10px; border: 1px solid #ccc;\">End</td>\n      </tr>\n    </table>\n    \"\"\"\n    \n    tn\['framerange_text'].setValue(html_table)\n        #tn\['label'].setValue(framerange_text)"
  selected true
+ xpos -339
+ ypos 528
  addUserKnob {20 multiwipe l "Multi Wipe"}
- addUserKnob {26 text_2 l "" +STARTLINE T "<font size=\"+5\">🧻 Multi Wipe🧻"}
- addUserKnob {26 about l "" t "v1.2 - Added frame range info, fixed wipe line when on an angle.\nv1.3 - Added wipe line into additional layer (for dealing with shot grades affecting wipe line)." +STARTLINE T "<font style=\"color: #666666;\">v1.3 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 text_2 l "" +STARTLINE T "<font size=\"+5\">🧊 Multi Wipe ICE🧊"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.4 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 ""}
  addUserKnob {26 framerange_text l "" +STARTLINE T "\n<table style=\"border-collapse: collapse; font-family: sans-serif; text-align: center;\">\n  <tr style=\"font-weight: bold; font-size: 18px;\">\n    <td style=\"color: #FFA500; padding: 3px 10px; border: 1px solid #ccc;\">0</td>\n    <td style=\"color: #008000; padding: 3px 10px; border: 1px solid #ccc;\">1001</td>\n    <td style=\"color: #008000; padding: 3px 10px; border: 1px solid #ccc;\">1001</td>\n    <td style=\"color: #FFA500; padding: 3px 10px; border: 1px solid #ccc;\">0</td>\n  </tr>\n  <tr style=\"font-size: 12px;\">\n    <td style=\"color: #FFA500; padding: 3px 10px; border: 1px solid #ccc;\">Start</td>\n    <td style=\"color: #008000; padding: 3px 10px; border: 1px solid #ccc;\">Wipes start</td>\n    <td style=\"color: #008000; padding: 3px 10px; border: 1px solid #ccc;\">Wipes end</td>\n    <td style=\"color: #FFA500; padding: 3px 10px; border: 1px solid #ccc;\">End</td>\n  </tr>\n</table>\n"}
  addUserKnob {26 ""}
  addUserKnob {4 breakdown_style l "breakdown style" M {"wipe while playing" "hold frame"}}
+ addUserKnob {4 wipe_style l "wipe style" +INVISIBLE M {"simple line" "Yusuke's dope glitch"}}
+ addUserKnob {26 text_4 l "" +STARTLINE +INVISIBLE T "<font style=\"color: #666666;\">Creative wipe will always be output in the Breakdown_Alt layer"}
  addUserKnob {26 text l "<b> Wipe"}
  addUserKnob {3 wipe_start l "start frame"}
  wipe_start 1001
@@ -22,8 +29,9 @@ Group {
  last_input_last_frame {{"\[node this.input\[expr \[value this.inputs]-1]].last_frame"}}
  addUserKnob {3 breakdown_last_frame l "breakdown last frame" +INVISIBLE}
  breakdown_last_frame {{"breakdown_style? last_input_last_frame + breakdown_duration :last_input_last_frame "}}
- addUserKnob {3 wipe_duration l duration}
+ addUserKnob {3 wipe_duration l duration +INVISIBLE}
  wipe_duration 7
+ addUserKnob {26 text_3 l duration T "<font style=\"color: #666666;\">locked to 7 frames"}
  addUserKnob {3 wipe_hold l "frames between wipes"}
  wipe_hold 12
  addUserKnob {7 wipe_angle l angle R 0 360}
@@ -35,19 +43,30 @@ Group {
  addUserKnob {41 white l colour T Grade1.white}
  addUserKnob {6 color_rgba_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
 }
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x232323ff
+  label "Yusuke's dope wipe"
+  note_font_size 42
+  xpos 211
+  ypos 640
+  bdwidth 437
+  bdheight 490
+ }
  StickyNote {
   inputs 0
   name StickyNote1
   label "If current frame is before start frame,\njust show input 1"
   xpos -539
-  ypos 1397
+  ypos 1654
  }
  StickyNote {
   inputs 0
   name StickyNote2
   label "If current frame is after the calculated breakdown length\nwipes + hold frames + start frame\nswitch to final input"
   xpos -572
-  ypos 1566
+  ypos 1823
  }
  Input {
   inputs 0
@@ -56,7 +75,7 @@ Group {
   ypos -721
   number 14
  }
-set N1d56d400 [stack 0]
+set Na1979c00 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -73,7 +92,7 @@ set N1d56d400 [stack 0]
   ypos -719
   number 13
  }
-set N1d56d000 [stack 0]
+set Na1979800 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -90,7 +109,7 @@ set N1d56d000 [stack 0]
   ypos -714
   number 12
  }
-set N1d56cc00 [stack 0]
+set Na1979400 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -107,7 +126,7 @@ set N1d56cc00 [stack 0]
   ypos -716
   number 11
  }
-set N1d56c800 [stack 0]
+set Na1979000 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -124,7 +143,7 @@ set N1d56c800 [stack 0]
   ypos -712
   number 10
  }
-set N1d56c400 [stack 0]
+set Na1978c00 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -141,7 +160,7 @@ set N1d56c400 [stack 0]
   ypos -716
   number 9
  }
-set N1d4ebc00 [stack 0]
+set Na1978800 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -158,7 +177,7 @@ set N1d4ebc00 [stack 0]
   ypos -716
   number 8
  }
-set N1d4eb800 [stack 0]
+set Na1978400 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -175,7 +194,7 @@ set N1d4eb800 [stack 0]
   ypos -713
   number 7
  }
-set N1d4eb400 [stack 0]
+set Nd958bc00 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -192,7 +211,7 @@ set N1d4eb400 [stack 0]
   ypos -716
   number 6
  }
-set N1d4eb000 [stack 0]
+set Nd958b800 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -209,7 +228,7 @@ set N1d4eb000 [stack 0]
   ypos -716
   number 5
  }
-set N1d4eac00 [stack 0]
+set Nd958b400 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -226,7 +245,7 @@ set N1d4eac00 [stack 0]
   ypos -716
   number 4
  }
-set N1d4ea800 [stack 0]
+set Nd958b000 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -243,7 +262,7 @@ set N1d4ea800 [stack 0]
   ypos -717
   number 3
  }
-set N1d4ea400 [stack 0]
+set Nd958ac00 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -260,7 +279,7 @@ set N1d4ea400 [stack 0]
   ypos -716
   number 2
  }
-set N1d4ea000 [stack 0]
+set Nd958a800 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -277,7 +296,7 @@ set N1d4ea000 [stack 0]
   ypos -716
   number 1
  }
-set N1d4e9c00 [stack 0]
+set Nd958a400 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -293,7 +312,7 @@ set N1d4e9c00 [stack 0]
   xpos -821
   ypos -713
  }
-set N1d4e9800 [stack 0]
+set Nd958a000 [stack 0]
  TimeOffset {
   time_offset {{"((parent.inputs-1) * wipe_duration) + ((parent.inputs-2)*wipe_hold)" x1165 -1}}
   time ""
@@ -313,15 +332,85 @@ set N1d4e9800 [stack 0]
 add_layer {wipe_line wipe_line.red wipe_line.green wipe_line.blue wipe_line.alpha}
  AddChannels {
   channels wipe_line
-  name AddChannels3
-  xpos 1374
-  ypos 1195
+  name AddChannels2
+  xpos 1367
+  ypos 1466
  }
  Dot {
   name Dot3
-  xpos 1408
-  ypos 1544
+  xpos 1401
+  ypos 1801
  }
+set Nd9589400 [stack 0]
+ Read {
+  inputs 0
+  file_type exr
+  file z:/shows/ice/102/CPH/ICE102_CPH_0140/comp/pcomp/WipeWhitefor4608Template/ICE102_CPH_0140.WipeWhitefor4608Template.v001/full/ICE102_CPH_0140.WipeWhitefor4608Template.v001.####.exr
+  localizationPolicy off
+  format "4608 2096 0 0 4608 2096 1 ice(4608x2096x1.0)"
+  proxy z:/shows/ice/102/CPH/ICE102_CPH_0140/comp/pcomp/WipeWhitefor4608Template/ICE102_CPH_0140.WipeWhitefor4608Template.v001/half/ICE102_CPH_0140.WipeWhitefor4608Template.v001.%04d.exr
+  proxy_format "2304 1048 0 0 2304 1048 1 "
+  first 1001
+  last 1015
+  origfirst 1001
+  origlast 1015
+  origset true
+  colorspace linear
+  name Read35
+  tile_color 0xff0001
+  label "\n\[lindex \[split \[value file] .] 4]"
+  xpos 401
+  ypos 767
+ }
+ Reformat {
+  type "to box"
+  box_width {{Input1.width}}
+  box_height {{Input1.height}}
+  box_fixed true
+  box_pixel_aspect {{Input1.pixel_aspect}}
+  resize distort
+  center false
+  name Reformat1
+  xpos 401
+  ypos 887
+ }
+ TimeWarp {
+  lookup {{1001+(clamp(fmod((frame-wipe_start),(wipe_duration+wipe_hold))/wipe_duration)*7)}}
+  time ""
+  name TimeWarp1
+  xpos 401
+  ypos 930
+ }
+ Multiply {
+  value {{1-floor(clamp(fmod((frame-wipe_start),(wipe_duration+wipe_hold))/(wipe_duration+1)))}}
+  name Multiply2
+  label "Disables wipe when not wipin'"
+  xpos 401
+  ypos 1002
+ }
+ Dot {
+  name Dot2
+  xpos 435
+  ypos 1265
+ }
+set Nda3ab400 [stack 0]
+ Dot {
+  name Dot8
+  xpos 435
+  ypos 1417
+ }
+set Nda3ab000 [stack 0]
+ Dot {
+  name Dot9
+  xpos 569
+  ypos 1417
+ }
+ Dot {
+  name Dot7
+  xpos 569
+  ypos 1567
+ }
+push $Nda3ab000
  Constant {
   inputs 0
   format "256 256 0 0 256 256 1 square_256"
@@ -357,7 +446,7 @@ add_layer {wipe_line wipe_line.red wipe_line.green wipe_line.blue wipe_line.alph
   xpos -126
   ypos 425
  }
-set N1d87b800 [stack 0]
+set Nda3a9400 [stack 0]
  ColorLookup {
   lut {master {curve C 0 k 1 s0}
     red {}
@@ -368,7 +457,7 @@ set N1d87b800 [stack 0]
   xpos 147
   ypos 521
  }
-push $N1d87b800
+push $Nda3a9400
  ColorLookup {
   lut {master {curve C k 0 s0 l 1}
     red {}
@@ -379,7 +468,7 @@ push $N1d87b800
   xpos 56
   ypos 520
  }
-push $N1d87b800
+push $Nda3a9400
  ColorLookup {
   lut {master {curve 0 s0 t2 1 s2 t0}
     red {}
@@ -390,7 +479,7 @@ push $N1d87b800
   xpos -38
   ypos 520
  }
-push $N1d87b800
+push $Nda3a9400
  Dot {
   name Dot4
   label linear
@@ -424,11 +513,252 @@ push $N1d87b800
   xpos -126
   ypos 658
  }
-set N1d879c00 [stack 0]
+set Nd987b400 [stack 0]
+push $Na1979c00
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold15
+  xpos 606
+  ypos -442
+  disable {{1-breakdown_style}}
+ }
+set Nda5c3900 [stack 0]
+push $Na1979800
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold14
+  xpos 504
+  ypos -434
+  disable {{1-breakdown_style}}
+ }
+set Nda5c3200 [stack 0]
+push $Na1979400
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold13
+  xpos 402
+  ypos -431
+  disable {{1-breakdown_style}}
+ }
+set Nda5c2b00 [stack 0]
+push $Na1979000
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold12
+  xpos 300
+  ypos -427
+  disable {{1-breakdown_style}}
+ }
+set Nda5c2400 [stack 0]
+push $Na1978c00
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold11
+  xpos 198
+  ypos -426
+  disable {{1-breakdown_style}}
+ }
+set Nda5c1d00 [stack 0]
+push $Na1978800
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold10
+  xpos 95
+  ypos -422
+  disable {{1-breakdown_style}}
+ }
+set Nda5c1600 [stack 0]
+push $Na1978400
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold9
+  xpos -5
+  ypos -417
+  disable {{1-breakdown_style}}
+ }
+set Nda5c0f00 [stack 0]
+push $Nd958bc00
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold8
+  xpos -107
+  ypos -415
+  disable {{1-breakdown_style}}
+ }
+set Nda5c0800 [stack 0]
+push $Nd958b800
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold7
+  xpos -209
+  ypos -414
+  disable {{1-breakdown_style}}
+ }
+set Nda5c0100 [stack 0]
+push $Nd958b400
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold6
+  xpos -312
+  ypos -412
+  disable {{1-breakdown_style}}
+ }
+set Nfcae3900 [stack 0]
+push $Nd958b000
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold5
+  xpos -413
+  ypos -407
+  disable {{1-breakdown_style}}
+ }
+set Nfcae3200 [stack 0]
+push $Nd958ac00
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold4
+  xpos -515
+  ypos -409
+  disable {{1-breakdown_style}}
+ }
+set Nfcae2b00 [stack 0]
+push $Nd958a800
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold3
+  xpos -617
+  ypos -411
+  disable {{1-breakdown_style}}
+ }
+set Nfcae2400 [stack 0]
+push $Nd958a400
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold2
+  xpos -719
+  ypos -412
+  disable {{1-breakdown_style}}
+ }
+set Nfcae1d00 [stack 0]
+push $Nd958a000
+ FrameHold {
+  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
+  name FrameHold1
+  xpos -821
+  ypos -411
+  disable {{1-breakdown_style}}
+ }
+set Nfcae1600 [stack 0]
+ Switch {
+  inputs 15
+  which {{"floor((frame - wipe_start +wipe_duration + wipe_hold)/(wipe_duration+wipe_hold))"}}
+  name Switch5
+  xpos -33
+  ypos 14
+ }
+push $Nda5c3900
+push $Nda5c3200
+push $Nda5c2b00
+push $Nda5c2400
+push $Nda5c1d00
+push $Nda5c1600
+push $Nda5c0f00
+push $Nda5c0800
+push $Nda5c0100
+push $Nfcae3900
+push $Nfcae3200
+push $Nfcae2b00
+push $Nfcae2400
+push $Nfcae1d00
+push $Nfcae1600
+ Switch {
+  inputs 15
+  which {{"floor((frame - wipe_start)/(wipe_duration+wipe_hold))"}}
+  name Switch6
+  xpos -493
+  ypos 14
+ }
+ Dot {
+  name data_dot
+  label data_dot
+  xpos -459
+  ypos 410
+ }
+ AddChannels {
+  channels rgba
+  format_size true
+  name AddChannels1
+  xpos -493
+  ypos 500
+ }
+ Keymix {
+  inputs 3
+  name Keymix7
+  xpos -493
+  ypos 652
+ }
+set Nd987a000 [stack 0]
+ Merge2 {
+  inputs 2
+  name Merge2
+  xpos 401
+  ypos 1509
+ }
+ Shuffle2 {
+  inputs 2
+  fromInput1 {{1} B A}
+  out1 wipe_line
+  fromInput2 {{0} B A}
+  mappings "4 rgba.red 0 0 wipe_line.red 0 0 rgba.green 0 1 wipe_line.green 0 1 rgba.blue 0 2 wipe_line.blue 0 2 rgba.alpha 0 3 wipe_line.alpha 0 3"
+  name Shuffle3
+  label "\[value in1] -> \[value out1]"
+  xpos 401
+  ypos 1558
+ }
+push $Nd958a000
+ Dot {
+  name Dot5
+  xpos -958
+  ypos -710
+ }
+ AddChannels {
+  channels wipe_line
+  name AddChannels4
+  xpos -992
+  ypos 1446
+ }
+ Dot {
+  name Dot1
+  xpos -958
+  ypos 1630
+ }
+set Nd9878c00 [stack 0]
+ Switch {
+  inputs 2
+  which {{frame>=wipe_start}}
+  name Switch8
+  xpos 401
+  ypos 1691
+ }
+ Switch {
+  inputs 2
+  which {{"frame >= ( ( (parent.inputs-1) * wipe_duration) + (parent.inputs-2) * wipe_hold) + parent.wipe_start"}}
+  name Switch9
+  xpos 401
+  ypos 1862
+ }
+ Dot {
+  name Dot10
+  xpos 435
+  ypos 2044
+ }
+push $Nd9589400
+push $Nda3ab400
+push $Nd987b400
  Group {
   name line_width
   xpos -126
-  ypos 780
+  ypos 714
   addUserKnob {20 User}
   addUserKnob {41 size T Blur1.size}
   addUserKnob {26 ""}
@@ -448,8 +778,8 @@ set N1d879c00 [stack 0]
    xpos -641
    ypos -396
   }
-set N1d879400 [stack 0]
-push $N1d879400
+set Ne9833400 [stack 0]
+push $Ne9833400
   Merge2 {
    inputs 2
    operation xor
@@ -477,224 +807,42 @@ push $N1d879400
   unpremult -rgba.alpha
   name line_softness
   xpos -126
-  ypos 825
+  ypos 759
  }
  Grade {
   black_clamp false
   unpremult -rgba.alpha
   name Grade1
   xpos -126
-  ypos 863
+  ypos 797
  }
  Multiply {
   value {{1-floor(clamp(fmod((frame-wipe_start),(wipe_duration+wipe_hold))/(wipe_duration+1)))}}
   name Multiply1
   label "Disables wipe when not wipin'"
   xpos -126
-  ypos 896
+  ypos 832
  }
- Dot {
-  name Dot2
-  xpos -92
-  ypos 968
+ Switch {
+  inputs 2
+  which {{parent.wipe_style}}
+  name Switch7
+  xpos -126
+  ypos 1262
  }
-set N1d7f3400 [stack 0]
+set Ne9831800 [stack 0]
  Dot {
   name Dot6
   xpos -92
-  ypos 1160
+  ypos 1429
  }
-push $N1d7f3400
-push $N1d879c00
-push $N1d56d400
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold15
-  xpos 606
-  ypos -442
-  disable {{1-breakdown_style}}
- }
-set N1d7e5600 [stack 0]
-push $N1d56d000
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold14
-  xpos 504
-  ypos -434
-  disable {{1-breakdown_style}}
- }
-set N1d7e4f00 [stack 0]
-push $N1d56cc00
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold13
-  xpos 402
-  ypos -431
-  disable {{1-breakdown_style}}
- }
-set N1d7e4800 [stack 0]
-push $N1d56c800
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold12
-  xpos 300
-  ypos -427
-  disable {{1-breakdown_style}}
- }
-set N1d7e4100 [stack 0]
-push $N1d56c400
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold11
-  xpos 198
-  ypos -426
-  disable {{1-breakdown_style}}
- }
-set N1d7b7900 [stack 0]
-push $N1d4ebc00
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold10
-  xpos 95
-  ypos -422
-  disable {{1-breakdown_style}}
- }
-set N1d7b7200 [stack 0]
-push $N1d4eb800
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold9
-  xpos -5
-  ypos -417
-  disable {{1-breakdown_style}}
- }
-set N1d7b6b00 [stack 0]
-push $N1d4eb400
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold8
-  xpos -107
-  ypos -415
-  disable {{1-breakdown_style}}
- }
-set N1d7b6400 [stack 0]
-push $N1d4eb000
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold7
-  xpos -209
-  ypos -414
-  disable {{1-breakdown_style}}
- }
-set N1d7b5d00 [stack 0]
-push $N1d4eac00
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold6
-  xpos -312
-  ypos -412
-  disable {{1-breakdown_style}}
- }
-set N1d7b5600 [stack 0]
-push $N1d4ea800
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold5
-  xpos -413
-  ypos -407
-  disable {{1-breakdown_style}}
- }
-set N1d7b4f00 [stack 0]
-push $N1d4ea400
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold4
-  xpos -515
-  ypos -409
-  disable {{1-breakdown_style}}
- }
-set N1d7b4800 [stack 0]
-push $N1d4ea000
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold3
-  xpos -617
-  ypos -411
-  disable {{1-breakdown_style}}
- }
-set N1d7b4100 [stack 0]
-push $N1d4e9c00
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold2
-  xpos -719
-  ypos -412
-  disable {{1-breakdown_style}}
- }
-set N1d787900 [stack 0]
-push $N1d4e9800
- FrameHold {
-  firstFrame {{"frame <= wipe_start? frame:wipe_start"}}
-  name FrameHold1
-  xpos -821
-  ypos -411
-  disable {{1-breakdown_style}}
- }
-set N1d787200 [stack 0]
- Switch {
-  inputs 15
-  which {{"floor((frame - wipe_start +wipe_duration + wipe_hold)/(wipe_duration+wipe_hold))"}}
-  name Switch5
-  xpos -33
-  ypos 14
- }
-push $N1d7e5600
-push $N1d7e4f00
-push $N1d7e4800
-push $N1d7e4100
-push $N1d7b7900
-push $N1d7b7200
-push $N1d7b6b00
-push $N1d7b6400
-push $N1d7b5d00
-push $N1d7b5600
-push $N1d7b4f00
-push $N1d7b4800
-push $N1d7b4100
-push $N1d787900
-push $N1d787200
- Switch {
-  inputs 15
-  which {{"floor((frame - wipe_start)/(wipe_duration+wipe_hold))"}}
-  name Switch6
-  xpos -493
-  ypos 14
- }
- Dot {
-  name data_dot
-  label data_dot
-  xpos -459
-  ypos 410
- }
- AddChannels {
-  channels rgba
-  format_size true
-  name AddChannels1
-  xpos -493
-  ypos 500
- }
- Keymix {
-  inputs 3
-  name Keymix7
-  xpos -493
-  ypos 652
- }
+push $Ne9831800
+push $Nd987a000
  Merge2 {
   inputs 2
-  name Merge35
+  name Merge1
   xpos -493
-  ypos 965
-  disable {{parent.line_width==0}}
+  ypos 1262
  }
  Shuffle2 {
   inputs 2
@@ -705,38 +853,34 @@ push $N1d787200
   name Shuffle1
   label "\[value in1] -> \[value out1]"
   xpos -493
-  ypos 1151
+  ypos 1420
  }
-push $N1d4e9800
- Dot {
-  name Dot5
-  xpos -958
-  ypos -710
- }
- AddChannels {
-  channels wipe_line
-  name AddChannels4
-  xpos -992
-  ypos 1154
- }
- Dot {
-  name Dot1
-  xpos -958
-  ypos 1373
- }
+push $Nd9878c00
  Switch {
   inputs 2
   which {{frame>=wipe_start}}
   name Switch1
   xpos -493
-  ypos 1370
+  ypos 1627
  }
  Switch {
   inputs 2
   which {{"frame >= ( ( (parent.inputs-1) * wipe_duration) + (parent.inputs-2) * wipe_hold) + parent.wipe_start"}}
   name Switch3
   xpos -493
-  ypos 1541
+  ypos 1798
+ }
+add_layer {Breakdown_Alt Breakdown_Alt.red Breakdown_Alt.green Breakdown_Alt.blue Breakdown_Alt.alpha}
+ Shuffle2 {
+  inputs 2
+  fromInput1 {{1} B A}
+  out1 Breakdown_Alt
+  fromInput2 {{0} B A}
+  mappings "4 rgba.red 0 0 Breakdown_Alt.red 0 0 rgba.green 0 1 Breakdown_Alt.green 0 1 rgba.blue 0 2 Breakdown_Alt.blue 0 2 rgba.alpha 0 3 Breakdown_Alt.alpha 0 3"
+  name Shuffle2
+  label "\[value in1] -> \[value out1]"
+  xpos -493
+  ypos 2035
  }
  FrameRange {
   first_frame {{parent.first_input_first_frame}}
@@ -744,11 +888,68 @@ push $N1d4e9800
   time ""
   name FrameRange1
   xpos -493
-  ypos 1722
+  ypos 2588
  }
  Output {
   name Output1
   xpos -493
-  ypos 1838
+  ypos 2790
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote3
+  label "If current frame is before start frame,\njust show input 1"
+  xpos 355
+  ypos 1718
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote4
+  label "If current frame is after the calculated breakdown length\nwipes + hold frames + start frame\nswitch to final input"
+  xpos 322
+  ypos 1887
  }
 end_group
+Dot {
+ name Dot6
+ selected true
+ xpos -305
+ ypos 609
+}
+set Nda16ac00 [stack 0]
+Dot {
+ name Dot7
+ selected true
+ xpos -127
+ ypos 609
+}
+Shuffle2 {
+ fromInput1 {{0} B}
+ in1 Breakdown_Alt
+ fromInput2 {{0} B}
+ mappings "4 Breakdown_Alt.red 0 0 rgba.red 0 0 Breakdown_Alt.green 0 1 rgba.green 0 1 Breakdown_Alt.blue 0 2 rgba.blue 0 2 Breakdown_Alt.alpha 0 3 rgba.alpha 0 3"
+ name Shuffle2
+ label "\[value in1] -> \[value out1]"
+ selected true
+ xpos -161
+ ypos 664
+}
+Dot {
+ name Dot8
+ label Creative
+ note_font "Verdana Bold"
+ note_font_size 20
+ selected true
+ xpos -127
+ ypos 758
+}
+push $Nda16ac00
+Dot {
+ name Dot9
+ label Simple
+ note_font "Verdana Bold"
+ note_font_size 20
+ selected true
+ xpos -305
+ ypos 760
+}

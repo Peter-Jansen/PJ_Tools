@@ -1,0 +1,37 @@
+Group {
+name Shutter_Efficiency
+selected true
+addUserKnob {20 User}
+addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Shutter Efficiency"}
+addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+addUserKnob {26 ""}
+addUserKnob {26 text l "" +STARTLINE T "For use with a downstream timeblur with a centered shutter.\nMatch the shutter on the timeblur with the shutter on this node."}
+addUserKnob {26 ""}
+addUserKnob {7 shutter}
+shutter 0.5
+addUserKnob {7 efficiency}
+efficiency 1
+}
+Input {
+inputs 0
+name Input1
+xpos 568
+ypos 225
+}
+Grade {
+channels rgba
+multiply {{"1-pow((cos(clamp(((fmod(frame+0.5,1)-0.5)/parent.shutter)+0.5)*2*PI)/2)+.5, 1/(1-parent.efficiency))"}}
+black_clamp false
+unpremult -rgba.alpha
+name Grade49
+label ShutterEfficiency
+xpos 568
+ypos 338
+disable {{efficiency==1}}
+}
+Output {
+name Output1
+xpos 568
+ypos 470
+}
+end_group

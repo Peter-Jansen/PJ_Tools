@@ -1,7 +1,3 @@
-
-
-
-
 import nuke
 import os
 
@@ -86,4 +82,5 @@ other.addCommand('Subframer', 'nuke.createNode(\'Subframer.nk\')', icon = 'p.png
 other.addCommand('MultiWipe', 'nuke.createNode(\'MultiWipe.nk\')', icon = 'p.png')
 other.addCommand('Arri_Grain', 'nuke.createNode(\'Arri_Grain.nk\')', icon = 'p.png')
 other.addCommand('DeepThicknessTextured', 'nuke.createNode(\'DeepThicknessTextured.nk\')', icon = 'p.png')
-
+other.addCommand('STMapExpand', 'nuke.createNode(\'STMapExpand.nk\')', icon = 'p.png')
+#other.addCommand('MultiWipeICE', lambda: nuke.loadToolset(r"Z:\depts\comp\users\peter.jansen\nuke_tools\PJ_Tools\tools\MultiWipeICE.nk"), icon = 'p.png')

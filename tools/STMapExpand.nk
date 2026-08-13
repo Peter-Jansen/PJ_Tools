@@ -1,0 +1,96 @@
+Group {
+ name STMap_Expand
+ selected true
+ addUserKnob {20 User l "STMap Expand"}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> STMap Expand"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 ""}
+ addUserKnob {7 overscan l "overscan %" R 0 100}
+ overscan 20
+ addUserKnob {7 post_blur l "post blur" R 0 200}
+}
+ Input {
+  inputs 0
+  name UV_map
+  xpos 975
+  ypos 86
+ }
+ Expression {
+  expr0 (r-(x+0.5)/width)*width
+  expr1 (g-(y+0.5)/height)*height
+  expr2 0
+  channel3 alpha
+  expr3 1
+  name UV_to_Vector1
+  xpos 827
+  ypos 133
+ }
+ Reformat {
+  type scale
+  scale {{"1+(parent.overscan / 100)"}}
+  resize none
+  pbb true
+  name Reformat28
+  xpos 827
+  ypos 191
+ }
+ Crop {
+  box {{"bbox.x + 1"} {"bbox.y + 1"} {"bbox.r - 1"} {"bbox.t - 1"}}
+  name Crop13
+  xpos 827
+  ypos 223
+ }
+ Crop {
+  box {{min(bbox.x,0)} {min(bbox.y,0)} {max(bbox.r,width)} {"max(bbox.t, height)"}}
+  crop false
+  name Crop11
+  xpos 827
+  ypos 279
+ }
+ Inpaint2 {
+  fillRegion "Source Inverted Alpha"
+  center {3315 1506.5}
+  name Inpaint2
+  xpos 827
+  ypos 350
+ }
+ Blur {
+  channels rgba
+  size 100
+  crop false
+  name Blur1
+  xpos 827
+  ypos 394
+ }
+ Crop {
+  box {{min(bbox.x,0)} {min(bbox.y,0)} {max(bbox.r,width)} {"max(bbox.t, height)"}}
+  crop false
+  name Crop3
+  xpos 827
+  ypos 456
+ }
+ Reformat {
+  type "to box"
+  box_width {{UV_map.width}}
+  box_height {{UV_map.height}}
+  box_pixel_aspect {{UV_map.pixel_aspect}}
+  resize none
+  pbb true
+  name Reformat31
+  xpos 827
+  ypos 510
+ }
+ Expression {
+  expr0 (r+x+0.5)/width
+  expr1 (g+y+0.5)/height
+  expr2 0
+  name Vector_to_UV1
+  xpos 827
+  ypos 565
+ }
+ Output {
+  name Output1
+  xpos 963
+  ypos 677
+ }
+end_group

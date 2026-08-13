@@ -1,16 +1,21 @@
+set cut_paste_input [stack 0]
+version 13.2 v1
+push $cut_paste_input
 Group {
  name GradeAOV
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name() #the knob name\n\n\nif kn == \"tonemap\":\n\n    if k.value() < 1.0:\n        k.setValue(1.0)\n        \nif kn == 'inputChange':\n    if n.input(1) is None:\n        n.begin()\n        nuke.toNode('Keymix2').knob('maskChannel').setValue('none')\n        n.end()\n    if n.input(1) is not None:\n        n.begin()\n        nuke.toNode('Keymix2').knob('maskChannel').setValue('alpha')\n        n.end()\n\n        "
  tile_color 0x8fa8d8ff
- label "\[value channels_1]"
+ label "\[value in]"
  selected true
+ xpos -5027
+ ypos 18264
  addUserKnob {20 GradeAOV l "Grade AOV"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Grade AOV"}
  addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
- addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 ""}
  addUserKnob {4 output_mode l output M {Result "RAW AOV" "Graded AOV" "" "" ""}}
  addUserKnob {26 ""}
- addUserKnob {41 channels_1 l "AOV Layer" T Copy1.channels}
+ addUserKnob {41 in l "AOV Layer" T Shuffle2.in}
  addUserKnob {26 text_2 l "<b>Linear Adjustments"}
  addUserKnob {41 saturation T Saturation1.saturation}
  addUserKnob {41 white l gain T Grade1.white}
@@ -33,19 +38,18 @@ Group {
   xpos 562
   ypos 163
  }
-set Naf279c00 [stack 0]
  Dot {
   name Dot1
   xpos 596
   ypos 326
  }
-set Naf279800 [stack 0]
+set Neb96e000 [stack 0]
  Dot {
   name Dot7
   xpos 596
   ypos 387
  }
-set Naf279400 [stack 0]
+set Neb96dc00 [stack 0]
  Dot {
   name Dot8
   xpos 328
@@ -57,9 +61,9 @@ set Naf279400 [stack 0]
   name Shuffle2
   label "\[value in] > \[value out]"
   xpos 294
-  ypos 469
+  ypos 471
  }
-set Naf278c00 [stack 0]
+set Neb96d400 [stack 0]
  Unpremult {
   name Unpremult2
   xpos 294
@@ -71,7 +75,7 @@ set Naf278c00 [stack 0]
   xpos 328
   ypos 656
  }
-set Naf278400 [stack 0]
+set Neb96cc00 [stack 0]
  Saturation {
   name Saturation1
   xpos 294
@@ -99,7 +103,7 @@ set Naf278400 [stack 0]
   xpos 328
   ypos 843
  }
-set N4bf23000 [stack 0]
+set N22483800 [stack 0]
  Premult {
   name Premult2
   xpos 294
@@ -111,13 +115,13 @@ set N4bf23000 [stack 0]
   xpos 328
   ypos 1098
  }
-set N4bf22800 [stack 0]
+set N22483000 [stack 0]
  Dot {
   name Dot12
   xpos 328
   ypos 1629
  }
-push $Naf278c00
+push $Neb96d400
  Dot {
   name Dot11
   xpos 162
@@ -141,7 +145,7 @@ push $Naf278c00
   xpos 767
   ypos 1358
  }
-push $Naf279800
+push $Neb96e000
  Dot {
   name Dot5
   xpos -474
@@ -152,18 +156,18 @@ push $Naf279800
   xpos -474
   ypos 925
  }
-set N4bf20c00 [stack 0]
+set N22481400 [stack 0]
  Dot {
   name Dot20
   xpos -474
   ypos 1367
  }
-set N4bf20800 [stack 0]
-push $N4bf22800
-push $N4bf20c00
-push $N4bf23000
-push $Naf278400
-push $Naf279400
+set N22481000 [stack 0]
+push $N22483000
+push $N22481400
+push $N22483800
+push $Neb96cc00
+push $Neb96dc00
  Unpremult {
   name Unpremult1
   xpos 562
@@ -199,12 +203,14 @@ push $Naf279400
   ypos 994
   disable {{!parent.un_premult}}
  }
+add_layer {VRaySpecular VRaySpecular.red VRaySpecular.green VRaySpecular.blue}
  ShuffleCopy {
   inputs 2
   red red
   green green
   blue blue
   alpha alpha2
+  out {{{Shuffle2.in}}}
   name ShuffleCopy1
   label "\[value out]"
   xpos 562
@@ -215,12 +221,11 @@ push $Naf279400
   maskChannel none
   bbox B
   name Keymix2
-  selected true
   xpos 562
   ypos 1358
   disable {{"1-\[exists parent.input1]"}}
  }
-push $N4bf20800
+push $N22481000
  Dot {
   name Dot2
   xpos -474
@@ -244,17 +249,5 @@ push $N4bf20800
   name Output1
   xpos 562
   ypos 1804
- }
-push $Naf279c00
-push 0
- Copy {
-  inputs 2
-  from0 rgba.alpha
-  to0 rgba.alpha
-  channels rgba
-  name Copy1
-  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name() #the knob name\n\nif kn == \"channels\":\n\n    channels = k.value()\n    nuke.toNode('Shuffle2').knob('in').setValue(channels)            \n    nuke.toNode('ShuffleCopy1').knob('out').setValue(channels)            \n"
-  xpos 42
-  ypos 149
  }
 end_group
