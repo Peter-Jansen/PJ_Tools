@@ -47,7 +47,7 @@ Group {
   xpos -445
   ypos 259
  }
-set N6ada2000 [stack 0]
+set Ne5dc7800 [stack 0]
  Dot {
   name Dot3
   xpos -273
@@ -58,18 +58,19 @@ set N6ada2000 [stack 0]
   xpos -273
   ypos 629
  }
-set N6ada1800 [stack 0]
+set Ne5dc7000 [stack 0]
  Dot {
   name Dot4
   xpos -273
   ypos 732
  }
-push $N6ada1800
-push $N6ada2000
+push $Ne5dc7000
+push $Ne5dc7800
  Reformat {
   type "to box"
   box_width {{"input.width * (1+(parent.overscan_percent / 100))"}}
   box_height {{"input.height * (1+(parent.overscan_percent / 100))"}}
+  box_pixel_aspect {{Input1.pixel_aspect}}
   scale {{"1+(parent.overscan_percent / 100)"}}
   resize none
   pbb true
@@ -78,8 +79,9 @@ push $N6ada2000
   ypos 307
  }
  VectorBlur2 {
+  uv forward
   blur_type uniform
-  normalize false
+  scale 1
   name VectorBlur1
   xpos -479
   ypos 372
@@ -88,6 +90,7 @@ push $N6ada2000
   type "to box"
   box_width {{Input1.width}}
   box_height {{Input1.height}}
+  box_pixel_aspect {{Input1.pixel_aspect}}
   resize none
   pbb true
   name Reformat2
