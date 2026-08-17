@@ -1,14 +1,9 @@
-set cut_paste_input [stack 0]
-version 13.2 v1
-push $cut_paste_input
 Group {
  name GradeAOV
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name() #the knob name\n\n\nif kn == \"tonemap\":\n\n    if k.value() < 1.0:\n        k.setValue(1.0)\n        \nif kn == 'inputChange':\n    if n.input(1) is None:\n        n.begin()\n        nuke.toNode('Keymix2').knob('maskChannel').setValue('none')\n        n.end()\n    if n.input(1) is not None:\n        n.begin()\n        nuke.toNode('Keymix2').knob('maskChannel').setValue('alpha')\n        n.end()\n\n        "
  tile_color 0x8fa8d8ff
  label "\[value in]"
  selected true
- xpos -5027
- ypos 18264
  addUserKnob {20 GradeAOV l "Grade AOV"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Grade AOV"}
  addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
