@@ -1,0 +1,583 @@
+Group {
+ name Astigmatism
+ selected true
+ addUserKnob {20 astigmatism l Astigmatism}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Astigmatism"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 channels T VectorBlurOverscan.channels}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 preview_shape l "preview shape/falloff" +STARTLINE}
+ addUserKnob {26 textttt l <b>Strength}
+ addUserKnob {7 strength R 0 100}
+ strength 50
+ addUserKnob {26 text_1 l "<b> falloff"}
+ addUserKnob {7 protect_center l "protect center"}
+ protect_center 0.5
+ addUserKnob {7 falloff_edge l "falloff edge" R 0 2}
+ falloff_edge 1
+ addUserKnob {6 clamp_beyond l "clamp beyond edge" -STARTLINE}
+ addUserKnob {7 falloff l "falloff gamma"}
+ falloff 1
+ addUserKnob {26 text l <b>Shape}
+ addUserKnob {7 width R 0 2}
+ width 1
+ addUserKnob {7 height R 0 2}
+ height 1
+ addUserKnob {7 offsetx l "offset x" R -1 1}
+ addUserKnob {7 offsety l "offset y" R -1 1}
+ addUserKnob {41 usePAR l "respect pixel aspect" T Expression1.usePAR}
+ addUserKnob {26 "" +STARTLINE}
+}
+ Input {
+  inputs 0
+  name img
+  xpos -918
+  ypos 412
+ }
+ Dot {
+  name Dot43
+  xpos -884
+  ypos 502
+ }
+set N4d79b000 [stack 0]
+ Dot {
+  name Dot40
+  xpos -1193
+  ypos 502
+ }
+ Expression {
+  temp_name0 par
+  temp_expr0 "usePAR? pixel_aspect : 1"
+  expr0 "((cy* par)+offset.y)  / size.h"
+  expr1 "-(cx - offset.x) / size.w"
+  expr2 0
+  expr3 0
+  name Expression1
+  xpos -1227
+  ypos 554
+  addUserKnob {20 User}
+  addUserKnob {12 offset}
+  offset {{parent.offsetx} {parent.offsety}}
+  addUserKnob {14 size R 0 100}
+  size {{parent.knob.width} {parent.knob.height}}
+  addUserKnob {6 usePAR l "use pixel aspect" +STARTLINE}
+  usePAR true
+ }
+ Dot {
+  name Dot42
+  xpos -1193
+  ypos 601
+ }
+set N4d79a400 [stack 0]
+ Group {
+  name MagnitudeVector2_
+  help "Calculate the magnitude (scalar) of an input Vector2."
+  xpos -1227
+  ypos 655
+  addUserKnob {20 main_tab l "Magnitude Vector2"}
+  addUserKnob {41 in l "Vector B Layer" t "Layer containing the vector information for input B" T vector_layer.in}
+  addUserKnob {26 ""}
+  addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+ }
+  Input {
+   inputs 0
+   name vectorB
+   xpos 0
+  }
+  Dot {
+   name Dot1
+   tile_color 0xcccccc00
+   xpos 34
+   ypos 108
+  }
+set N4d799c00 [stack 0]
+  Shuffle {
+   name vector_layer
+   xpos 140
+   ypos 104
+  }
+  Remove {
+   operation keep
+   channels rgba
+   name Remove1
+   xpos 140
+   ypos 130
+  }
+  Expression {
+   channel0 rgba
+   expr0 sqrt((r*r)+(g*g))
+   channel2 {-rgba.red -rgba.green -rgba.blue none}
+   channel3 {none none none -rgba.alpha}
+   name Mag2
+   xpos 140
+   ypos 218
+  }
+  Dot {
+   name Dot2
+   tile_color 0xcccccc00
+   xpos 174
+   ypos 364
+  }
+push $N4d799c00
+  ShuffleCopy {
+   inputs 2
+   in2 none
+   red red
+   green green
+   blue blue
+   out {{{parent.vector_layer.in}}}
+   name ShuffleCopy1
+   xpos 0
+   ypos 360
+  }
+  Output {
+   name Output1
+   xpos 0
+   ypos 506
+  }
+ end_group
+ Grade {
+  channels rgba
+  blackpoint {{parent.protect_center}}
+  whitepoint {{parent.falloff_edge}}
+  gamma {{parent.falloff}}
+  white_clamp {{parent.clamp_beyond}}
+  unpremult -rgba.alpha
+  name Grade18
+  xpos -1227
+  ypos 751
+ }
+set N92c33c00 [stack 0]
+ Dot {
+  name Dot41
+  xpos -1193
+  ypos 882
+ }
+set N92c33800 [stack 0]
+ Grade {
+  whitepoint 0
+  white_clamp true
+  unpremult -rgba.alpha
+  name Grade20
+  xpos -1164
+  ypos 936
+ }
+ Grade {
+  whitepoint 0
+  white_clamp true
+  unpremult -rgba.alpha
+  name Grade26
+  xpos -1164
+  ypos 960
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.red 0 0 rgba.blue 0 2 rgba.red 0 0 rgba.alpha 0 3"
+  name Shuffle12
+  label "\[value in1] -> \[value out1]"
+  xpos -1164
+  ypos 989
+ }
+ Blur {
+  channels rgba
+  size 2
+  name Blur2
+  xpos -1164
+  ypos 1041
+ }
+ Group {
+  name XOR_edge2
+  xpos -1164
+  ypos 1085
+  addUserKnob {20 User}
+  addUserKnob {41 size T Blur1.size}
+  addUserKnob {26 ""}
+  addUserKnob {26 text l "" +STARTLINE T "A simple XOR edge detect"}
+  addUserKnob {26 text_1 l "" +STARTLINE T "Probably grade your alpha to be harder beforehand."}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -641
+   ypos -478
+  }
+  Blur {
+   size 2
+   name Blur1
+   label "\[value size]"
+   selected true
+   xpos -641
+   ypos -396
+  }
+set N92c32400 [stack 0]
+push $N92c32400
+  Merge2 {
+   inputs 2
+   operation xor
+   name Merge2
+   xpos -641
+   ypos -316
+  }
+  Grade {
+   channels alpha
+   whitepoint 0.5
+   name Grade4
+   xpos -641
+   ypos -256
+  }
+  Output {
+   name Output1
+   xpos -641
+   ypos -156
+  }
+ end_group
+ Grade {
+  whitepoint 0.05
+  white_clamp true
+  unpremult -rgba.alpha
+  name Grade23
+  xpos -1164
+  ypos 1109
+ }
+push $N92c33800
+ Grade {
+  blackpoint 0.999
+  white_clamp true
+  unpremult -rgba.alpha
+  name Grade21
+  xpos -1289
+  ypos 936
+ }
+ Grade {
+  blackpoint 0.999
+  white_clamp true
+  unpremult -rgba.alpha
+  name Grade27
+  xpos -1289
+  ypos 960
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.red 0 0 rgba.blue 0 2 rgba.red 0 0 rgba.alpha 0 3"
+  name Shuffle14
+  label "\[value in1] -> \[value out1]"
+  xpos -1289
+  ypos 989
+ }
+ Blur {
+  channels rgba
+  size 2
+  name Blur1
+  xpos -1289
+  ypos 1043
+ }
+ Group {
+  name XOR_edge3
+  xpos -1289
+  ypos 1089
+  addUserKnob {20 User}
+  addUserKnob {41 size T Blur1.size}
+  addUserKnob {26 ""}
+  addUserKnob {26 text l "" +STARTLINE T "A simple XOR edge detect"}
+  addUserKnob {26 text_1 l "" +STARTLINE T "Probably grade your alpha to be harder beforehand."}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -641
+   ypos -478
+  }
+  Blur {
+   size 2
+   name Blur1
+   label "\[value size]"
+   selected true
+   xpos -641
+   ypos -396
+  }
+set N56c93c00 [stack 0]
+push $N56c93c00
+  Merge2 {
+   inputs 2
+   operation xor
+   name Merge2
+   xpos -641
+   ypos -316
+  }
+  Grade {
+   channels alpha
+   whitepoint 0.5
+   name Grade4
+   xpos -641
+   ypos -256
+  }
+  Output {
+   name Output1
+   xpos -641
+   ypos -156
+  }
+ end_group
+ Grade {
+  whitepoint 0.05
+  white_clamp true
+  unpremult -rgba.alpha
+  name Grade22
+  xpos -1289
+  ypos 1113
+ }
+ Merge2 {
+  inputs 2
+  name Merge23
+  xpos -1221
+  ypos 1158
+ }
+push $N92c33c00
+push $N4d79a400
+ Group {
+  name NormalizeVector2_
+  help "Normalize the magnitude of a Vector2 (to be of magnitude 1)"
+  xpos -1055
+  ypos 598
+  addUserKnob {20 main_tab l "Normalize Vector2"}
+  addUserKnob {41 in l "Vector B Layer" t "Layer containing the vector information for input B" T vector_layer.in}
+  addUserKnob {26 ""}
+  addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+ }
+  Input {
+   inputs 0
+   name vectorB
+   xpos 0
+  }
+  Dot {
+   name Dot1
+   tile_color 0xcccccc00
+   xpos 34
+   ypos 108
+  }
+set N56c92000 [stack 0]
+  Shuffle {
+   name vector_layer
+   xpos 140
+   ypos 104
+  }
+  Remove {
+   operation keep
+   channels rgba
+   name Remove1
+   xpos 140
+   ypos 130
+  }
+set N56c91800 [stack 0]
+push $N56c91800
+  Expression {
+   channel0 {rgba.red rgba.green -rgba.blue -rgba.alpha}
+   expr0 sqrt((r*r)+(g*g))
+   channel1 {-rgba.red -rgba.green rgba.blue rgba.alpha}
+   expr1 1
+   channel2 {-rgba.red -rgba.green -rgba.blue none}
+   channel3 {none none none -rgba.alpha}
+   name Mag2
+   xpos 289
+   ypos 216
+  }
+  Merge2 {
+   inputs 2
+   operation divide
+   bbox B
+   name Merge1
+   xpos 140
+   ypos 267
+  }
+  Dot {
+   name Dot2
+   tile_color 0x4b5ec600
+   xpos 174
+   ypos 364
+  }
+push $N56c92000
+  ShuffleCopy {
+   inputs 2
+   in2 none
+   red red
+   green green
+   blue blue
+   out {{{parent.vector_layer.in}}}
+   name ShuffleCopy1
+   xpos 0
+   ypos 360
+  }
+  Output {
+   name Output1
+   xpos 0
+   ypos 506
+  }
+ end_group
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge20
+  xpos -1055
+  ypos 751
+ }
+push $N4d79b000
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 forward.u
+  from1 rgba.green
+  to1 forward.v
+  name Copy8
+  xpos -918
+  ypos 739
+ }
+ Group {
+  name VectorBlurOverscan
+  tile_color 0xcd7e4dff
+  xpos -918
+  ypos 966
+  addUserKnob {20 User}
+  addUserKnob {41 channels T VectorBlur1.channels}
+  addUserKnob {26 "" l "Local GPU:" T ""}
+  addUserKnob {26 gpuName l "" -STARTLINE T "NVIDIA RTX A4500"}
+  addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T VectorBlur1.useGPUIfAvailable}
+  addUserKnob {26 ""}
+  addUserKnob {41 uv l "uv channels" T VectorBlur1.uv}
+  addUserKnob {41 mv_presets l "mv presets" T VectorBlur1.mv_presets}
+  addUserKnob {26 "" l "vector preprocessing"}
+  addUserKnob {41 output T VectorBlur1.output}
+  addUserKnob {41 blur_uv l "blur uv" T VectorBlur1.blur_uv}
+  addUserKnob {41 invert_uv l "invert uv" -STARTLINE T VectorBlur1.invert_uv}
+  addUserKnob {41 uv_offset l "uv offset" T VectorBlur1.uv_offset}
+  addUserKnob {41 alpha l "uv alpha" T VectorBlur1.alpha}
+  addUserKnob {26 "" l "motion blur"}
+  addUserKnob {41 blur_type l "blur type" T VectorBlur1.blur_type}
+  addUserKnob {41 scale l "motion amount" T VectorBlur1.scale}
+  addUserKnob {41 motion_falloff l "motion falloff" T VectorBlur1.motion_falloff}
+  addUserKnob {41 offset l "shutter offset" T VectorBlur1.offset}
+  addUserKnob {41 grow_bbox l "expand blur bbox" T VectorBlur1.grow_bbox}
+  addUserKnob {41 soft_lines l "soft lines" T VectorBlur1.soft_lines}
+  addUserKnob {41 blur_inside l "blur inside" -STARTLINE T VectorBlur1.blur_inside}
+  addUserKnob {41 normalize -STARTLINE T VectorBlur1.normalize}
+  addUserKnob {26 text l overscan}
+  addUserKnob {7 overscan_percent l percent R 0 10}
+  overscan_percent 5
+  addUserKnob {26 ""}
+  addUserKnob {26 "" l mask T ""}
+  addUserKnob {41 maskChannelInput l "" -STARTLINE T VectorBlur1.maskChannelInput}
+  addUserKnob {41 inject -STARTLINE T VectorBlur1.inject}
+  addUserKnob {41 invert_mask l invert -STARTLINE T VectorBlur1.invert_mask}
+  addUserKnob {41 fringe -STARTLINE T VectorBlur1.fringe}
+  addUserKnob {41 mix T VectorBlur1.mix}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -479
+   ypos 178
+  }
+  Dot {
+   name Dot2
+   xpos -445
+   ypos 259
+  }
+set N12d13000 [stack 0]
+  Dot {
+   name Dot3
+   xpos -273
+   ypos 259
+  }
+  Dot {
+   name Dot1
+   xpos -273
+   ypos 629
+  }
+set N12d12800 [stack 0]
+  Dot {
+   name Dot4
+   xpos -273
+   ypos 732
+  }
+push $N12d12800
+push $N12d13000
+  Reformat {
+   type "to box"
+   box_width {{"input.width * (1+(parent.overscan_percent / 100))"}}
+   box_height {{"input.height * (1+(parent.overscan_percent / 100))"}}
+   box_pixel_aspect {{Input1.pixel_aspect}}
+   scale {{"1+(parent.overscan_percent / 100)"}}
+   resize none
+   pbb true
+   name Reformat1
+   xpos -479
+   ypos 307
+  }
+  VectorBlur2 {
+   channels rgba
+   uv forward
+   blur_type uniform
+   scale {{parent.parent.strength}}
+   name VectorBlur1
+   xpos -479
+   ypos 372
+  }
+  Reformat {
+   type "to box"
+   box_width {{Input1.width}}
+   box_height {{Input1.height}}
+   box_pixel_aspect {{Input1.pixel_aspect}}
+   resize none
+   pbb true
+   name Reformat2
+   xpos -479
+   ypos 446
+  }
+  Switch {
+   inputs 2
+   which {{"Reformat1.bbox.t <= 0 || Reformat1.bbox.r <= 0 || Reformat1.bbox.x >= Reformat1.width || bbox.y >= Reformat1.height"}}
+   name Switch1
+   xpos -479
+   ypos 626
+  }
+  Switch {
+   inputs 2
+   which {{"Input1.bbox.w == 1 && Input1.bbox.w == 1"}}
+   name Switch2
+   xpos -479
+   ypos 729
+  }
+  Output {
+   name Output1
+   xpos -479
+   ypos 847
+  }
+  StickyNote {
+   inputs 0
+   name StickyNote1
+   label "If bbox is outside OVERSCANNED format, switch to input.\nThis is to prevent CUDA error."
+   xpos -574
+   ypos 655
+  }
+  StickyNote {
+   inputs 0
+   name StickyNote2
+   label "If input bbox is only 1 pixel, switch to input.\nAlso prevents CUDA error."
+   xpos -539
+   ypos 759
+  }
+ end_group
+ Merge2 {
+  inputs 2
+  name Merge21
+  xpos -918
+  ypos 1158
+  disable {{!parent.preview_shape}}
+ }
+ Output {
+  name Output1
+  xpos -918
+  ypos 1343
+ }
+end_group
