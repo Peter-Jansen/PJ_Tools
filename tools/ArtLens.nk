@@ -1,14 +1,31 @@
 Group {
  name ArtLens
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"enableSim\":\n    lensSimKnobs = \[n.knob('units'), n.knob('bg_depth'),n.knob('fg_depth'), n.knob('focalDistance'), n.knob('focalLength'), n.knob('fStop'), n.knob('filmBack'), n.knob('divider01'), n.knob('divider02')]\n    sizeKnobs = \[n.knob('bg_size'), n.knob('fg_size')]\n    if k.value():\n        for knob in lensSimKnobs:\n            knob.clearFlag(nuke.INVISIBLE)\n        for knob in sizeKnobs:\n            knob.setFlag(nuke.INVISIBLE)\n        \n    else:\n        for knob in lensSimKnobs:\n            knob.setFlag(nuke.INVISIBLE)\n        for knob in sizeKnobs:\n            knob.clearFlag(nuke.INVISIBLE)            \n            \n#Switch unit multiplier\nif k.name() in \['units']:\n  conv = \[10.0,1.0,0.1,0.01,0.00001,1/2.54,1/30.48,1/91.44,1.0]\n  unit = n\['units'].getValue()\n  n\['unitMult'].setValue(conv\[int(unit)])"
  selected true
  addUserKnob {20 User l "Art Lens"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Art Lens"}
- addUserKnob {26 about l "" t "0.1 - initial build\n0.2 - tooltips and coc maps take alpha" +STARTLINE T "<font style=\"color: #666666;\">v0.2 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
- addUserKnob {26 ""}
+ addUserKnob {26 about l "" t "0.1 - initial build\n0.2 - tooltips and coc maps take alpha\n1.0 - add lens simulation" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 text_4 l "" +STARTLINE T "<font style=\"color: #666666;\">Having both a BG and FG will create eclipsed bokeh <br> around the FG edges if they are both defocused."}
+ addUserKnob {26 ""}
  addUserKnob {4 output_mode l "output mode" M {composited BG FG}}
+ addUserKnob {6 enableSim l "Use lens attributes to calculate size" +STARTLINE}
  addUserKnob {26 size_text l <b>Size}
- addUserKnob {26 text_5 l "" +STARTLINE T "<font style=\"color: #666666;\"> Negative size means \"size behind focal plane\"."}
+ addUserKnob {7 bg_depth l "BG depth" +INVISIBLE R 0 100}
+ bg_depth 50
+ addUserKnob {7 fg_depth l "FG depth" +INVISIBLE R 0 100}
+ fg_depth 20
+ addUserKnob {26 divider01 l "" +STARTLINE +INVISIBLE}
+ addUserKnob {4 units l "world units" +INVISIBLE M {mm cm dm m km inch feet yards}}
+ units cm
+ addUserKnob {7 focalDistance l "focal distance" +INVISIBLE R 0 200}
+ focalDistance 30
+ addUserKnob {7 focalLength l "focal length" +INVISIBLE R 0 100}
+ focalLength 50
+ addUserKnob {7 fStop +INVISIBLE R 0.1 32}
+ fStop 8
+ addUserKnob {7 filmBack l "filmback width" +INVISIBLE R 0 100}
+ filmBack 24
+ addUserKnob {26 divider02 l "" +STARTLINE +INVISIBLE}
  addUserKnob {7 bg_size l BG t "Circle of confusion size for the BG. Negative values emulate the BG being behind the focal plane. Certain optical effects will flip based on which side of the focal plane they are." R -100 100}
  bg_size -20
  addUserKnob {7 fg_size l FG t "Same as BG. Having a FG will simulate eclipsed bokeh on the BG bokehs." R -100 100}
@@ -20,6 +37,7 @@ Group {
  addUserKnob {7 astigmatism l asitgmatism t "Swirls, or stretches the bokehs towards the edge of frame (tangential or sagittal). Flips based on which side of the focal plane we're on." R -2 2}
  addUserKnob {7 cateye l "cateye occlusion" t "Emulates occlusion on the bokehs caused by the aperture. Flips based on which side of the focal plane we're on." R -1 1}
  addUserKnob {20 CA_group l "chromatic aberration" n 1}
+ CA_group 0
  addUserKnob {26 text l <b>lateral}
  addUserKnob {7 lateral_CA l chromatic t "Full spectrum chromatic aberration that increases based on distance from center." R -10 10}
  addUserKnob {7 lateral_aCA l achromatic t "Emulates corrected chromatic aberration. Creates magenta/green aberration instead of yellow/blue." R -10 10}
@@ -28,6 +46,7 @@ Group {
  addUserKnob {7 long_aCA l achromatic t "Green/magenta aberration that is EVEN across the frame. Flips based on which side of the focal plane we're on." R -10 10}
  addUserKnob {20 endGroup n -1}
  addUserKnob {20 barndorrs_grp l "barn doors" n 1}
+ barndorrs_grp 0
  addUserKnob {7 barn_top l top R 0 0.5}
  addUserKnob {7 barn_bottom l bottom R 0 0.5}
  addUserKnob {7 barn_left l left R 0 0.5}
@@ -43,14 +62,18 @@ Group {
  addUserKnob {26 ""}
  addUserKnob {6 vignette_compensation l "vignette compensation" t "Certain effects like cateye cause vignetting because light is lost. This will compensate for that and effectively remove the vignetting." +STARTLINE}
  vignette_compensation true
+ addUserKnob {7 unitMult +INVISIBLE}
+ unitMult 1
+ addUserKnob {7 focalDistanceCM +INVISIBLE}
+ focalDistanceCM {{"focalDistance / unitMult" i}}
 }
  Input {
   inputs 0
-  name BG_CoC
-  label input4
-  xpos 1269
-  ypos -142
-  number 4
+  name BG_map
+  label input3
+  xpos 1274
+  ypos -143
+  number 3
  }
  Constant {
   inputs 0
@@ -72,38 +95,13 @@ Group {
   xpos 1168
   ypos -225
  }
-set Nf5330400 [stack 0]
- Switch {
-  inputs 2
-  which {{"\[exists parent.input4]"}}
-  name Switch1
-  xpos 1269
-  ypos -34
- }
- Shuffle2 {
-  fromInput1 {{0} B}
-  fromInput2 {{0} B}
-  mappings "4 rgba.alpha 0 3 rgba.red 0 0 rgba.alpha 0 3 rgba.green 0 1 rgba.alpha 0 3 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3"
-  name Shuffle1
-  label "\[value in1] -> \[value out1]"
-  xpos 1269
-  ypos -10
- }
- Input {
-  inputs 0
-  name FG_CoC
-  label input3
-  xpos 1495
-  ypos -142
-  number 3
- }
-push $Nf5330400
+set Nbb781800 [stack 0]
  Switch {
   inputs 2
   which {{"\[exists parent.input3]"}}
   name Switch2
-  xpos 1495
-  ypos -32
+  xpos 1274
+  ypos -40
  }
  Shuffle2 {
   fromInput1 {{0} B}
@@ -111,8 +109,33 @@ push $Nf5330400
   mappings "4 rgba.alpha 0 3 rgba.red 0 0 rgba.alpha 0 3 rgba.green 0 1 rgba.alpha 0 3 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3"
   name Shuffle2
   label "\[value in1] -> \[value out1]"
-  xpos 1495
-  ypos -8
+  xpos 1274
+  ypos -4
+ }
+ Input {
+  inputs 0
+  name FG_map
+  label input4
+  xpos 1503
+  ypos -152
+  number 4
+ }
+push $Nbb781800
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input4]"}}
+  name Switch1
+  xpos 1503
+  ypos -56
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.alpha 0 3 rgba.red 0 0 rgba.alpha 0 3 rgba.green 0 1 rgba.alpha 0 3 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3"
+  name Shuffle1
+  label "\[value in1] -> \[value out1]"
+  xpos 1503
+  ypos -32
  }
  Input {
   inputs 0
@@ -154,7 +177,7 @@ push $Nf5330400
   ypos -155
   number 1
  }
-push $Nf5330400
+push $Nbb781800
  Switch {
   inputs 2
   which {{"\[exists parent.input1]"}}
@@ -192,10 +215,10 @@ push $Nf5330400
   "EclipsedBokehKernel_FG Input" {{"\[exists parent.input1]"}}
   EclipsedBokehKernel_Output {{parent.output_mode}}
   EclipsedBokehKernel_Samples {{"\$gui? samples_gui : samples_farm"}}
-  "EclipsedBokehKernel_FG CoC" {{parent.fg_size}}
-  "EclipsedBokehKernel_FG CoC Map" {{"\[exists parent.input3]"}}
-  "EclipsedBokehKernel_BG CoC" {{parent.bg_size}}
-  "EclipsedBokehKernel_BG CoC Map" {{"\[exists parent.input4]"}}
+  "EclipsedBokehKernel_FG CoC" {{"enableSim? (((focalLength/fStop)*((((fg_depth/unitMult*10)-(focalDistanceCM*10))/(fg_depth/unitMult*10))*(focalLength/((focalDistanceCM*10)-focalLength)))) * (width/filmBack) / 2) : parent.fg_size"}}
+  "EclipsedBokehKernel_FG CoC Map" {{"\[exists parent.input4]"}}
+  "EclipsedBokehKernel_BG CoC" {{"enableSim? (((focalLength/fStop)*((((bg_depth/unitMult*10)-(focalDistanceCM*10))/(bg_depth/unitMult*10))*(focalLength/((focalDistanceCM*10)-focalLength)))) * (width/filmBack) / 2) : parent.bg_size"}}
+  "EclipsedBokehKernel_BG CoC Map" {{"\[exists parent.input3]"}}
   "EclipsedBokehKernel_Spherical Aberration" {{parent.spherical_aberration}}
   EclipsedBokehKernel_Astigmatism {{parent.astigmatism}}
   "EclipsedBokehKernel_Format Size" {{width} {height}}
