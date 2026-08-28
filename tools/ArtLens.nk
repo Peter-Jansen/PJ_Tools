@@ -3,29 +3,29 @@ Group {
  selected true
  addUserKnob {20 User l "Art Lens"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Art Lens"}
- addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v0.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 about l "" t "0.1 - initial build\n0.2 - tooltips and coc maps take alpha" +STARTLINE T "<font style=\"color: #666666;\">v0.2 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 ""}
  addUserKnob {26 text_4 l "" +STARTLINE T "<font style=\"color: #666666;\">Having both a BG and FG will create eclipsed bokeh <br> around the FG edges if they are both defocused."}
  addUserKnob {4 output_mode l "output mode" M {composited BG FG}}
  addUserKnob {26 size_text l <b>Size}
  addUserKnob {26 text_5 l "" +STARTLINE T "<font style=\"color: #666666;\"> Negative size means \"size behind focal plane\"."}
- addUserKnob {7 bg_size l BG R -100 100}
+ addUserKnob {7 bg_size l BG t "Circle of confusion size for the BG. Negative values emulate the BG being behind the focal plane. Certain optical effects will flip based on which side of the focal plane they are." R -100 100}
  bg_size -20
- addUserKnob {7 fg_size l FG R -100 100}
+ addUserKnob {7 fg_size l FG t "Same as BG. Having a FG will simulate eclipsed bokeh on the BG bokehs." R -100 100}
  fg_size 10
- addUserKnob {7 ana_squeeze l squeeze R 0.1 2}
+ addUserKnob {7 ana_squeeze l squeeze t "Anamorphic squeeze" R 0.1 2}
  ana_squeeze 1
  addUserKnob {26 text_2 l "<b> Artsy"}
- addUserKnob {7 spherical_aberration l "spherical aberration" R -1 1}
- addUserKnob {7 astigmatism l asitgmatism R -2 2}
- addUserKnob {7 cateye l "cateye occlusion" R -1 1}
+ addUserKnob {7 spherical_aberration l "spherical aberration" t "Produces rings on the outer edge of bokeh, or \"creamier\" bokeh on the other side of focal plane. Flips based on which side of the focal plane we're on." R -1 1}
+ addUserKnob {7 astigmatism l asitgmatism t "Swirls, or stretches the bokehs towards the edge of frame (tangential or sagittal). Flips based on which side of the focal plane we're on." R -2 2}
+ addUserKnob {7 cateye l "cateye occlusion" t "Emulates occlusion on the bokehs caused by the aperture. Flips based on which side of the focal plane we're on." R -1 1}
  addUserKnob {20 CA_group l "chromatic aberration" n 1}
  addUserKnob {26 text l <b>lateral}
- addUserKnob {7 lateral_CA l chromatic R -10 10}
- addUserKnob {7 lateral_aCA l achromatic R -10 10}
+ addUserKnob {7 lateral_CA l chromatic t "Full spectrum chromatic aberration that increases based on distance from center." R -10 10}
+ addUserKnob {7 lateral_aCA l achromatic t "Emulates corrected chromatic aberration. Creates magenta/green aberration instead of yellow/blue." R -10 10}
  addUserKnob {26 text_1 l <b>longitudinal}
- addUserKnob {7 long_CA l chromatic R -10 10}
- addUserKnob {7 long_aCA l achromatic R -10 10}
+ addUserKnob {7 long_CA l chromatic t "Full spectrum colour splitting that is EVEN throughout the frame. Flips based on which side of the focal plane we're on." R -10 10}
+ addUserKnob {7 long_aCA l achromatic t "Green/magenta aberration that is EVEN across the frame. Flips based on which side of the focal plane we're on." R -10 10}
  addUserKnob {20 endGroup n -1}
  addUserKnob {20 barndorrs_grp l "barn doors" n 1}
  addUserKnob {7 barn_top l top R 0 0.5}
@@ -34,14 +34,14 @@ Group {
  addUserKnob {7 barn_right l right R 0 0.5}
  addUserKnob {20 endGroup_1 l endGroup n -1}
  addUserKnob {26 text_3 l <b>Samples}
- addUserKnob {3 samples_gui l gui}
+ addUserKnob {3 samples_gui l gui t "Number of samples used in the gui"}
  samples_gui 24
- addUserKnob {3 samples_farm l farm -STARTLINE}
- samples_farm 128
- addUserKnob {6 jitter_samples l "jitter samples" -STARTLINE}
+ addUserKnob {3 samples_farm l farm t "Number of samples that render on the farm" -STARTLINE}
+ samples_farm 64
+ addUserKnob {6 jitter_samples l "jitter samples" t "Randomly offsets the samples for a more natural look, instead of a digital, replicated look." -STARTLINE}
  jitter_samples true
  addUserKnob {26 ""}
- addUserKnob {6 vignette_compensation l "vignette compensation" +STARTLINE}
+ addUserKnob {6 vignette_compensation l "vignette compensation" t "Certain effects like cateye cause vignetting because light is lost. This will compensate for that and effectively remove the vignetting." +STARTLINE}
  vignette_compensation true
 }
  Input {
@@ -80,6 +80,15 @@ set Nf5330400 [stack 0]
   xpos 1269
   ypos -34
  }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.alpha 0 3 rgba.red 0 0 rgba.alpha 0 3 rgba.green 0 1 rgba.alpha 0 3 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3"
+  name Shuffle1
+  label "\[value in1] -> \[value out1]"
+  xpos 1269
+  ypos -10
+ }
  Input {
   inputs 0
   name FG_CoC
@@ -95,6 +104,15 @@ push $Nf5330400
   name Switch2
   xpos 1495
   ypos -32
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.alpha 0 3 rgba.red 0 0 rgba.alpha 0 3 rgba.green 0 1 rgba.alpha 0 3 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3"
+  name Shuffle2
+  label "\[value in1] -> \[value out1]"
+  xpos 1495
+  ypos -8
  }
  Input {
   inputs 0
