@@ -20,7 +20,7 @@ Group {
  addUserKnob {26 text_4 l "<b> Set Focus"}
  addUserKnob {12 focal_point l "focal point"}
  addUserKnob {7 focalDistance l "focal distance" R 0 200}
- focalDistance 10
+ focalDistance 20
  addUserKnob {7 max_near_size l "max \"near\" size" R 0 256}
  max_near_size 128
  addUserKnob {26 lens_parm_text l "<b> Lens parameters"}
@@ -261,7 +261,7 @@ push $N8e678000
   ArtLensDepthKernel_BGMult {{parent.BG_mult}}
   ArtLensDepthKernel_BGNearCoCLimit {{parent.max_near_size}}
   ArtLensDepthKernel_BGHitMode 1
-  ArtLensDepthKernel_FGInput {{parent.parent.ArtLensDepth3.BlinkScript2.ArtLensDepthKernel_FGInput}}
+  ArtLensDepthKernel_FGInput {{"\[exists parent.input1]"}}
   ArtLensDepthKernel_FGMult {{parent.FG_mult}}
   ArtLensDepthKernel_FGNearCoCLimit {{parent.max_near_size}}
   ArtLensDepthKernel_MarchSteps {{"\[python nuke.thisParent().knob('march_steps_farm').value()\\ if\\ nuke.executing()\\ else\\ nuke.thisParent().knob('march_steps_gui').value()]"}}
@@ -279,7 +279,7 @@ push $N8e678000
   ArtLensDepthKernel_BarnLeft {{parent.barn_left}}
   ArtLensDepthKernel_BarnRight {{parent.barn_right}}
   ArtLensDepthKernel_VignetteComp {{parent.vignette_compensation}}
-  ArtLensDepthKernel_DirtInput {{parent.parent.ArtLensDepth3.BlinkScript2.ArtLensDepthKernel_DirtInput}}
+  ArtLensDepthKernel_DirtInput {{"\[exists parent.input3]"}}
   ArtLensDepthKernel_DirtCoC {{-abs(parent.dirt_CoC)}}
   ArtLensDepthKernel_DirtScale {{parent.dirt_scale}}
   ArtLensDepthKernel_DirtExposureComp {{parent.dirt_exposure_comp}}
