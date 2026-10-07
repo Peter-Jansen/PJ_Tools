@@ -1,0 +1,431 @@
+Group {
+ name Vibe_Fractal
+ selected true
+ group_view_position top-right
+ addUserKnob {20 User l "Vibe Fractal"}
+ addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Vibe Fractal"}
+ addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v0.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 ""}
+ addUserKnob {6 use_gpu l "Use GPU if available" +STARTLINE}
+ use_gpu true
+ addUserKnob {41 format l "output format" T Reformat1.format}
+ addUserKnob {7 overscan l "overscan (px)" R 0 400}
+ addUserKnob {6 color_rgb_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {6 color_rgb_1_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {26 text_4 l <b>Xforms}
+ addUserKnob {20 xform1_grp l "Xform 1" n 1}
+ xform1_grp 0
+ addUserKnob {7 xform1_weight l weight R 0 2}
+ xform1_weight 0.8
+ addUserKnob {7 xform1_colour l colour}
+ xform1_colour 0.75
+ addUserKnob {13 xform1_translate l translate}
+ addUserKnob {13 xform1_rotate l rotate}
+ xform1_rotate {-10 0 20}
+ addUserKnob {13 xform1_scale l scale}
+ xform1_scale {1 0.06 0.5}
+ addUserKnob {26 xform1_warps_grp l <b>Warps}
+ addUserKnob {7 xform1_linear l linear R -2 2}
+ xform1_linear 0.08
+ addUserKnob {7 xform1_sinusoidal l sinusoidal R -2 2}
+ addUserKnob {7 xform1_spherical l spherical R -2 2}
+ xform1_spherical 1.16
+ addUserKnob {7 xform1_swirl l swirl R -2 2}
+ addUserKnob {7 xform1_horseshoe l horseshoe R -2 2}
+ xform1_horseshoe -0.27
+ addUserKnob {7 xform1_julia l julia R -2 2}
+ xform1_julia 0.2
+ addUserKnob {7 xform1_bubble l bubble R -2 2}
+ xform1_bubble 0.2
+ addUserKnob {7 xform1_cylinder l cylinder R -2 2}
+ xform1_cylinder 0.04
+ addUserKnob {20 xform1_grp_end l "" -STARTLINE n -1}
+ addUserKnob {20 xform2_grp l "Xform 2" n 1}
+ xform2_grp 0
+ addUserKnob {7 xform2_weight l weight R 0 2}
+ xform2_weight 0.5
+ addUserKnob {7 xform2_colour l colour}
+ xform2_colour 0.4
+ addUserKnob {13 xform2_translate l translate}
+ addUserKnob {13 xform2_rotate l rotate}
+ xform2_rotate {0 180 0}
+ addUserKnob {13 xform2_scale l scale}
+ xform2_scale {1 1 1}
+ addUserKnob {26 xform2_warps_grp l <b>Warps}
+ addUserKnob {7 xform2_linear l linear R -2 2}
+ xform2_linear 0.6
+ addUserKnob {7 xform2_sinusoidal l sinusoidal R -2 2}
+ addUserKnob {7 xform2_spherical l spherical R -2 2}
+ addUserKnob {7 xform2_swirl l swirl R -2 2}
+ addUserKnob {7 xform2_horseshoe l horseshoe R -2 2}
+ addUserKnob {7 xform2_julia l julia R -2 2}
+ xform2_julia 0.5
+ addUserKnob {7 xform2_bubble l bubble R -2 2}
+ addUserKnob {7 xform2_cylinder l cylinder R -2 2}
+ xform2_cylinder 0.4
+ addUserKnob {20 xform2_grp_end l "" -STARTLINE n -1}
+ addUserKnob {20 xform3_grp l "Xform 3" n 1}
+ xform3_grp 0
+ addUserKnob {7 xform3_weight l weight R 0 2}
+ xform3_weight 0.04
+ addUserKnob {7 xform3_colour l colour}
+ xform3_colour 0.28
+ addUserKnob {13 xform3_translate l translate}
+ addUserKnob {13 xform3_rotate l rotate}
+ addUserKnob {13 xform3_scale l scale}
+ xform3_scale {-0.5 0.9 -0.6}
+ addUserKnob {26 xform3_warps_grp l <b>Warps}
+ addUserKnob {7 xform3_linear l linear R -2 2}
+ xform3_linear -0.7
+ addUserKnob {7 xform3_sinusoidal l sinusoidal R -2 2}
+ xform3_sinusoidal 0.26
+ addUserKnob {7 xform3_spherical l spherical R -2 2}
+ xform3_spherical -0.36
+ addUserKnob {7 xform3_swirl l swirl R -2 2}
+ xform3_swirl 0.6
+ addUserKnob {7 xform3_horseshoe l horseshoe R -2 2}
+ xform3_horseshoe -0.24
+ addUserKnob {7 xform3_julia l julia R -2 2}
+ xform3_julia 0.9
+ addUserKnob {7 xform3_bubble l bubble R -2 2}
+ addUserKnob {7 xform3_cylinder l cylinder R -2 2}
+ addUserKnob {20 xform3_grp_end l "" -STARTLINE n -1}
+ addUserKnob {20 xform4_grp l "Xform 4" n 1}
+ xform4_grp 0
+ addUserKnob {7 xform4_weight l weight R 0 2}
+ xform4_weight 0.1
+ addUserKnob {7 xform4_colour l colour}
+ xform4_colour 0.59
+ addUserKnob {13 xform4_translate l translate}
+ addUserKnob {13 xform4_rotate l rotate}
+ addUserKnob {13 xform4_scale l scale}
+ xform4_scale {0.3 0.3 0.3}
+ addUserKnob {26 xform4_warps_grp l <b>Warps}
+ addUserKnob {7 xform4_linear l linear R -2 2}
+ xform4_linear 0.66
+ addUserKnob {7 xform4_sinusoidal l sinusoidal R -2 2}
+ xform4_sinusoidal -0.98
+ addUserKnob {7 xform4_spherical l spherical R -2 2}
+ xform4_spherical 0.22
+ addUserKnob {7 xform4_swirl l swirl R -2 2}
+ xform4_swirl -0.7
+ addUserKnob {7 xform4_horseshoe l horseshoe R -2 2}
+ xform4_horseshoe -1.06
+ addUserKnob {7 xform4_julia l julia R -2 2}
+ addUserKnob {7 xform4_bubble l bubble R -2 2}
+ xform4_bubble -0.84
+ addUserKnob {7 xform4_cylinder l cylinder R -2 2}
+ xform4_cylinder 0.14
+ addUserKnob {20 xform4_grp_end l "" -STARTLINE n -1}
+ addUserKnob {26 colour_txt l <b>Colour}
+ addUserKnob {18 colour_A l "colour A"}
+ colour_A {3 1.299053 0.461344}
+ addUserKnob {6 colour_A_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 colour_B l "colour B"}
+ colour_B {0.105126 0.121536 0.22}
+ addUserKnob {6 colour_B_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 gamma}
+ gamma 0.2
+ addUserKnob {7 colour_speed l "colour speed"}
+ colour_speed 0.755
+ addUserKnob {26 text_3 l "<b>Global tansform"}
+ addUserKnob {13 global_translate l translate}
+ addUserKnob {13 global_rotate l rotate}
+ addUserKnob {7 global_scale l scale R 0 4}
+ global_scale 1
+ addUserKnob {26 quality_txt l <b>Quality}
+ addUserKnob {3 samples_gui l "<b>Samples </b> | gui"}
+ samples_gui 32
+ addUserKnob {3 samples_farm l farm -STARTLINE}
+ samples_farm 256
+ addUserKnob {6 preview_farm l "preview farm settings" +STARTLINE}
+ preview_farm true
+ addUserKnob {20 dof_tab l "DoF / Optics"}
+ addUserKnob {6 enable_dof l "enable dof" +STARTLINE}
+ addUserKnob {7 focus_distance l "focus distance" R 0 20}
+ focus_distance 8.2
+ addUserKnob {7 fstop l fStop R 0.1 32}
+ fstop 5.6
+ addUserKnob {7 ana_squeeze l "anamorphic squeeze" R 0.1 2}
+ ana_squeeze 2
+ addUserKnob {7 field_falloff l "field falloff" R 0.1 4}
+ field_falloff 1
+ addUserKnob {26 text_2 l <b>Optics}
+ addUserKnob {7 spherical_aberration l "spherical aberration" R -0.5 0.5}
+ spherical_aberration -0.2
+ addUserKnob {7 astigmatism R -2 2}
+ addUserKnob {7 cateye R -2 2}
+ cateye 1
+ addUserKnob {7 coma R -8 8}
+ coma 4
+ addUserKnob {26 text l "<b>Chromatic Aberration"}
+ addUserKnob {7 lateral_CA l "lateral chromatic" R -10 10}
+ addUserKnob {7 lateral_aCA l "lateral achromatic" R -10 10}
+ addUserKnob {7 long_CA l "longituidinal chromatic" R -10 10}
+ addUserKnob {7 long_aCA l "longitudinal achromatic" R -10 10}
+ addUserKnob {26 text_1 l "<b>Barn Doors"}
+ addUserKnob {7 barn_top l top R 0 0.5}
+ addUserKnob {7 barn_bottom l bottom R 0 0.5}
+ addUserKnob {7 barn_left l left R 0 0.5}
+ addUserKnob {7 barn_right l right R 0 0.5}
+}
+ Input {
+  inputs 0
+  name filter
+  xpos -53
+  ypos 190
+  number 1
+ }
+ Constant {
+  inputs 0
+  format "32 32 0 0 32 32 1 32"
+  name Constant3
+  xpos -190
+  ypos 114
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input1]"}}
+  name Switch3
+  xpos -190
+  ypos 228
+ }
+ Input {
+  inputs 0
+  name palette
+  xpos 373
+  ypos 260
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {0 0 0 0}
+  format "256 256 0 0 256 256 1 square_256"
+  name Constant2
+  xpos 194
+  ypos -20
+ }
+set N8308a300 [stack 0]
+ Ramp {
+  p0 {0 0}
+  p1 {256 0}
+  name Ramp1
+  xpos 88
+  ypos 65
+ }
+ Grade {
+  channels rgba
+  gamma {{parent.gamma}}
+  name Grade1
+  label "mix factor"
+  xpos 88
+  ypos 115
+ }
+push $N8308a300
+ Grade {
+  add {{parent.colour_A} {parent.colour_A} {parent.colour_A} {parent.colour_A}}
+  name Grade3
+  label "Colour B"
+  xpos 303
+  ypos 100
+ }
+push $N8308a300
+ Grade {
+  add {{parent.colour_B} {parent.colour_B} {parent.colour_B} {parent.colour_B}}
+  name Grade2
+  label "Colour A"
+  xpos 217
+  ypos 106
+ }
+ Keymix {
+  inputs 3
+  name Keymix1
+  xpos 193
+  ypos 182
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input0]"}}
+  name Switch1
+  xpos 193
+  ypos 260
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  name Constant1
+  xpos 601
+  ypos 42
+ }
+ Reformat {
+  name Reformat1
+  xpos 601
+  ypos 200
+ }
+ AdjBBox {
+  numpixels {{parent.overscan}}
+  name AdjBBox2
+  xpos 601
+  ypos 276
+ }
+ BlinkScript {
+  inputs 3
+  recompileCount 4
+  ProgramGroup 1
+  KernelDescription "3 \"FractalFlameOverscan\" iterate pixelWise a3e20d57e76a494f59d4eba945464416d641200b054762236392eb69d79a7cd0 4 \"format\" Read Point \"palette\" Read Random \"filter\" Read Random \"dst\" Write Random 74 \"CameraWorldMatrix\" Float 16 AACAPwAAAAAAAAAAAAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAAAAAAAAAgD8AAABBAAAAAAAAAAAAAAAAAACAPw== \"FocalLength\" Float 1 AABIQg== \"HorizontalAperture\" Float 1 ppvEQQ== \"PixelAspect\" Float 1 AACAPw== \"FormatSize\" Int 2 gAcAADgEAAA= \"FocusDistance\" Float 1 AAAAQQ== \"fstop\" Float 1 MzMzQA== \"EnableDepthOfField\" Bool 1 AQ== \"UnitsPerMetre\" Float 1 AACAPw== \"ApertureInput\" Bool 1 AA== \"ApertureRotate\" Float 1 AAAAAA== \"ApertureGamma\" Float 1 AACAPw== \"SphericalAberration\" Float 1 AAAAAA== \"Astigmatism\" Float 1 AAAAAA== \"Coma\" Float 1 AAAAAA== \"FieldFalloff\" Float 1 AACAPw== \"Squeeze\" Float 1 AACAPw== \"LateralCA\" Float 1 AAAAAA== \"LateralAchromaticCA\" Float 1 AAAAAA== \"LongitudinalCA\" Float 1 AAAAAA== \"LongitudinalAchromaticCA\" Float 1 AAAAAA== \"CatEye\" Float 1 AAAAAA== \"BarnTop\" Float 1 AAAAAA== \"BarnBottom\" Float 1 AAAAAA== \"BarnLeft\" Float 1 AAAAAA== \"BarnRight\" Float 1 AAAAAA== \"BarnShift\" Float 1 AACAPw== \"VignetteComp\" Float 1 AAAAAA== \"Workers\" Int 1 AAAEAA== \"Seed\" Int 1 AAAAAA== \"SamplesPerPixel\" Int 1 MgAAAA== \"FuseIterations\" Int 1 FAAAAA== \"Generations\" Float 1 AAAAAA== \"GenerationRandom\" Float 1 AAAAAA== \"GenerationFalloff\" Float 1 AACAPw== \"FlameTranslate\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"FlameRotate\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"FlameScale\" Float 1 AACAPw== \"Xform1Weight\" Float 1 AACAPw== \"Xform1Colour\" Float 1 AAAAAA== \"Xform1Translate\" Float 3 AAAAPwAAAAAAAAAAAAAAAA== \"Xform1Rotate\" Float 3 AAAAAAAA8EEAAKBBAAAAAA== \"Xform1Scale\" Float 3 mpkZP5qZGT+amRk/AAAAAA== \"Xform1VarsA\" Float 4 mpmZPgAAAAAzMzM/AAAAAA== \"Xform1VarsB\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"Xform2Weight\" Float 1 AACAPw== \"Xform2Colour\" Float 1 MzOzPg== \"Xform2Translate\" Float 3 mpmZvs3MzD7NzEw+AAAAAA== \"Xform2Rotate\" Float 3 AAAgQgAAAAAAAHDCAAAAAA== \"Xform2Scale\" Float 3 MzMzPzMzMz8zMzM/AAAAAA== \"Xform2VarsA\" Float 4 AAAAAAAAAAAAAAAAmpkZPw== \"Xform2VarsB\" Float 4 AAAAAAAAAD8AAAAAAAAAAA== \"Xform3Weight\" Float 1 zcxMPw== \"Xform3Colour\" Float 1 MzMzPw== \"Xform3Translate\" Float 3 AAAAAAAAAL+amZm+AAAAAA== \"Xform3Rotate\" Float 3 AACgwQAASEIAAPBCAAAAAA== \"Xform3Scale\" Float 3 AAAAPwAAAD8AAAA/AAAAAA== \"Xform3VarsA\" Float 4 AAAAPwAAAD8AAAAAAAAAAA== \"Xform3VarsB\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"Xform4Weight\" Float 1 AAAAPw== \"Xform4Colour\" Float 1 AACAPw== \"Xform4Translate\" Float 3 zcxMPs3MTD7NzMw+AAAAAA== \"Xform4Rotate\" Float 3 AAAAAAAAAAAAALRCAAAAAA== \"Xform4Scale\" Float 3 zcxMP83MTD/NzEw/AAAAAA== \"Xform4VarsA\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"Xform4VarsB\" Float 4 AAAAAAAAAAAAAIA/AAAAAA== \"ColourSpeed\" Float 1 AAAAPw== \"UsePaletteInput\" Bool 1 AA== \"PaletteA\" Float 3 AAAAPwAAAD8AAAA/AAAAAA== \"PaletteB\" Float 3 AAAAPwAAAD8AAAA/AAAAAA== \"PaletteC\" Float 3 AACAPwAAgD8AAIA/AAAAAA== \"PaletteD\" Float 3 AAAAAMP1qD4fhSs/AAAAAA== \"Brightness\" Float 1 AACAPw== \"Gamma\" Float 1 ZmbmPw== 74 \"_cameraWorldMatrix\" 16 1 Default \"_focalLength\" 1 1 Default \"_horizontalAperture\" 1 1 Default \"_pixelAspect\" 1 1 Default \"_formatSize\" 2 1 Default \"_focusDistance\" 1 1 Default \"_fStop\" 1 1 Default \"_enableDepthOfField\" 1 1 Default \"_unitsPerMetre\" 1 1 Default \"_apertureInput\" 1 1 Default \"_apertureRotate\" 1 1 Default \"_apertureGamma\" 1 1 Default \"_sphericalAber\" 1 1 Default \"_astigmatism\" 1 1 Default \"_coma\" 1 1 Default \"_fieldFalloff\" 1 1 Default \"_squeeze\" 1 1 Default \"_lateralCA\" 1 1 Default \"_lateralAchroCA\" 1 1 Default \"_longitudinalCA\" 1 1 Default \"_longAchroCA\" 1 1 Default \"_catEye\" 1 1 Default \"_barnTop\" 1 1 Default \"_barnBottom\" 1 1 Default \"_barnLeft\" 1 1 Default \"_barnRight\" 1 1 Default \"_barnShift\" 1 1 Default \"_vignetteComp\" 1 1 Default \"_workers\" 1 1 Default \"_seed\" 1 1 Default \"_samplesPerPixel\" 1 1 Default \"_fuseIterations\" 1 1 Default \"_generations\" 1 1 Default \"_generationRandom\" 1 1 Default \"_generationFalloff\" 1 1 Default \"_flameTranslate\" 3 1 Default \"_flameRotate\" 3 1 Default \"_flameScale\" 1 1 Default \"_xform1Weight\" 1 1 Default \"_xform1Colour\" 1 1 Default \"_xform1Translate\" 3 1 Default \"_xform1Rotate\" 3 1 Default \"_xform1Scale\" 3 1 Default \"_xform1VarsA\" 4 1 Default \"_xform1VarsB\" 4 1 Default \"_xform2Weight\" 1 1 Default \"_xform2Colour\" 1 1 Default \"_xform2Translate\" 3 1 Default \"_xform2Rotate\" 3 1 Default \"_xform2Scale\" 3 1 Default \"_xform2VarsA\" 4 1 Default \"_xform2VarsB\" 4 1 Default \"_xform3Weight\" 1 1 Default \"_xform3Colour\" 1 1 Default \"_xform3Translate\" 3 1 Default \"_xform3Rotate\" 3 1 Default \"_xform3Scale\" 3 1 Default \"_xform3VarsA\" 4 1 Default \"_xform3VarsB\" 4 1 Default \"_xform4Weight\" 1 1 Default \"_xform4Colour\" 1 1 Default \"_xform4Translate\" 3 1 Default \"_xform4Rotate\" 3 1 Default \"_xform4Scale\" 3 1 Default \"_xform4VarsA\" 4 1 Default \"_xform4VarsB\" 4 1 Default \"_colourSpeed\" 1 1 Default \"_usePaletteInput\" 1 1 Default \"_paletteA\" 3 1 Default \"_paletteB\" 3 1 Default \"_paletteC\" 3 1 Default \"_paletteD\" 3 1 Default \"_brightness\" 1 1 Default \"_gamma\" 1 1 Default 39 \"filterconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"__worldToCamera\" Float 16 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"__flameMatrix\" Float 9 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \"__cocK\" Float 1 1 AAAAAA== \"__focusDistance\" Float 1 1 AAAAAA== \"__useLens\" Bool 1 1 AA== \"__formatSize\" Float 2 1 AAAAAAAAAAA= \"__imgCentre\" Float 2 1 AAAAAAAAAAA= \"__invImgRadius\" Float 1 1 AAAAAA== \"__par\" Float 1 1 AAAAAA== \"__invPar\" Float 1 1 AAAAAA== \"__invSqueeze\" Float 1 1 AAAAAA== \"__saKpos\" Float 1 1 AAAAAA== \"__saKneg\" Float 1 1 AAAAAA== \"__useAstig\" Bool 1 1 AA== \"__useComa\" Bool 1 1 AA== \"__fieldF\" Float 1 1 AAAAAA== \"__useCA\" Bool 1 1 AA== \"__useLatCA\" Bool 1 1 AA== \"__useCatEye\" Bool 1 1 AA== \"__useBarn\" Bool 1 1 AA== \"__bxMin\" Float 1 1 AAAAAA== \"__bxMax\" Float 1 1 AAAAAA== \"__byMin\" Float 1 1 AAAAAA== \"__byMax\" Float 1 1 AAAAAA== \"__vignetteComp\" Float 1 1 AAAAAA== \"__apCentre\" Float 2 1 AAAAAAAAAAA= \"__apHalf\" Float 1 1 AAAAAA== \"__cosR\" Float 1 1 AAAAAA== \"__sinR\" Float 1 1 AAAAAA== \"__xform1Matrix\" Float 9 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \"__xform2Matrix\" Float 9 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \"__xform3Matrix\" Float 9 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \"__xform4Matrix\" Float 9 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \"__cdf1\" Float 1 1 AAAAAA== \"__cdf2\" Float 1 1 AAAAAA== \"__cdf3\" Float 1 1 AAAAAA== \"__anyXform\" Bool 1 1 AA== \"__invGamma\" Float 1 1 AAAAAA=="
+  kernelSource "#define PI 3.14159265358979f\n#define TWO_PI 6.28318530717959f\n\n// A point this far out (squared) has escaped the attractor; reseed it. NaN\n// fails the comparison too, so it is caught by the same test.\n#define ESCAPE_RADIUS_SQ 1e20f\n\n// Points closer to the lens than this (scene units) are not drawn.\n#define NEAR_DEPTH 1e-4f\n\n// Most pupil draws one hit may spend getting past the iris and gates.\n#define MAX_PUPIL_TRIES 16\n\n\n//\n// Random numbers\n//\n\n// Two 16-bit multiply-with-carry generators (Marsaglia). Both multipliers are\n// small enough that a * 65535 + carry stays under 2^31, so nothing overflows\n// a signed int and the state stays positive. Combined period is about 2^59,\n// plenty for a chaos game. Returns a float on \[0, 1) with 24 random bits.\ninline float rand01(int &z, int &w)\n\{\n    z = 30903 * (z & 65535) + (z >> 16);\n    w = 18000 * (w & 65535) + (w >> 16);\n    const int bits = ((z & 255) << 16) | (w & 65535);\n    return float(bits) * (1.0f / 16777216.0f);\n\}\n\n\ninline float3 randomPointInCube(int &z, int &w)\n\{\n    return float3(\n        rand01(z, w) * 2.0f - 1.0f,\n        rand01(z, w) * 2.0f - 1.0f,\n        rand01(z, w) * 2.0f - 1.0f\n    );\n\}\n\n\n//\n// Matrix helpers. Everything indexes m\[row]\[column] and multiplies column\n// vectors, same as the Nuke world matrix.\n//\n\ninline float3 mul3(const float3x3 &m, const float3 &v)\n\{\n    return float3(\n        m\[0]\[0] * v.x + m\[0]\[1] * v.y + m\[0]\[2] * v.z,\n        m\[1]\[0] * v.x + m\[1]\[1] * v.y + m\[1]\[2] * v.z,\n        m\[2]\[0] * v.x + m\[2]\[1] * v.y + m\[2]\[2] * v.z\n    );\n\}\n\n\ninline float3 transformPoint(const float4x4 &m, const float3 &p)\n\{\n    return float3(\n        m\[0]\[0] * p.x + m\[0]\[1] * p.y + m\[0]\[2] * p.z + m\[0]\[3],\n        m\[1]\[0] * p.x + m\[1]\[1] * p.y + m\[1]\[2] * p.z + m\[1]\[3],\n        m\[2]\[0] * p.x + m\[2]\[1] * p.y + m\[2]\[2] * p.z + m\[2]\[3]\n    );\n\}\n\n\n/**\n * Rotation (degrees, applied X then Y then Z) times a per-axis scale.\n */\ninline float3x3 rotateScaleMatrix(const float3 &rotateDegrees, const float3 &scale)\n\{\n    const float3 a = rotateDegrees * (PI / 180.0f);\n    const float cx = cos(a.x), sx = sin(a.x);\n    const float cy = cos(a.y), sy = sin(a.y);\n    const float cz = cos(a.z), sz = sin(a.z);\n\n    // Rz * Ry * Rx\n    float3x3 r;\n    r\[0]\[0] = cz * cy;\n    r\[0]\[1] = cz * sy * sx - sz * cx;\n    r\[0]\[2] = cz * sy * cx + sz * sx;\n    r\[1]\[0] = sz * cy;\n    r\[1]\[1] = sz * sy * sx + cz * cx;\n    r\[1]\[2] = sz * sy * cx - cz * sx;\n    r\[2]\[0] = -sy;\n    r\[2]\[1] = cy * sx;\n    r\[2]\[2] = cy * cx;\n\n    // Scale first: multiply each column by its axis scale.\n    for (int row = 0; row < 3; row++)\n    \{\n        r\[row]\[0] *= scale.x;\n        r\[row]\[1] *= scale.y;\n        r\[row]\[2] *= scale.z;\n    \}\n    return r;\n\}\n\n\n//\n// Variations\n//\n\n/**\n * Weighted sum of the eight variations. See the header for definitions.\n *\n * @arg p: The point after the transform's affine.\n * @arg varsA: Weights for Linear, Sinusoidal, Spherical, Swirl.\n * @arg varsB: Weights for Horseshoe, Julia, Bubble, Cylinder.\n * @arg coin: A uniform random on \[0, 1), used by Julia to pick a branch.\n */\ninline float3 applyVariations(\n        const float3 &p,\n        const float4 &varsA,\n        const float4 &varsB,\n        const float coin)\n\{\n    const float x = p.x, y = p.y, z = p.z;\n    const float r2 = x * x + y * y + z * z + 1e-9f;\n    const float r = sqrt(r2);\n    const float rxy2 = x * x + y * y;\n    const float rxy = sqrt(rxy2) + 1e-9f;\n\n    float3 out = float3(0.0f, 0.0f, 0.0f);\n\n    if (varsA.x != 0.0f)\n        out += varsA.x * p;\n\n    if (varsA.y != 0.0f)\n        out += varsA.y * float3(sin(x), sin(y), sin(z));\n\n    if (varsA.z != 0.0f)\n        out += varsA.z * p / r2;\n\n    if (varsA.w != 0.0f)\n    \{\n        const float s = sin(r2), c = cos(r2);\n        out += varsA.w * float3(x * s - y * c, x * c + y * s, z);\n    \}\n\n    if (varsB.x != 0.0f)\n        out += varsB.x * float3((x - y) * (x + y) / rxy, 2.0f * x * y / rxy, z);\n\n    if (varsB.y != 0.0f)\n    \{\n        const float theta = 0.5f * atan2(y, x) + (coin < 0.5f ? 0.0f : PI);\n        const float rootR = sqrt(r);\n        out += varsB.y * rootR * float3(\n            cos(theta) * rxy / r,\n            sin(theta) * rxy / r,\n            z / r\n        );\n    \}\n\n    if (varsB.z != 0.0f)\n    \{\n        const float t = 4.0f / (rxy2 + 4.0f);\n        out += varsB.z * float3(t * x, t * y, (4.0f - rxy2) / (4.0f + rxy2));\n    \}\n\n    if (varsB.w != 0.0f)\n        out += varsB.w * float3(sin(x), y, cos(x));\n\n    return out;\n\}\n\n\nkernel FractalFlameOverscan : ImageComputationKernel<ePixelWise>\n\{\n    // Never read. Its bbox is the render region, overscan included; the\n    // format itself comes from FormatSize.\n    Image<eRead, eAccessPoint, eEdgeNone> format;\n\n    // Optional gradient, read along its middle row when UsePaletteInput is on.\n    Image<eRead, eAccessRandom, eEdgeClamped> palette;\n\n    // Iris shape, read when ApertureInput is on. Constant edge, so outside the\n    // filter's format the iris is closed.\n    Image<eRead, eAccessRandom, eEdgeConstant> filter;\n\n    // Shared by every worker, never cleared, updated with racy\n    // read-modify-writes. rgb = tonemapped colour, alpha = hit density.\n    Image<eReadWrite, eAccessRandom> dst;\n\n\n    param:\n        // Camera\n        float4x4 _cameraWorldMatrix;\n        float _focalLength;\n        float _horizontalAperture;\n        float _pixelAspect;\n        int2 _formatSize;        // format w/h in pixels -- NOT the bbox. 0 = use bbox\n        float _focusDistance;\n        float _fStop;\n        bool _enableDepthOfField;\n        float _unitsPerMetre;\n\n        // The glass. Names, units and defaults from ArtLensDepth_09.\n        bool _apertureInput;     // read the filter input as the iris\n        float _apertureRotate;   // iris rotation, degrees\n        float _apertureGamma;    // >1 hardens the iris edge, <1 softens\n        float _sphericalAber;    // +ve rings beyond focus / creamy in front\n        float _astigmatism;      // radial/tangential squeeze, 0 on axis, signed\n        float _coma;             // comet flare, signed. +ve flares outward\n        float _fieldFalloff;     // exponent on field height. 1 = physical\n        float _squeeze;          // anamorphic: >1 makes the bokeh taller\n\n        float _lateralCA;        // magnification error, px of fringe at corner\n        float _lateralAchroCA;   // ditto, corrected residual: green/magenta\n        float _longitudinalCA;   // focus error, px of CoC shift at the extremes\n        float _longAchroCA;      // ditto, corrected residual: green/magenta\n\n        float _catEye;           // round barrel gate, signed. 0 = off\n        float _barnTop;          // rectangular gate, 0 = open, 1 = closed\n        float _barnBottom;\n        float _barnLeft;\n        float _barnRight;\n        float _barnShift;        // how fast the barn gate sweeps across frame\n        float _vignetteComp;     // 0 = gates darken the corners, 1 = shape only\n\n        // Sampling\n        int _workers;\n        int _seed;\n        int _samplesPerPixel;\n        int _fuseIterations;\n\n        // Generations\n        float _generations;\n        float _generationRandom;\n        float _generationFalloff;\n\n        // Whole-flame placement in world space\n        float3 _flameTranslate;\n        float3 _flameRotate;\n        float _flameScale;\n\n        // Transforms. Weight 0 switches one off.\n        float _xform1Weight;\n        float _xform1Colour;\n        float3 _xform1Translate;\n        float3 _xform1Rotate;\n        float3 _xform1Scale;\n        float4 _xform1VarsA;\n        float4 _xform1VarsB;\n\n        float _xform2Weight;\n        float _xform2Colour;\n        float3 _xform2Translate;\n        float3 _xform2Rotate;\n        float3 _xform2Scale;\n        float4 _xform2VarsA;\n        float4 _xform2VarsB;\n\n        float _xform3Weight;\n        float _xform3Colour;\n        float3 _xform3Translate;\n        float3 _xform3Rotate;\n        float3 _xform3Scale;\n        float4 _xform3VarsA;\n        float4 _xform3VarsB;\n\n        float _xform4Weight;\n        float _xform4Colour;\n        float3 _xform4Translate;\n        float3 _xform4Rotate;\n        float3 _xform4Scale;\n        float4 _xform4VarsA;\n        float4 _xform4VarsB;\n\n        // Colour\n        float _colourSpeed;\n        bool _usePaletteInput;\n        float3 _paletteA;\n        float3 _paletteB;\n        float3 _paletteC;\n        float3 _paletteD;\n\n        // Tonemap\n        float _brightness;\n        float _gamma;\n\n\n    local:\n        float4x4 __worldToCamera;\n        float3x3 __flameMatrix;\n\n        // Thin-lens CoC at infinity in square pixels: c = K * (1 - S / depth).\n        // 0 with depth of field off.\n        float __cocK;\n        float __focusDistance;\n        // Any lens effect at all; off means the pinhole landing is final.\n        bool __useLens;\n\n        // Optics, as ArtLensDepth's locals.\n        float2 __formatSize;     // FormatSize, or the bbox size if that is 0\n        float2 __imgCentre;      // format centre, continuous pixel coordinates\n        float __invImgRadius;    // 1 / half-diagonal, in square pixels\n        float __par;\n        float __invPar;\n        float __invSqueeze;\n        float __saKpos;\n        float __saKneg;\n        bool __useAstig;\n        bool __useComa;\n        float __fieldF;\n        bool __useCA;\n        bool __useLatCA;\n        bool __useCatEye;\n        bool __useBarn;\n        float __bxMin;\n        float __bxMax;\n        float __byMin;\n        float __byMax;\n        float __vignetteComp;\n        float2 __apCentre;\n        float __apHalf;\n        float __cosR;\n        float __sinR;\n\n        float3x3 __xform1Matrix;\n        float3x3 __xform2Matrix;\n        float3x3 __xform3Matrix;\n        float3x3 __xform4Matrix;\n\n        // Cumulative, normalised transform weights.\n        float __cdf1;\n        float __cdf2;\n        float __cdf3;\n        bool __anyXform;\n        float __invGamma;\n\n\n    void define()\n    \{\n        // Camera. The default sits 8 units back on +Z looking at the origin.\n        defineParam(\n            _cameraWorldMatrix,\n            \"CameraWorldMatrix\",\n            float4x4(\n                1, 0, 0, 0,\n                0, 1, 0, 0,\n                0, 0, 1, 8,\n                0, 0, 0, 1\n            )\n        );\n        defineParam(_focalLength, \"FocalLength\", 50.0f);\n        defineParam(_horizontalAperture, \"HorizontalAperture\", 24.576f);\n        defineParam(_pixelAspect, \"PixelAspect\", 1.0f);\n        defineParam(_formatSize, \"FormatSize\", int2(1920, 1080));\n        defineParam(_focusDistance, \"FocusDistance\", 8.0f);\n        defineParam(_fStop, \"fstop\", 2.8f);\n        defineParam(_enableDepthOfField, \"EnableDepthOfField\", true);\n        defineParam(_unitsPerMetre, \"UnitsPerMetre\", 1.0f);\n\n        // The glass - ArtLensDepth_09's names and defaults.\n        defineParam(_apertureInput, \"ApertureInput\", false);\n        defineParam(_apertureRotate, \"ApertureRotate\", 0.0f);\n        defineParam(_apertureGamma, \"ApertureGamma\", 1.0f);\n        defineParam(_sphericalAber, \"SphericalAberration\", 0.0f);\n        defineParam(_astigmatism, \"Astigmatism\", 0.0f);\n        defineParam(_coma, \"Coma\", 0.0f);\n        defineParam(_fieldFalloff, \"FieldFalloff\", 1.0f);\n        defineParam(_squeeze, \"Squeeze\", 1.0f);\n\n        defineParam(_lateralCA, \"LateralCA\", 0.0f);\n        defineParam(_lateralAchroCA, \"LateralAchromaticCA\", 0.0f);\n        defineParam(_longitudinalCA, \"LongitudinalCA\", 0.0f);\n        defineParam(_longAchroCA, \"LongitudinalAchromaticCA\", 0.0f);\n\n        defineParam(_catEye, \"CatEye\", 0.0f);\n        defineParam(_barnTop, \"BarnTop\", 0.0f);\n        defineParam(_barnBottom, \"BarnBottom\", 0.0f);\n        defineParam(_barnLeft, \"BarnLeft\", 0.0f);\n        defineParam(_barnRight, \"BarnRight\", 0.0f);\n        defineParam(_barnShift, \"BarnShift\", 1.0f);\n        defineParam(_vignetteComp, \"VignetteComp\", 0.0f);\n\n        // Sampling\n        defineParam(_workers, \"Workers\", 262144);\n        defineParam(_seed, \"Seed\", 0);\n        defineParam(_samplesPerPixel, \"SamplesPerPixel\", 50);\n        defineParam(_fuseIterations, \"FuseIterations\", 20);\n\n        // Generations. 0 = never restart, the plain flame.\n        defineParam(_generations, \"Generations\", 0.0f);\n        defineParam(_generationRandom, \"GenerationRandom\", 0.0f);\n        defineParam(_generationFalloff, \"GenerationFalloff\", 1.0f);\n\n        // Placement\n        defineParam(_flameTranslate, \"FlameTranslate\", float3(0.0f, 0.0f, 0.0f));\n        defineParam(_flameRotate, \"FlameRotate\", float3(0.0f, 0.0f, 0.0f));\n        defineParam(_flameScale, \"FlameScale\", 1.0f);\n\n        // Transforms\n        defineParam(_xform1Weight, \"Xform1Weight\", 1.0f);\n        defineParam(_xform1Colour, \"Xform1Colour\", 0.0f);\n        defineParam(_xform1Translate, \"Xform1Translate\", float3(0.5f, 0.0f, 0.0f));\n        defineParam(_xform1Rotate, \"Xform1Rotate\", float3(0.0f, 30.0f, 20.0f));\n        defineParam(_xform1Scale, \"Xform1Scale\", float3(0.6f, 0.6f, 0.6f));\n        defineParam(_xform1VarsA, \"Xform1VarsA\", float4(0.3f, 0.0f, 0.7f, 0.0f));\n        defineParam(_xform1VarsB, \"Xform1VarsB\", float4(0.0f, 0.0f, 0.0f, 0.0f));\n\n        defineParam(_xform2Weight, \"Xform2Weight\", 1.0f);\n        defineParam(_xform2Colour, \"Xform2Colour\", 0.35f);\n        defineParam(_xform2Translate, \"Xform2Translate\", float3(-0.3f, 0.4f, 0.2f));\n        defineParam(_xform2Rotate, \"Xform2Rotate\", float3(40.0f, 0.0f, -60.0f));\n        defineParam(_xform2Scale, \"Xform2Scale\", float3(0.7f, 0.7f, 0.7f));\n        defineParam(_xform2VarsA, \"Xform2VarsA\", float4(0.0f, 0.0f, 0.0f, 0.6f));\n        defineParam(_xform2VarsB, \"Xform2VarsB\", float4(0.0f, 0.5f, 0.0f, 0.0f));\n\n        defineParam(_xform3Weight, \"Xform3Weight\", 0.8f);\n        defineParam(_xform3Colour, \"Xform3Colour\", 0.7f);\n        defineParam(_xform3Translate, \"Xform3Translate\", float3(0.0f, -0.5f, -0.3f));\n        defineParam(_xform3Rotate, \"Xform3Rotate\", float3(-20.0f, 50.0f, 120.0f));\n        defineParam(_xform3Scale, \"Xform3Scale\", float3(0.5f, 0.5f, 0.5f));\n        defineParam(_xform3VarsA, \"Xform3VarsA\", float4(0.5f, 0.5f, 0.0f, 0.0f));\n        defineParam(_xform3VarsB, \"Xform3VarsB\", float4(0.0f, 0.0f, 0.0f, 0.0f));\n\n        defineParam(_xform4Weight, \"Xform4Weight\", 0.5f);\n        defineParam(_xform4Colour, \"Xform4Colour\", 1.0f);\n        defineParam(_xform4Translate, \"Xform4Translate\", float3(0.2f, 0.2f, 0.4f));\n        defineParam(_xform4Rotate, \"Xform4Rotate\", float3(0.0f, 0.0f, 90.0f));\n        defineParam(_xform4Scale, \"Xform4Scale\", float3(0.8f, 0.8f, 0.8f));\n        defineParam(_xform4VarsA, \"Xform4VarsA\", float4(0.0f, 0.0f, 0.0f, 0.0f));\n        defineParam(_xform4VarsB, \"Xform4VarsB\", float4(0.0f, 0.0f, 1.0f, 0.0f));\n\n        // Colour. The default cosine palette is a full rainbow loop.\n        defineParam(_colourSpeed, \"ColourSpeed\", 0.5f);\n        defineParam(_usePaletteInput, \"UsePaletteInput\", false);\n        defineParam(_paletteA, \"PaletteA\", float3(0.5f, 0.5f, 0.5f));\n        defineParam(_paletteB, \"PaletteB\", float3(0.5f, 0.5f, 0.5f));\n        defineParam(_paletteC, \"PaletteC\", float3(1.0f, 1.0f, 1.0f));\n        defineParam(_paletteD, \"PaletteD\", float3(0.0f, 0.33f, 0.67f));\n\n        // Tonemap. flam3's gamma 4 is about 1.8 here, because the Nuke viewer\n        // adds its own ~2.2 on top of this linear output.\n        defineParam(_brightness, \"Brightness\", 1.0f);\n        defineParam(_gamma, \"Gamma\", 1.8f);\n    \}\n\n\n    // Outer extent of r(rho) = A*rho + B*rho^3 over rho in \[0,1], returned as\n    // the factor that rescales it back to |A|. From ArtLensDepth_09: when A and\n    // B oppose, the caustic fold can reach further than the rim, so it is\n    // tested too.\n    float saNormalise(const float A, const float B)\n    \{\n        float rMax = fabs(A + B);\n        if (A * B < 0.0f)\n        \{\n            const float rc2 = -A / (3.0f * B);\n            if (rc2 > 0.0f && rc2 < 1.0f)\n                rMax = max(rMax, fabs((2.0f / 3.0f) * A * sqrt(rc2)));\n        \}\n        return (rMax > 1e-6f) ? fabs(A) / rMax : 1.0f;\n    \}\n\n\n    void init()\n    \{\n        float4x4 cameraMatrix = _cameraWorldMatrix;\n        __worldToCamera = cameraMatrix.invert();\n\n        __flameMatrix = rotateScaleMatrix(\n            _flameRotate,\n            float3(_flameScale, _flameScale, _flameScale)\n        );\n\n        // ---- the frame ------------------------------------------------------\n        // The format input's bounds are its BBOX - the render region, overscan\n        // included. The projection is fitted to the FORMAT, which comes from\n        // FormatSize. Continuous pixel coordinates: pixel i covers \[i, i+1).\n        //\n        // The optical centre is the centre of the format, not of the bbox:\n        // Nuke formats are anchored at (0, 0), so it is simply half the format\n        // however far the bbox runs past it.\n        const float bx1 = float(format.bounds.x1);\n        const float by1 = float(format.bounds.y1);\n        const float bw = float(format.bounds.width());\n        const float bh = float(format.bounds.height());\n        float fmtW = float(_formatSize.x);\n        float fmtH = float(_formatSize.y);\n        if (fmtW < 1.0f || fmtH < 1.0f)\n        \{\n            // FormatSize left unset: fall back to the bbox, correct only when\n            // the two coincide.\n            fmtW = bw;\n            fmtH = bh;\n            __imgCentre = float2(bx1 + 0.5f * bw, by1 + 0.5f * bh);\n        \}\n        else\n        \{\n            __imgCentre = float2(0.5f * fmtW, 0.5f * fmtH);\n        \}\n        __formatSize = float2(fmtW, fmtH);\n        __par = max(_pixelAspect, 1e-4f);\n        __invPar = 1.0f / __par;\n        const float imgRadius = max(length(float2(fmtW * 0.5f * __par, fmtH * 0.5f)), 1.0f);\n        __invImgRadius = 1.0f / imgRadius;\n\n        // ---- the CoC --------------------------------------------------------\n        // ArtLensDepth's thin lens, in square pixels (the vertical pixel size,\n        // since pixel aspect widens the horizontal). Focus is held beyond the\n        // focal length, where the expression diverges.\n        __focusDistance = max(_focusDistance, 1e-6f);\n        __cocK = 0.0f;\n        if (_enableDepthOfField && _fStop > 0.0f)\n        \{\n            const float f = max(_focalLength, 1e-3f);\n            const float focusMM = max(\n                __focusDistance * 1000.0f / max(_unitsPerMetre, 1e-6f),\n                f * 1.001f\n            );\n            const float apertureMM = f / _fStop;\n            const float pxPerMM = fmtW * __par / max(_horizontalAperture, 1e-3f);\n            __cocK = 0.5f * apertureMM * f / (focusMM - f) * pxPerMM;\n        \}\n\n        // ---- the glass, as ArtLensDepth_09's init -----------------------------\n        __invSqueeze = 1.0f / max(_squeeze, 1e-6f);\n        __saKpos = saNormalise( 1.0f, -_sphericalAber);\n        __saKneg = saNormalise(-1.0f, -_sphericalAber);\n        __useAstig = (_astigmatism != 0.0f);\n        __useComa = (_coma != 0.0f);\n        __fieldF = max(_fieldFalloff, 0.0f);\n        __useLatCA = (_lateralCA != 0.0f) || (_lateralAchroCA != 0.0f);\n        __useCA = __useLatCA || (_longitudinalCA != 0.0f) || (_longAchroCA != 0.0f);\n\n        // Barn gate edges in pupil coordinates. The gate slides with field, so\n        // the pupil sweeps \[-1-T, 1+T] in gate space, T being the furthest the\n        // gate travels in frame - see ArtLensDepth_09 for why a door parked at\n        // +-1 would otherwise still clip. The travel has to cover the whole\n        // BBOX: field is 1 at the format corner, so an overscan pixel sits past\n        // 1. Measured from the optical centre, so off-centre overscan is\n        // covered too.\n        const float exX = max(fabs(bx1 - __imgCentre.x), fabs(bx1 + bw - __imgCentre.x));\n        const float exY = max(fabs(by1 - __imgCentre.y), fabs(by1 + bh - __imgCentre.y));\n        const float fieldMaxX = max(exX * __par, fmtW * 0.5f * __par) / imgRadius;\n        const float fieldMaxY = max(exY, fmtH * 0.5f) / imgRadius;\n        float reachX, reachY;\n        if (__fieldF >= 1.0f)\n        \{\n            const float grow = pow(length(float2(fieldMaxX, fieldMaxY)), __fieldF - 1.0f);\n            reachX = fieldMaxX * grow;\n            reachY = fieldMaxY * grow;\n        \}\n        else\n        \{\n            reachX = pow(fieldMaxX, __fieldF);\n            reachY = pow(fieldMaxY, __fieldF);\n        \}\n        const float spanX = 1.0f + fabs(_barnShift) * reachX;\n        const float spanY = 1.0f + fabs(_barnShift) * reachY;\n        __bxMin = spanX * (2.0f * clamp(_barnLeft, 0.0f, 1.0f) - 1.0f);\n        __bxMax = spanX * (1.0f - 2.0f * clamp(_barnRight, 0.0f, 1.0f));\n        __byMin = spanY * (2.0f * clamp(_barnBottom, 0.0f, 1.0f) - 1.0f);\n        __byMax = spanY * (1.0f - 2.0f * clamp(_barnTop, 0.0f, 1.0f));\n\n        __useCatEye = (_catEye != 0.0f);\n        __useBarn = (_barnTop > 0.0f) || (_barnBottom > 0.0f)\n            || (_barnLeft > 0.0f) || (_barnRight > 0.0f);\n        __vignetteComp = clamp(_vignetteComp, 0.0f, 1.0f);\n\n        // The unit pupil is the circle inscribed in the filter format.\n        const float fw = float(filter.bounds.width());\n        const float fh = float(filter.bounds.height());\n        __apCentre = float2(\n            float(filter.bounds.x1) + fw * 0.5f,\n            float(filter.bounds.y1) + fh * 0.5f\n        );\n        __apHalf = min(fw, fh) * 0.5f;\n        const float rotate = _apertureRotate * PI / 180.0f;\n        __cosR = cos(rotate);\n        __sinR = sin(rotate);\n\n        __useLens = (__cocK != 0.0f) || __useCA || __useCatEye || __useBarn\n            || _apertureInput;\n\n        __xform1Matrix = rotateScaleMatrix(_xform1Rotate, _xform1Scale);\n        __xform2Matrix = rotateScaleMatrix(_xform2Rotate, _xform2Scale);\n        __xform3Matrix = rotateScaleMatrix(_xform3Rotate, _xform3Scale);\n        __xform4Matrix = rotateScaleMatrix(_xform4Rotate, _xform4Scale);\n\n        const float w1 = max(_xform1Weight, 0.0f);\n        const float w2 = max(_xform2Weight, 0.0f);\n        const float w3 = max(_xform3Weight, 0.0f);\n        const float w4 = max(_xform4Weight, 0.0f);\n        const float total = w1 + w2 + w3 + w4;\n        __anyXform = total > 0.0f;\n        const float invTotal = __anyXform ? 1.0f / total : 0.0f;\n        __cdf1 = w1 * invTotal;\n        __cdf2 = (w1 + w2) * invTotal;\n        __cdf3 = (w1 + w2 + w3) * invTotal;\n\n        __invGamma = 1.0f / max(_gamma, 1e-4f);\n    \}\n\n\n    float3 paletteColour(const float t)\n    \{\n        if (_usePaletteInput)\n        \{\n            const float pw = float(palette.bounds.width());\n            const float ph = float(palette.bounds.height());\n            // Pixel centres sit on integers in Blink.\n            const float px = float(palette.bounds.x1) + t * (pw - 1.0f);\n            const float py = float(palette.bounds.y1) + (ph - 1.0f) * 0.5f;\n            const float4 c = bilinear(palette, px, py);\n            return float3(c.x, c.y, c.z);\n        \}\n        const float3 phase = TWO_PI * (_paletteC * t + _paletteD);\n        return _paletteA + _paletteB * float3(cos(phase.x), cos(phase.y), cos(phase.z));\n    \}\n\n\n    // Log-density tonemap of a hit density (hits per pixel per sample).\n    float toneAlpha(const float density)\n    \{\n        return pow(max(_brightness * log(1.0f + density), 0.0f), __invGamma);\n    \}\n\n\n    // Sensor response at spectral position s, 0 = blue end, 1 = red end. From\n    // ArtLensDepth_09: three overlapping tents that sum to 1 at every s.\n    float3 spectralResponse(const float s)\n    \{\n        return float3(\n            max(0.0f, 1.0f - fabs(s - 1.0f) * 2.0f),\n            max(0.0f, 1.0f - fabs(s - 0.5f) * 2.0f),\n            max(0.0f, 1.0f - fabs(s) * 2.0f)\n        );\n    \}\n\n\n    // Dispersion at spectral position s: linear (red/blue) plus DC-centred\n    // parabolic (green/magenta). From ArtLensDepth_09.\n    float caDispersion(const float s, const float linAmt, const float parAmt)\n    \{\n        const float c = s - 0.5f;\n        return linAmt * (2.0f * s - 1.0f) + parAmt * (1.0f / 3.0f - 4.0f * c * c);\n    \}\n\n\n    /**\n     * Where a hit lands through the lens - ArtLensDepth_09's ray basis, run\n     * forwards. That kernel gathers source = base - r * k at a destination;\n     * this inverts it, landing = centre + (pinhole - centre + r * k) / (1 + Lf).\n     *\n     * Draws a pupil sample (and a wavelength, with CA), then applies the\n     * iris and gates as probabilities - see the header.\n     *\n     * @arg pinhole: Pinhole landing, continuous pixel coordinates.\n     * @arg coc: Signed CoC in square pixels, negative in front of focus.\n     * @arg landing: Receives where the hit lands.\n     * @arg tint: Receives the colour multiplier (iris colour, wavelength).\n     * @returns: false if the hit was blocked and not redrawn.\n     */\n    bool lensLanding(\n            const float2 &pinhole,\n            const float coc,\n            int &rz,\n            int &rw,\n            float2 &landing,\n            float3 &tint)\n    \{\n        // Field position: 1.0 at the frame corner, in square pixels so it\n        // stays radial on an anamorphic format.\n        const float2 rel = pinhole - __imgCentre;\n        const float2 field = float2(\n            rel.x * __par * __invImgRadius,\n            rel.y * __invImgRadius\n        );\n\n        // Field falloff and the radial frame, as ArtLensDepth_09.\n        const float fh = sqrt(field.x * field.x + field.y * field.y);\n        const bool offAxis = fh > 1e-4f;\n        float hF = 0.0f;\n        float fScale = 0.0f;\n        float erx = 0.0f;\n        float ery = 0.0f;\n        if (offAxis)\n        \{\n            hF = (__fieldF == 1.0f) ? fh : pow(fh, __fieldF);\n            fScale = hF / fh;\n            erx = field.x / fh;\n            ery = field.y / fh;\n        \}\n        const float2 sfield = field * fScale;\n        const bool doAstig = __useAstig && offAxis;\n        const bool doComa = __useComa && offAxis;\n        const float astigM = _astigmatism * hF * hF;\n        const float comaK = _coma * hF * (1.0f / 6.0f);\n\n        for (int attempt = 0; attempt < MAX_PUPIL_TRIES; attempt++)\n        \{\n            // ---- pupil sample, u in the unit disc -----------------------------\n            float ux;\n            float uy;\n            float3 irisTint = float3(1.0f, 1.0f, 1.0f);\n            if (_apertureInput)\n            \{\n                ux = rand01(rz, rw) * 2.0f - 1.0f;\n                uy = rand01(rz, rw) * 2.0f - 1.0f;\n\n                // The rotation applies to the lookup only; the offsets below\n                // stay in unrotated pupil coordinates.\n                const float rx = ux * __cosR - uy * __sinR;\n                const float ry = ux * __sinR + uy * __cosR;\n                const float4 t = bilinear(\n                    filter,\n                    __apCentre.x + rx * __apHalf,\n                    __apCentre.y + ry * __apHalf\n                );\n                float3 w = float3(max(t.x, 0.0f), max(t.y, 0.0f), max(t.z, 0.0f));\n                if (_apertureGamma != 1.0f)\n                    w = float3(\n                        pow(w.x, _apertureGamma),\n                        pow(w.y, _apertureGamma),\n                        pow(w.z, _apertureGamma)\n                    );\n                const float wm = (w.x + w.y + w.z) * (1.0f / 3.0f);\n\n                // Iris is shape, not exposure: a rejected draw is always redrawn.\n                if (!(rand01(rz, rw) < wm))\n                    continue;\n                irisTint = w / wm;\n            \}\n            else\n            \{\n                const float radius = sqrt(rand01(rz, rw));\n                const float angle = TWO_PI * rand01(rz, rw);\n                ux = radius * cos(angle);\n                uy = radius * sin(angle);\n            \}\n\n            // ---- chromatic aberration: one wavelength per hit ---------------\n            // (4, 2, 4) makes each channel average 1 over the spectrum, so CA\n            // only moves light, never recolours the flame.\n            float3 spectralTint = float3(1.0f, 1.0f, 1.0f);\n            float caLat = 0.0f;\n            float caLong = 0.0f;\n            if (__useCA)\n            \{\n                const float s = rand01(rz, rw);\n                spectralTint = spectralResponse(s) * float3(4.0f, 2.0f, 4.0f);\n                caLat = caDispersion(s, _lateralCA, _lateralAchroCA) * __invImgRadius;\n                caLong = caDispersion(s, _longitudinalCA, _longAchroCA);\n            \}\n\n            // ---- gates, sliding with field ------------------------------------\n            bool open = true;\n            if (__useCatEye)\n            \{\n                const float qx = ux - _catEye * sfield.x;\n                const float qy = uy - _catEye * sfield.y;\n                if (qx * qx + qy * qy > 1.0f)\n                    open = false;\n            \}\n            if (open && __useBarn)\n            \{\n                const float bx = ux + _barnShift * sfield.x;\n                const float by = uy + _barnShift * sfield.y;\n                if (bx < __bxMin || bx > __bxMax || by < __byMin || by > __byMax)\n                    open = false;\n            \}\n            if (!open)\n            \{\n                if (rand01(rz, rw) < __vignetteComp)\n                    continue;\n                return false;\n            \}\n\n            // ---- the ray basis, exactly as ArtLensDepth_09 --------------------\n            // Spherical aberration: one multiplier per sign of the CoC.\n            const float rho2 = min(ux * ux + uy * uy, 1.0f);\n            const float saTerm = _sphericalAber * rho2;\n            const float mulP = (1.0f - saTerm) * __saKpos;\n            const float mulN = (1.0f + saTerm) * __saKneg;\n\n            // Offset direction: squeeze, then astigmatism (flips with the sign\n            // of r), then coma (even in u, adds to one sign, subtracts from the\n            // other).\n            const float dx0 = ux * __invSqueeze;\n            const float dy0 = uy;\n            float axP = dx0, ayP = dy0, axN = dx0, ayN = dy0;\n            if (doAstig)\n            \{\n                const float D = dx0 * erx + dy0 * ery;\n                const float rx2 = 2.0f * D * erx - dx0;\n                const float ry2 = 2.0f * D * ery - dy0;\n                axP = dx0 + astigM * rx2;\n                ayP = dy0 + astigM * ry2;\n                axN = dx0 - astigM * rx2;\n                ayN = dy0 - astigM * ry2;\n            \}\n            if (doComa)\n            \{\n                const float xr = ux * erx + uy * ery;\n                const float yt = uy * erx - ux * ery;\n                const float qr = 3.0f * xr * xr + yt * yt - 1.0f;\n                const float qt = 2.0f * xr * yt;\n                const float cmx = comaK * (qr * erx - qt * ery) * __invSqueeze;\n                const float cmy = comaK * (qr * ery + qt * erx);\n                axP += cmx;  ayP += cmy;\n                axN -= cmx;  ayN -= cmy;\n            \}\n\n            // Lateral CA: local magnification L on the direction, plus the\n            // radial magnification Lf that the landing divides out below.\n            float L = 1.0f;\n            float Lf = 0.0f;\n            if (__useLatCA)\n            \{\n                L = 1.0f + caLat;\n                Lf = caLat * fScale;\n            \}\n            const float kxP = axP * __invPar * L;\n            const float kyP = ayP * L;\n            const float kxN = axN * __invPar * L;\n            const float kyN = ayN * L;\n\n            // ---- land -------------------------------------------------------\n            const float r = ((coc >= 0.0f) ? coc * mulP : coc * mulN) + caLong;\n            const bool rp = (r >= 0.0f);\n            const float2 offset = float2(r * (rp ? kxP : kxN), r * (rp ? kyP : kyN));\n            float2 x = pinhole + offset;\n            if (__useLatCA)\n                x = __imgCentre + (rel + offset) / (1.0f + Lf);\n\n            landing = x;\n            tint = irisTint * spectralTint;\n            return true;\n        \}\n        return false;\n    \}\n\n\n    void process(int2 pos)\n    \{\n        const int x1 = dst.bounds.x1;\n        const int y1 = dst.bounds.y1;\n        const int width = dst.bounds.width();\n        const int height = dst.bounds.height();\n        const int x2 = x1 + width;\n        const int y2 = y1 + height;\n        const int pixelCount = width * height;\n\n        // Workers are spread evenly through the bbox, one every `stride`\n        // pixels, so however Nuke or the GPU splits the image up, every chunk\n        // gets its share. Everything else returns immediately.\n        int workers = _workers > 1 ? _workers : 1;\n        if (workers > pixelCount)\n            workers = pixelCount;\n        const int stride = pixelCount / workers;\n        const int index = (pos.y - y1) * width + (pos.x - x1);\n        if (index % stride != 0)\n            return;\n        const int worker = index / stride;\n        if (worker >= workers)\n            return;\n\n        if (!__anyXform)\n            return;\n\n        // SamplesPerPixel * FORMAT pixels steps in total, shared evenly, each\n        // hit weighted so the stored density is hits per pixel per sample\n        // whatever Workers is. Counting format pixels rather than bbox pixels\n        // keeps brightness and noise inside the format independent of the\n        // overscan: hits per pixel depend only on the projection.\n        const int samplesPerPixel = _samplesPerPixel > 1 ? _samplesPerPixel : 1;\n        const int formatPixels = int(__formatSize.x) * int(__formatSize.y);\n        const int stepsPerPass = (formatPixels + workers - 1) / workers;\n        const float hitWeight = float(formatPixels)\n            / (float(samplesPerPixel) * float(stepsPerPass) * float(workers));\n\n        // Sensor millimetres -> pixels, fitted to the format. Vertical carries\n        // the pixel aspect.\n        const float pixelsPerMmX = __formatSize.x / _horizontalAperture;\n        const float pixelsPerMmY = pixelsPerMmX * max(_pixelAspect, 1e-4f);\n        const float centreX = __imgCentre.x;\n        const float centreY = __imgCentre.y;\n\n        // An independent stream per worker. Every product stays under 2^31 and\n        // the XORs keep the state positive. The high bits of the worker index\n        // go into rw so streams stay distinct past 32768 workers.\n        int rz = (362436069 & 0x3fffffff)\n            ^ ((_seed & 0x7fff) * 40503)\n            ^ ((worker & 0x7fff) * 7919);\n        int rw = (521288629 & 0x3fffffff)\n            ^ ((_seed & 0x7fff) * 9973)\n            ^ ((worker & 0x7fff) * 52813)\n            ^ (((worker >> 15) & 0x7fff) * 31337);\n        if (rz == 0) rz = 1;\n        if (rw == 0) rw = 1;\n        for (int i = 0; i < 32; i++)\n            rand01(rz, rw);\n\n        // Each worker's current point. `alive` false means it needs a spawn;\n        // `generation` counts transform steps since that spawn.\n        float3 p = float3(0.0f, 0.0f, 0.0f);\n        float colourT = 0.0f;\n        int generation = 0;\n        int lifetime = 0;\n        float generationWeight = 1.0f;\n        bool alive = false;\n        const bool limitGenerations = _generations > 0.0f;\n        const float lifetimeRandom = clamp(_generationRandom, 0.0f, 1.0f);\n\n        for (int pass = 0; pass < samplesPerPixel; pass++)\n        \{\n            for (int step = 0; step < stepsPerPass; step++)\n            \{\n                bool draw = true;\n                if (!alive)\n                \{\n                    // (Re)spawn in the random cube.\n                    p = randomPointInCube(rz, rw);\n                    alive = true;\n                    generation = 0;\n                    generationWeight = 1.0f;\n\n                    // This spawn's lifetime: optionally exponential around\n                    // Generations, then stochastically rounded so the\n                    // fractional part becomes a probability. 1 - u is in\n                    // (0, 1], so the log is always finite (at most ~16.6).\n                    if (limitGenerations)\n                    \{\n                        float life = _generations;\n                        if (lifetimeRandom > 0.0f)\n                        \{\n                            const float e = -log(1.0f - rand01(rz, rw));\n                            life *= (1.0f - lifetimeRandom) + lifetimeRandom * e;\n                        \}\n                        const float whole = floor(life);\n                        lifetime = int(whole);\n                        if (rand01(rz, rw) < life - whole)\n                            lifetime++;\n                    \}\n                    colourT = rand01(rz, rw);\n                    draw = _fuseIterations <= 0;\n                \}\n                else\n                \{\n                    // Pick a transform by weight.\n                    const float pick = rand01(rz, rw);\n                    float3x3 m;\n                    float3 translate;\n                    float4 varsA;\n                    float4 varsB;\n                    float colour;\n                    if (pick < __cdf1)\n                    \{\n                        m = __xform1Matrix; translate = _xform1Translate;\n                        varsA = _xform1VarsA; varsB = _xform1VarsB; colour = _xform1Colour;\n                    \}\n                    else if (pick < __cdf2)\n                    \{\n                        m = __xform2Matrix; translate = _xform2Translate;\n                        varsA = _xform2VarsA; varsB = _xform2VarsB; colour = _xform2Colour;\n                    \}\n                    else if (pick < __cdf3)\n                    \{\n                        m = __xform3Matrix; translate = _xform3Translate;\n                        varsA = _xform3VarsA; varsB = _xform3VarsB; colour = _xform3Colour;\n                    \}\n                    else\n                    \{\n                        m = __xform4Matrix; translate = _xform4Translate;\n                        varsA = _xform4VarsA; varsB = _xform4VarsB; colour = _xform4Colour;\n                    \}\n\n                    p = applyVariations(mul3(m, p) + translate, varsA, varsB, rand01(rz, rw));\n                    colourT += (colour - colourT) * _colourSpeed;\n                    generation++;\n                    if (limitGenerations)\n                        generationWeight *= _generationFalloff;\n\n                    if (!(dot(p, p) < ESCAPE_RADIUS_SQ))\n                    \{\n                        alive = false;\n                        continue;\n                    \}\n                    draw = generation >= _fuseIterations;\n                \}\n\n                // The last generation is still drawn; the respawn happens on\n                // the next step.\n                if (limitGenerations && generation >= lifetime)\n                    alive = false;\n                if (!draw)\n                    continue;\n\n                // Flame space -> world -> camera.\n                const float3 world = mul3(__flameMatrix, p) + _flameTranslate;\n                const float3 cam = transformPoint(__worldToCamera, world);\n                const float depth = -cam.z;\n                if (depth < NEAR_DEPTH)\n                    continue;\n\n                const float invDepth = 1.0f / depth;\n                const float2 sensor = _focalLength * float2(cam.x, cam.y) * invDepth;\n\n                // Pinhole landing, continuous pixel coordinates; then the lens.\n                float2 landing = float2(\n                    centreX + sensor.x * pixelsPerMmX,\n                    centreY + sensor.y * pixelsPerMmY\n                );\n                float3 tint = float3(1.0f, 1.0f, 1.0f);\n                if (__useLens)\n                \{\n                    const float coc = __cocK * (1.0f - __focusDistance * invDepth);\n                    float2 throughLens;\n                    if (!lensLanding(landing, coc, rz, rw, throughLens, tint))\n                        continue;\n                    landing = throughLens;\n                \}\n\n                const int ix = int(floor(landing.x));\n                const int iy = int(floor(landing.y));\n                if (ix < x1 || ix >= x2 || iy < y1 || iy >= y2)\n                    continue;\n\n                // RACY read-modify-write. Another worker may update this pixel\n                // between the read and the write; one of the two hits is lost.\n                //\n                // Stored: rgb = finished tonemapped colour, alpha = density.\n                // Recover the colour sum from them, add this hit, re-tonemap.\n                const float4 old = dst(ix, iy);\n                float density = old.w;\n                float3 colourSum = float3(0.0f, 0.0f, 0.0f);\n                if (density > 0.0f && density < 1e30f)\n                \{\n                    const float oldAlpha = toneAlpha(density);\n                    if (oldAlpha > 1e-20f)\n                        colourSum = float3(old.x, old.y, old.z) * (density / oldAlpha);\n                \}\n                else\n                \{\n                    // Zero, negative or NaN: nothing usable there yet.\n                    density = 0.0f;\n                \}\n\n                const float3 rgb = paletteColour(clamp(colourT, 0.0f, 1.0f)) * tint;\n                const float weight = hitWeight * generationWeight;\n                if (!(weight > 0.0f))\n                    continue;\n                density += weight;\n                colourSum += rgb * weight;\n                const float scale = toneAlpha(density) / density;\n                dst(ix, iy) = float4(\n                    colourSum.x * scale,\n                    colourSum.y * scale,\n                    colourSum.z * scale,\n                    density\n                );\n            \}\n        \}\n    \}\n\};\n"
+  useGPUIfAvailable {{parent.use_gpu}}
+  rebuild ""
+  FractalFlameOverscan_CameraWorldMatrix {
+   
+       {{parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix}}
+       {{parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix}}
+       {{parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix}}
+       {{parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix}}
+  }
+  FractalFlameOverscan_FocalLength {{parent.DummyCam.focal}}
+  FractalFlameOverscan_HorizontalAperture {{parent.DummyCam.haperture}}
+  FractalFlameOverscan_PixelAspect {{Reformat1.pixel_aspect}}
+  FractalFlameOverscan_FormatSize {{Reformat1.width} {Reformat1.height}}
+  FractalFlameOverscan_FocusDistance {{parent.focus_distance}}
+  FractalFlameOverscan_fstop {{parent.fstop}}
+  FractalFlameOverscan_EnableDepthOfField {{parent.enable_dof}}
+  FractalFlameOverscan_UnitsPerMetre 100
+  FractalFlameOverscan_ApertureInput {{"\[exists parent.input1]"}}
+  FractalFlameOverscan_SphericalAberration {{parent.spherical_aberration}}
+  FractalFlameOverscan_Astigmatism {{parent.astigmatism}}
+  FractalFlameOverscan_Coma {{parent.coma}}
+  FractalFlameOverscan_FieldFalloff {{parent.field_falloff}}
+  FractalFlameOverscan_Squeeze {{parent.ana_squeeze}}
+  FractalFlameOverscan_LateralCA {{parent.lateral_CA}}
+  FractalFlameOverscan_LateralAchromaticCA {{parent.lateral_aCA}}
+  FractalFlameOverscan_LongitudinalCA {{parent.long_CA}}
+  FractalFlameOverscan_LongitudinalAchromaticCA {{parent.long_aCA}}
+  FractalFlameOverscan_CatEye {{parent.cateye}}
+  FractalFlameOverscan_BarnTop {{parent.barn_top}}
+  FractalFlameOverscan_BarnBottom {{parent.barn_bottom}}
+  FractalFlameOverscan_BarnLeft {{parent.barn_left}}
+  FractalFlameOverscan_BarnRight {{parent.barn_right}}
+  FractalFlameOverscan_VignetteComp 1
+  FractalFlameOverscan_SamplesPerPixel {{"\[python -execlocal farm\\ =\\ nuke.thisParent().knob('samples_farm').value()\\ngui\\ =\\ nuke.thisParent().knob('samples_gui').value()\\nif\\ nuke.executing():\\n\\ \\ \\ \\ ret\\ =\\ farm\\nelse:\\n\\ \\ \\ \\ if\\ nuke.thisParent().knob('preview_farm').value():\\n\\ \\ \\ \\ \\ \\ \\ \\ ret\\ =\\ farm\\n\\ \\ \\ \\ else:\\n\\ \\ \\ \\ \\ \\ \\ \\ ret\\ =\\ gui]"}}
+  FractalFlameOverscan_FuseIterations 8
+  FractalFlameOverscan_FlameTranslate {{parent.global_translate} {parent.global_translate} {parent.global_translate}}
+  FractalFlameOverscan_FlameRotate {{parent.global_rotate} {parent.global_rotate} {parent.global_rotate}}
+  FractalFlameOverscan_FlameScale {{parent.global_scale}}
+  FractalFlameOverscan_Xform1Weight {{parent.xform1_weight}}
+  FractalFlameOverscan_Xform1Colour {{parent.xform1_colour}}
+  FractalFlameOverscan_Xform1Translate {{parent.xform1_translate.x} {parent.xform1_translate.y} {parent.xform1_translate.z}}
+  FractalFlameOverscan_Xform1Rotate {{parent.xform1_rotate.x} {parent.xform1_rotate.y} {parent.xform1_rotate.z}}
+  FractalFlameOverscan_Xform1Scale {{parent.xform1_scale.x} {parent.xform1_scale.y} {parent.xform1_scale.z}}
+  FractalFlameOverscan_Xform1VarsA {{parent.xform1_linear} {parent.xform1_sinusoidal} {parent.xform1_spherical} {parent.xform1_swirl}}
+  FractalFlameOverscan_Xform1VarsB {{parent.xform1_horseshoe} {parent.xform1_julia} {parent.xform1_bubble} {parent.xform1_cylinder}}
+  FractalFlameOverscan_Xform2Weight {{parent.xform2_weight}}
+  FractalFlameOverscan_Xform2Colour {{parent.xform2_colour}}
+  FractalFlameOverscan_Xform2Translate {{parent.xform2_translate} {parent.xform2_translate} {parent.xform2_translate}}
+  FractalFlameOverscan_Xform2Rotate {{parent.xform2_rotate} {parent.xform2_rotate} {parent.xform2_rotate}}
+  FractalFlameOverscan_Xform2Scale {{parent.xform2_scale} {parent.xform2_scale} {parent.xform2_scale}}
+  FractalFlameOverscan_Xform2VarsA {{parent.xform2_linear} {parent.xform2_sinusoidal} {parent.xform2_spherical} {parent.xform2_swirl}}
+  FractalFlameOverscan_Xform2VarsB {{parent.xform2_horseshoe} {parent.xform2_julia} {parent.xform2_bubble} {parent.xform2_cylinder}}
+  FractalFlameOverscan_Xform3Weight {{parent.xform3_weight}}
+  FractalFlameOverscan_Xform3Colour {{parent.xform3_colour}}
+  FractalFlameOverscan_Xform3Translate {{parent.xform3_translate} {parent.xform3_translate} {parent.xform3_translate}}
+  FractalFlameOverscan_Xform3Rotate {{parent.xform3_rotate} {parent.xform3_rotate} {parent.xform3_rotate}}
+  FractalFlameOverscan_Xform3Scale {{parent.xform3_scale} {parent.xform3_scale} {parent.xform3_scale}}
+  FractalFlameOverscan_Xform3VarsA {{parent.xform3_linear} {parent.xform3_sinusoidal} {parent.xform3_spherical} {parent.xform3_swirl}}
+  FractalFlameOverscan_Xform3VarsB {{parent.xform3_horseshoe} {parent.xform3_julia} {parent.xform3_bubble} {parent.xform3_cylinder}}
+  FractalFlameOverscan_Xform4Weight {{parent.xform4_weight}}
+  FractalFlameOverscan_Xform4Colour {{parent.xform4_colour}}
+  FractalFlameOverscan_Xform4Translate {{parent.xform4_translate} {parent.xform4_translate} {parent.xform4_translate}}
+  FractalFlameOverscan_Xform4Rotate {{parent.xform4_rotate} {parent.xform4_rotate} {parent.xform4_rotate}}
+  FractalFlameOverscan_Xform4Scale {{parent.xform4_scale} {parent.xform4_scale} {parent.xform4_scale}}
+  FractalFlameOverscan_Xform4VarsA {{parent.xform4_linear} {parent.xform4_sinusoidal} {parent.xform4_spherical} {parent.xform4_swirl}}
+  FractalFlameOverscan_Xform4VarsB {{parent.xform4_horseshoe} {parent.xform4_julia} {parent.xform4_bubble} {parent.xform4_cylinder}}
+  FractalFlameOverscan_ColourSpeed {{parent.colour_speed}}
+  FractalFlameOverscan_UsePaletteInput true
+  FractalFlameOverscan_PaletteD {0 0.3300000131 0.6700000167}
+  FractalFlameOverscan_Gamma 1
+  rebuild_finalise ""
+  name BlinkScript6
+  xpos 343
+  ypos 388
+ }
+ Expression {
+  expr3 "min(1, pow(max(1 * log(1 + a), 0), 1 / 1))"
+  name Expression3
+  label "FIX ALPHA"
+  xpos 343
+  ypos 481
+ }
+ Output {
+  name Output1
+  xpos 343
+  ypos 605
+ }
+ Input {
+  inputs 0
+  name cam
+  xpos -30
+  ypos 327
+  number 2
+ }
+ Camera {
+  inputs 0
+  translate {0 0 10}
+  focal 35
+  name Camera4
+  label "default cam"
+  xpos -152
+  ypos 378
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input2]"}}
+  name Switch2
+  xpos -30
+  ypos 399
+ }
+ Camera {
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {{"\[expression \[value the_cam]far(\[value the_frame])]"}}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
+  name DummyCam
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nadrianpueyo.com, 2019-2020"
+  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
+  label "\[value \[value the_cam]name]"
+  xpos -20
+  ypos 480
+  addUserKnob {20 DummyCam l Defaults}
+  addUserKnob {43 the_cam}
+  the_cam "\[\n#DummyCam v1.1. Updated 5 April 2020.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Camera3\" && \[class \$x] != \"Camera4\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera3\"||\[class \$x]==\"Camera\"||\[class \$x]==\"Camera4\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
+  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 49
+  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
+  d_haperture 30
+  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
+  d_vaperture 18.672
+  addUserKnob {7 d_near l near R 0 10}
+  d_near 1
+  addUserKnob {7 d_far l far R 0 10000}
+  d_far 1000
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
+  d_win_scale {1 1}
+  addUserKnob {7 d_winroll l "window roll" R 0 45}
+  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
+  d_focal_point 2
+  addUserKnob {7 d_fstop l fstop R 0 30}
+  d_fstop 16
+  addUserKnob {26 version l " " t "Updated 5 April 2020" T "<span style=\"color:#666\"><br/><b>DummyCam v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2020</span>"}
+ }
+end_group
