@@ -54,6 +54,7 @@ filter.addCommand('Confocus', 'nuke.createNode(\'Confocus.nk\')', icon = 'p.png'
 filter.addCommand('InpaintFaster', 'nuke.createNode(\'InpaintFaster.nk\')', icon = 'p.png')
 filter.addCommand('Astigmatism', 'nuke.createNode(\'Astigmatism.nk\')', icon = 'p.png')
 filter.addCommand('ArtLens', 'nuke.createNode(\'ArtLens.nk\')', icon = 'p.png')
+filter.addCommand('VibeFractal', 'nuke.createNode(\'VibeFractal.nk\')', icon = 'p.png')
 
 p_tools.addSeparator()
 

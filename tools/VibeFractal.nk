@@ -1,7 +1,6 @@
 Group {
  name Vibe_Fractal
  selected true
- group_view_position top-right
  addUserKnob {20 User l "Vibe Fractal"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Vibe Fractal"}
  addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v0.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
@@ -139,7 +138,6 @@ Group {
  addUserKnob {3 samples_farm l farm -STARTLINE}
  samples_farm 256
  addUserKnob {6 preview_farm l "preview farm settings" +STARTLINE}
- preview_farm true
  addUserKnob {20 dof_tab l "DoF / Optics"}
  addUserKnob {6 enable_dof l "enable dof" +STARTLINE}
  addUserKnob {7 focus_distance l "focus distance" R 0 20}
@@ -205,7 +203,7 @@ Group {
   xpos 194
   ypos -20
  }
-set N8308a300 [stack 0]
+set N5957ef00 [stack 0]
  Ramp {
   p0 {0 0}
   p1 {256 0}
@@ -221,7 +219,7 @@ set N8308a300 [stack 0]
   xpos 88
   ypos 115
  }
-push $N8308a300
+push $N5957ef00
  Grade {
   add {{parent.colour_A} {parent.colour_A} {parent.colour_A} {parent.colour_A}}
   name Grade3
@@ -229,7 +227,7 @@ push $N8308a300
   xpos 303
   ypos 100
  }
-push $N8308a300
+push $N5957ef00
  Grade {
   add {{parent.colour_B} {parent.colour_B} {parent.colour_B} {parent.colour_B}}
   name Grade2
@@ -258,7 +256,9 @@ push $N8308a300
   ypos 42
  }
  Reformat {
+  resize distort
   name Reformat1
+  selected true
   xpos 601
   ypos 200
  }
