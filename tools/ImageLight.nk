@@ -1,316 +1,162 @@
 Group {
  name ImageLight
  selected true
- addUserKnob {20 User}
+ addUserKnob {20 User l "Image Light"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Image Light"}
- addUserKnob {26 about l "" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 about l "" t "v2.0 - updated algorithm. Faster, GGX reflection, oren nayar diffuse, and self shadowing." +STARTLINE T "<font style=\"color: #666666;\">v2.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 ""}
- addUserKnob {26 text l <b>Normals}
- addUserKnob {4 normal_mode l "Normals src" M {"Generate from luma" "Generate from alpha" "From input" "" "" ""}}
- addUserKnob {7 bump_height l "Bump Height"}
- bump_height 0.5
- addUserKnob {7 bump_blur l "Bump Blur" R 0 25}
- bump_blur 1
+ addUserKnob {26 text l <b>Bump/Displacement}
+ addUserKnob {7 bump_height l Height}
+ bump_height 0.25
  addUserKnob {26 light_text l <b>Light}
  addUserKnob {7 light_height l "Light Height"}
- light_height 0.1
+ light_height 0.3
  addUserKnob {7 light_intensity l Intensity R 0 10}
  light_intensity 1
- addUserKnob {14 lightmap_res l "lightmap resolution" R 0 100}
- lightmap_res 32
+ addUserKnob {26 text_1 l <b>Shadow}
+ addUserKnob {7 shadow_strength l "Shadow Stength" R 0 8}
+ shadow_strength 1
+ addUserKnob {7 shadow_distance l "Shadow Distance"}
+ shadow_distance 0.5
+ addUserKnob {7 shadow_softness l "Shadow Softness"}
+ shadow_softness 0.5
  addUserKnob {26 material_text l <b>Material}
  addUserKnob {7 diffuse_intensity l Diffuse}
  diffuse_intensity 1
+ addUserKnob {7 diffuse_rough l "Diffuse Roughness"}
+ diffuse_rough 0.5
  addUserKnob {7 specular l Specular}
- addUserKnob {7 specular_hardness l "Specular Hardness"}
- specular_hardness 3
+ specular 1
+ addUserKnob {7 spec_rough l "Specular Roughness"}
+ spec_rough 0.6
+ addUserKnob {7 ior l "Index of refraction" R 1 20}
+ ior 2
  addUserKnob {18 spec_tint l "Specular Tint"}
  spec_tint {1 1 1}
  addUserKnob {6 spec_tint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {26 ""}
- addUserKnob {6 effect_only l "Effect only" +STARTLINE}
- effect_only true
+ addUserKnob {3 lightmap_res l "lightmap resolution"}
+ lightmap_res 32
+ addUserKnob {3 shadow_steps l "shadow steps"}
+ shadow_steps 32
  addUserKnob {6 color_rgb_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
 }
  Input {
   inputs 0
   name light_img
-  xpos 381
-  ypos -42
+  xpos 1128
+  ypos 197
   number 1
  }
+ Constant {
+  inputs 0
+  channels rgb
+  name Constant2
+  xpos 1005
+  ypos 222
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input1]"}}
+  name Switch2
+  xpos 1128
+  ypos 246
+ }
+ Dot {
+  name Dot1
+  xpos 1162
+  ypos 308
+ }
+set N87411f80 [stack 0]
  Reformat {
   type "to box"
-  box_width {{parent.lightmap_res.w}}
-  box_height {{parent.lightmap_res.h}}
+  box_width {{parent.lightmap_res}}
+  box_height {{parent.lightmap_res}}
   box_fixed true
   scale 0.5
   resize distort
   name Reformat5
-  xpos 381
-  ypos 49
+  xpos 1128
+  ypos 396
  }
  Crop {
   box {0 0 {width} {height}}
   crop false
   name Crop2
-  xpos 381
-  ypos 84
+  xpos 1128
+  ypos 431
  }
  Grade {
   multiply {{parent.light_intensity}}
   name Grade2
-  xpos 381
-  ypos 126
+  xpos 1128
+  ypos 472
+ }
+ Blur {
+  size {{lerp(8,2,512,0,lightmap_res)}}
+  name Blur1
+  xpos 1128
+  ypos 533
  }
  Expression {
   expr3 ceil(max(r,g,b))
   name Expression2
-  xpos 381
-  ypos 176
+  xpos 1128
+  ypos 626
  }
- Dot {
-  name Dot7
-  xpos 415
-  ypos 254
- }
-set Ndaefc00 [stack 0]
  Dot {
   name Dot14
-  xpos 415
-  ypos 335
+  xpos 1162
+  ypos 682
  }
  Input {
   inputs 0
   name img
-  xpos 828
-  ypos -809
- }
- Dot {
-  name Dot1
-  xpos 862
-  ypos -622
- }
-set Nda87c00 [stack 0]
- Dot {
-  name Dot5
-  xpos 862
-  ypos -558
- }
-set Ndb20000 [stack 0]
- Shuffle2 {
-  fromInput1 {{0} B}
-  fromInput2 {{0} B}
-  mappings "4 rgba.alpha 0 3 rgba.red 0 0 rgba.alpha 0 3 rgba.green 0 1 rgba.alpha 0 3 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3"
-  name Shuffle1
-  xpos 828
-  ypos -500
- }
- Dot {
-  name Dot3
-  label "from alpha"
-  note_font "Verdana Bold"
-  xpos 862
-  ypos -448
- }
-push $Ndb20000
- Dot {
-  name Dot2
-  xpos 989
-  ypos -558
- }
- Dot {
-  name Dot4
-  label "from luma"
-  note_font "Verdana Bold"
-  xpos 989
-  ypos -384
- }
- Switch {
-  inputs 2
-  which {{normal_mode}}
-  name Switch1
-  xpos 828
-  ypos -387
- }
- Grade {
-  multiply {{parent.bump_height}}
-  black_clamp false
-  name Grade1
-  xpos 828
-  ypos -352
- }
- Group {
-  name CreateNormals
-  tile_color 0xffbf00ff
-  xpos 828
-  ypos -313
-  addUserKnob {20 prewitt_tangent_space_normals_generator_Tab l "Tangent Space Normals Generator"}
-  addUserKnob {20 parameters_Group l Parameters n 1}
-  addUserKnob {7 size_Floating_Point_Slider l Size R 1 5}
-  size_Floating_Point_Slider {{parent.bump_blur}}
-  addUserKnob {7 intensity_Floating_Point_Slider l Intensity R -5 5}
-  intensity_Floating_Point_Slider 0.05
-  addUserKnob {20 parameters_endGroup l endGroup n -1}
-  addUserKnob {20 about_Tab l About}
-  addUserKnob {26 description_Text l "" +STARTLINE T "Tangent Space Normals Generator v0.1.1\n\ncolour-science.org - April 9, 2015\n\nThis Gizmo / Group generates tangent space normals from given input.\n\n\[1] Kolasinski, K. (2015). AwesomeBump v1.0, 1–7. Retrieved from http://awesomebump.besaba.com/wp-content/uploads/2015/01/ABoverwiev.pdf\n\[2] Wikipedia. (n.d.). Sobel operator. Retrieved April 7, 2015, from http://en.wikipedia.org/wiki/Sobel_operator"}
- }
-  Input {
-   inputs 0
-   name Input
-   xpos -603
-   ypos -264
-  }
-  Saturation {
-   saturation 0
-   name Saturation
-   xpos -603
-   ypos -185
-  }
-  Blur {
-   size {{"parent.size_Floating_Point_Slider - 1"}}
-   quality {{"size * 0.5 + 8"}}
-   name Blur
-   xpos -603
-   ypos -159
-  }
-  Multiply {
-   value {{parent.intensity_Floating_Point_Slider}}
-   name intensity_Multiply
-   xpos -603
-   ypos -116
-  }
-  Expression {
-   expr0 "x / width"
-   expr1 "y / width"
-   name gradient_Expression
-   xpos -603
-   ypos -71
-  }
-set Ndb5a400 [stack 0]
-  Matrix {
-   matrix {
-       {-3 0 3}
-       {-10 0 10}
-       {-3 0 3}
-     }
-   name dx_Scharr_Matrix
-   xpos -700
-   ypos 29
-  }
-push $Ndb5a400
-  Matrix {
-   matrix {
-       {3 10 3}
-       {0 0 0}
-       {-3 -10 -3}
-     }
-   name dy_Scharr_Matrix
-   xpos -490
-   ypos 26
-  }
-  MergeExpression {
-   inputs 2
-   expr0 "Ag * Bb - Bg * Ab"
-   expr1 "Ar * Bb - Br * Ab"
-   expr2 "Ar * Bg - Br * Ag"
-   name dot_product_MergeExpression
-   label "\n"
-   xpos -590
-   ypos 87
-  }
-  Expression {
-   expr1 "- g"
-   name invert_green_Expression
-   xpos -590
-   ypos 111
-  }
-  Expression {
-   temp_name0 norme
-   temp_expr0 "sqrt(r * r + g * g + b * b)"
-   expr0 "r / abs(norme)"
-   expr1 "g / abs(norme)"
-   expr2 "b / abs(norme)"
-   name normalise_Expression
-   xpos -590
-   ypos 135
-  }
-  Expression {
-   expr0 "r * 0.5 + 0.5"
-   expr1 "g * 0.5 + 0.5"
-   expr2 "b * 0.5 + 0.5"
-   name output_offset_Expression
-   xpos -590
-   ypos 159
-   disable true
-  }
-  Shuffle {
-   alpha white
-   name Shuffle
-   xpos -590
-   ypos 207
-  }
-  Output {
-   name Output
-   xpos -590
-   ypos 315
-  }
- end_group
- Input {
-  inputs 0
-  name N
-  xpos 649
-  ypos -260
-  number 2
- }
- Switch {
-  inputs 2
-  which {{2-normal_mode}}
-  name Switch2
-  xpos 828
-  ypos -260
- }
-set Ndb0d200 [stack 0]
- BlinkScript {
-  inputs 2
-  kernelSourceFile C:/Users/petes/Documents/Nuke_Blinkscripts/image_light/image_light_specular_v001.cpp
-  recompileCount 34
-  ProgramGroup 1
-  kernelSource "kernel image_light_specular : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> normal;\n  Image<eRead, eAccessRandom, eEdgeClamped> l;\n  Image<eWrite> dst;\n\n  param:\n\n    float light_height;\n    float specular_power;\n    float specular_hardness;\n    float3 specular_tint;\n\nlocal:\nint l_w;\nint l_h;\nfloat l_w_div;\nfloat l_h_div;\nint _w;\nint _h;\nfloat _w_div;\nfloat _h_div;\n\nfloat lightmap_size;\n\nfloat3 l_dir;\nfloat3 view_dir;\n\nvoid init()\{\n\n\tl_w = l.bounds.width();\n\tl_h = l.bounds.height();\n\tl_w_div = 1.0f/float(l_w);\n\tl_h_div = 1.0f/float(l_h);\n\n    _w = normal.bounds.width();\n\t_h = normal.bounds.height();\n\t_w_div = 1.0f/float(_w);\n\t_h_div = 1.0f/float(_h);\n\n    lightmap_size = 1.0f / (float(l_w) * float(l_h));\n\}\n\n  void process(int2 pos) \{\n\n\tfloat4 accum = float4(0.0, 0.0, 0.0, 0.0);\n\n\tfloat3 l_colour = float3(0.0, 0.0, 0.0);\n    float3 l_pos = float3(0.0, 0.0, 0.0);\n    float3 N = float3(normal().x, normal().y, normal().z);\n\n //normalised screen pos, from -0.5 - 0.5.\n    float3 P = float3( \n        (float(pos.x) * _w_div) - 0.5f,\n        (float(pos.y) * _h_div) - 0.5f,\n        0.0f);\n\n    view_dir = float3(0.0, 0.0, 1.0) - P;\n    view_dir = normalize(view_dir);\n\n\t// float result;\n\tfor (int x = 0; x < l_w; x++)\{\n\t\tfor (int y = 0; y < l_h; y++)\{\n            // if (int(l(x,y).w) != 1) break; // optimisation that doesn't seem to optimise anything...\n\t\t\tl_colour = float3( l(x,y).x, l(x,y).y, l(x,y).z );\n            l_pos  = float3( \n                ((float(x)/float(l_w)) - 0.5f),\n                ((float(y)/float(l_h)) - 0.5f),\n                light_height); \n            \n            // direction of light to pixel\n            l_dir = l_pos - P;\n            float distance = length(l_dir);\n            l_dir = normalize(l_dir);\n\n\n            // spec\n            float3 H = normalize(l_dir + view_dir);\n            float NdotH = dot(N, H);\n            float intensity = pow(NdotH,specular_hardness);\n            float spec_power = intensity * specular_power / distance;\n            float3 specular = specular_tint * spec_power;\n\n            // colour\n            l_colour *= specular ;\n\n\n\t\taccum += float4(l_colour, 1.0);\t\n\t\t\}\n\t\} // loop ends\n    dst() = accum * lightmap_size;\n\n  \}\n\};"
-  rebuild ""
-  image_light_specular_light_height {{parent.light_height}}
-  image_light_specular_specular_power {{parent.specular}}
-  image_light_specular_specular_hardness {{parent.specular_hardness}}
-  image_light_specular_specular_tint {{parent.spec_tint} {parent.spec_tint} {parent.spec_tint}}
-  rebuild_finalise ""
-  name BlinkScript2
-  xpos 828
-  ypos 326
- }
- Grade {
-  multiply 10
-  name Grade4
-  xpos 828
-  ypos 416
- }
- Dot {
-  name Dot11
-  xpos 862
-  ypos 555
- }
-set Ndba5800 [stack 0]
- Dot {
-  name Dot13
-  xpos 862
-  ypos 817
+  xpos 1662
+  ypos 428
  }
  Constant {
   inputs 0
   channels rgb
-  format "512 512 0 0 512 512 1 square_512"
   name Constant1
-  xpos 1199
-  ypos 212
+  xpos 1511
+  ypos 540
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input0]"}}
+  name Switch1
+  xpos 1662
+  ypos 564
+ }
+ BlinkScript {
+  inputs 2
+  recompileCount 9
+  ProgramGroup 1
+  kernelSource "kernel image_light_diffuse_specular : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> heightmap; // height in the red channel, normals are built from it\n  Image<eRead, eAccessRandom> l; // loop indices are always in bounds, so skip edge clamping cost\n  Image<eWrite> dst;\n\n  param:\n\n    // distances are fractions of the frame width, so light_height and height_scale share units\n    // and the look holds at any resolution (proxy, reformat)\n    float light_height;\n    float height_scale;       // height of a heightmap value of 1\n    float diffuse_intensity;\n    float diffuse_roughness;  // Oren-Nayar sigma, 0 = Lambert, 1 = very rough\n    float specular_intensity;\n    float specular_roughness; // GGX perceptual roughness, 0 - 1\n    float specular_f0;        // reflectance facing the camera, 0.04 for most dielectrics\n    float3 specular_tint;     // tints f0 only, grazing highlights fade to the light colour\n    float shadow_strength;    // 0 = off (skips the horizon march entirely), 1 = full\n    float shadow_distance;    // how far to look for occluders\n    float shadow_softness;    // width of the shadow edge, in sine of light elevation\n    int shadow_steps;         // samples per march direction, 1 or more\n\nlocal:\nint l_x1;\nint l_y1;\nint l_w;\nint l_h;\nfloat l_w_div;\nfloat l_y_scale;\n\nint n_x1;\nint n_y1;\nfloat n_w_div;\nfloat n_y_off;\n\nfloat diffuse_scale;\nfloat3 specular_f0_scale;\nfloat3 specular_fresnel_scale;\nbool do_specular;\n\n// Oren-Nayar (Fujii), scaled by pi so roughness 0 matches plain Lambert\nfloat on_a;\nfloat on_b;\n\n// GGX\nfloat alpha2;\nfloat ggx_k;\nfloat ggx_one_minus_k;\n\n// heightmap\nfloat slope_scale;\nfloat h_to_working;\n\n// horizon shadows: 16 march directions spaced evenly in diamond angle, so the\n// per-light lookup can use diamond angle (one divide) instead of atan2\nfloat march_dir_x\[16];\nfloat march_dir_y\[16];\nint march_steps;\nfloat march_u_scale;\nfloat march_t_range;\nfloat march_height_px;\nbool do_shadows;\nfloat shadow_inv_softness;\n\nvoid define()\{\n\tdefineParam(light_height, \"light_height\", 0.1f);\n\tdefineParam(height_scale, \"height_scale\", 0.05f);\n\tdefineParam(diffuse_intensity, \"diffuse_intensity\", 1.0f);\n\tdefineParam(diffuse_roughness, \"diffuse_roughness\", 0.5f);\n\tdefineParam(specular_intensity, \"specular_intensity\", 1.0f);\n\tdefineParam(specular_roughness, \"specular_roughness\", 0.5f);\n\tdefineParam(specular_f0, \"specular_f0\", 0.04f);\n\tdefineParam(specular_tint, \"specular_tint\", float3(1.0f, 1.0f, 1.0f));\n\tdefineParam(shadow_strength, \"shadow_strength\", 1.0f);\n\tdefineParam(shadow_distance, \"shadow_distance\", 0.035f);\n\tdefineParam(shadow_softness, \"shadow_softness\", 0.05f);\n\tdefineParam(shadow_steps, \"shadow_steps\", 16);\n\}\n\nvoid init()\{\n\n\tn_x1 = heightmap.bounds.x1;\n\tn_y1 = heightmap.bounds.y1;\n\tn_w_div = 1.0f/float(heightmap.bounds.width());\n\t// working space: x from -0.5 - 0.5, y scaled by the same factor so distances are square\n\tfloat aspect = float(heightmap.bounds.height()) * n_w_div;\n\tn_y_off = 0.5f * aspect;\n\n\t// the lightmap is stretched over the full frame (like a Reformat), whatever its ratio\n\tl_x1 = l.bounds.x1;\n\tl_y1 = l.bounds.y1;\n\tl_w = l.bounds.width();\n\tl_h = l.bounds.height();\n\tl_w_div = 1.0f/float(l_w);\n\tl_y_scale = aspect / float(l_h);\n\n\t// everything constant across the light loop is applied once at the end\n\tfloat lightmap_size = 1.0f / (float(l_w) * float(l_h));\n\tdiffuse_scale = diffuse_intensity * lightmap_size;\n\n\t// Schlick F = f0 + (1 - f0) * fc^5 is linear in fc^5, so the loop sums with and without fc^5\n\t// and the coloured f0 is applied here, once\n\tfloat3 f0 = specular_tint * specular_f0;\n\tf0 = float3(clamp(f0.x, 0.0f, 1.0f), clamp(f0.y, 0.0f, 1.0f), clamp(f0.z, 0.0f, 1.0f));\n\tfloat spec_scale = specular_intensity * lightmap_size;\n\tspecular_f0_scale = f0 * spec_scale;\n\tspecular_fresnel_scale = (float3(1.0f, 1.0f, 1.0f) - f0) * spec_scale;\n\n\t// specular at 0 costs about the same as diffuse alone\n\tdo_specular = specular_intensity != 0.0f;\n\n\tfloat sigma = max(diffuse_roughness, 0.0f);\n\ton_a = 1.0f / (1.0f + (0.5f - 2.0f / (3.0f * 3.14159265f)) * sigma);\n\ton_b = sigma * on_a;\n\n\t// floor on roughness stops the lobe collapsing into dots between light pixels\n\tfloat r = clamp(specular_roughness, 0.02f, 1.0f);\n\tfloat alpha = r * r;\n\talpha2 = alpha * alpha;\n\tggx_k = (r + 1.0f) * (r + 1.0f) * 0.125f; // Smith-Schlick remap for direct lights\n\tggx_one_minus_k = 1.0f - ggx_k;\n\n\t// height in pixels, for slopes and horizons measured in pixel steps\n\tfloat height_px = height_scale * float(heightmap.bounds.width());\n\t// central differences span 2 pixels\n\tslope_scale = 0.5f * height_px;\n\t// heights are already in working space units (fraction of frame width)\n\th_to_working = height_scale;\n\n\t// march directions: diamond angle k/4 round the circle, quadrant by quadrant\n\tfor (int k = 0; k < 16; k++)\{\n\t\tint q = k / 4;\n\t\tfloat t = float(k - q * 4) * 0.25f;\n\t\tfloat bx = 1.0f - t;\n\t\tfloat by = t;\n\t\tfloat inv_len = rsqrt(bx*bx + by*by);\n\t\tbx *= inv_len;\n\t\tby *= inv_len;\n\t\tif (q == 0)      \{ march_dir_x\[k] =  bx; march_dir_y\[k] =  by; \}\n\t\telse if (q == 1) \{ march_dir_x\[k] = -by; march_dir_y\[k] =  bx; \}\n\t\telse if (q == 2) \{ march_dir_x\[k] = -bx; march_dir_y\[k] = -by; \}\n\t\telse             \{ march_dir_x\[k] =  by; march_dir_y\[k] = -bx; \}\n\t\}\n\n\t// march distances: 1 pixel out to shadow_distance, quadratic so samples are dense near the pixel\n\t// t = 1 + t_range * u^2, u from 0 - 1 across the steps\n\tmarch_steps = max(shadow_steps, 1);\n\tmarch_u_scale = 0.0f;\n\tif (march_steps > 1) march_u_scale = 1.0f / float(march_steps - 1);\n\tmarch_t_range = max(shadow_distance * float(heightmap.bounds.width()), 1.0f) - 1.0f;\n\tmarch_height_px = height_px;\n\n\tdo_shadows = shadow_strength > 0.0f;\n\tshadow_inv_softness = 1.0f / max(shadow_softness, 1e-3f);\n\}\n\n  void process(int2 pos) \{\n\n\t// normal from the heightmap, central differences\n\tfloat h0 = heightmap(pos.x, pos.y, 0);\n\tfloat hl = heightmap(pos.x - 1, pos.y, 0);\n\tfloat hr = heightmap(pos.x + 1, pos.y, 0);\n\tfloat hd = heightmap(pos.x, pos.y - 1, 0);\n\tfloat hu = heightmap(pos.x, pos.y + 1, 0);\n\tfloat3 N = normalize(float3((hl - hr) * slope_scale, (hd - hu) * slope_scale, 1.0f));\n\n //normalised screen pos at pixel centre, x from -0.5 - 0.5, y scaled to match.\n\tfloat Px = (float(pos.x - n_x1) + 0.5f) * n_w_div - 0.5f;\n\tfloat Py = (float(pos.y - n_y1) + 0.5f) * n_w_div - n_y_off;\n\tfloat Pz = h0 * h_to_working;\n\n\t// camera sits at (0, 0, 1)\n\tfloat3 V = normalize(float3(-Px, -Py, 1.0f - Pz));\n\tfloat NdotV = dot(N, V);\n\n\t// view half of the GGX visibility term, 1 / (4 * G1 denominator), only depends on the pixel\n\tfloat vis_v = 0.25f / (max(NdotV, 1e-4f) * ggx_one_minus_k + ggx_k);\n\n\t// horizon in each march direction, stored as sine of elevation\n\t// steps outer, directions inner, so each step's distance and divide are shared by all 16 directions\n\tfloat sin_h\[16];\n\tif (do_shadows) \{\n\t\tfloat fx = float(pos.x) + 0.5f; // + 0.5 so floor rounds to nearest\n\t\tfloat fy = float(pos.y) + 0.5f;\n\t\tfor (int k = 0; k < 16; k++) sin_h\[k] = -1e6f; // running max tangent until converted below\n\t\tfor (int j = 0; j < march_steps; j++)\{\n\t\t\tfloat u = float(j) * march_u_scale;\n\t\t\tfloat t = 1.0f + march_t_range * u * u;\n\t\t\tfloat tan_scale = march_height_px / t;\n\t\t\tfor (int k = 0; k < 16; k++)\{\n\t\t\t\tfloat hs = heightmap(int(floor(fx + march_dir_x\[k] * t)), int(floor(fy + march_dir_y\[k] * t)), 0);\n\t\t\t\tsin_h\[k] = max(sin_h\[k], (hs - h0) * tan_scale);\n\t\t\t\}\n\t\t\}\n\t\tfor (int k = 0; k < 16; k++) sin_h\[k] = sin_h\[k] * rsqrt(1.0f + sin_h\[k] * sin_h\[k]);\n\t\}\n\n\t// z component of light-to-pixel, lights sit light_height above height 0\n\tfloat dz = light_height - Pz;\n\tfloat dz2 = dz*dz + 1e-6f; // epsilon avoids divide by zero when the light is level with the pixel\n\tfloat Nz_dz = N.z * dz;\n\tfloat Vz_dz = V.z * dz;\n\n\tfloat3 diffuse_accum = float3(0.0f, 0.0f, 0.0f);\n\tfloat3 specular_accum = float3(0.0f, 0.0f, 0.0f);\n\tfloat3 fresnel_accum = float3(0.0f, 0.0f, 0.0f);\n\n\t// y outer so light reads walk along rows\n\tfor (int y = 0; y < l_h; y++)\{\n\t\tfloat dy = (float(y) + 0.5f) * l_y_scale - n_y_off - Py;\n\t\tfloat row_ndl = N.y * dy + Nz_dz;\n\t\tfloat row_ldv = V.y * dy + Vz_dz;\n\t\tfloat row_d2 = dy*dy + dz2;\n\n\t\tfor (int x = 0; x < l_w; x++)\{\n\t\t\tfloat dx = (float(x) + 0.5f) * l_w_div - 0.5f - Px;\n\n\t\t\t// unnormalised N.L, lights behind the surface contribute nothing\n\t\t\tfloat ndl = N.x * dx + row_ndl;\n\t\t\tif (ndl <= 0.0f) continue;\n\n\t\t\tfloat4 lc = l(l_x1 + x, l_y1 + y);\n\t\t\tif (lc.w <= 0.0f) continue;\n\n\t\t\tfloat inv_d = rsqrt(dx*dx + row_d2);\n\n\t\t\t// shadow: compare light elevation with the horizon in the light's direction\n\t\t\tfloat vis = 1.0f;\n\t\t\tif (do_shadows) \{\n\t\t\t\t// diamond angle, 0 - 4 round the circle, same spacing as the march directions\n\t\t\t\tfloat a = dy / (fabs(dx) + fabs(dy) + 1e-12f);\n\t\t\t\tif (dx < 0.0f) a = 2.0f - a;\n\t\t\t\telse if (a < 0.0f) a += 4.0f;\n\n\t\t\t\tfloat f = a * 4.0f;\n\t\t\t\tint i0 = int(f);\n\t\t\t\tfloat fr = f - float(i0);\n\t\t\t\tif (i0 > 15) i0 = 0;\n\t\t\t\tint i1 = i0 + 1;\n\t\t\t\tif (i1 > 15) i1 = 0;\n\t\t\t\tfloat horizon = sin_h\[i0] + (sin_h\[i1] - sin_h\[i0]) * fr;\n\n\t\t\t\tfloat e = clamp((dz * inv_d - horizon) * shadow_inv_softness + 0.5f, 0.0f, 1.0f);\n\t\t\t\tvis = 1.0f - shadow_strength * (1.0f - e * e * (3.0f - 2.0f * e));\n\t\t\t\tif (vis <= 0.0f) continue; // fully shadowed, skip the shading\n\t\t\t\}\n\n\t\t\tfloat NdotL = ndl * inv_d;\n\t\t\tfloat LdotV = (V.x * dx + row_ldv) * inv_d;\n\n\t\t\t// light arriving at the pixel, inverse square falloff\n\t\t\tfloat3 radiance = float3(lc.x, lc.y, lc.z) * (lc.w * inv_d * inv_d * vis);\n\n\t\t\t// diffuse: Oren-Nayar, s / t is the azimuth term from Fujii's formulation\n\t\t\tfloat s = LdotV - NdotL * NdotV;\n\t\t\tfloat t = 1.0f;\n\t\t\tif (s > 0.0f) t = max(NdotL, NdotV);\n\t\t\tfloat oren = max(0.0f, on_a + on_b * s / t);\n\t\t\tdiffuse_accum += radiance * (NdotL * oren);\n\n\t\t\t// specular: GGX D * Smith-Schlick G, Schlick F applied after the loop\n\t\t\t// |L_hat + V|^2 = 2 + 2 L_hat.V\n\t\t\tif (do_specular) \{\n\t\t\t\tfloat inv_h = rsqrt(max(2.0f + 2.0f * LdotV, 1e-6f));\n\t\t\t\tfloat NdotH = max(0.0f, (NdotL + NdotV) * inv_h);\n\t\t\t\tfloat VdotH = (1.0f + LdotV) * inv_h;\n\n\t\t\t\tfloat fc = 1.0f - VdotH;\n\t\t\t\tfloat fc2 = fc * fc;\n\n\t\t\t\t// D (with pi folded in to match the diffuse scale) and light half of visibility in one divide\n\t\t\t\tfloat dd = NdotH * NdotH * (alpha2 - 1.0f) + 1.0f;\n\t\t\t\tfloat D_vis_l = alpha2 / (dd * dd * (NdotL * ggx_one_minus_k + ggx_k));\n\n\t\t\t\tfloat3 spec_radiance = radiance * (D_vis_l * vis_v * NdotL);\n\t\t\t\tspecular_accum += spec_radiance;\n\t\t\t\tfresnel_accum += spec_radiance * (fc2 * fc2 * fc);\n\t\t\t\}\n\t\t\}\n\t\} // loop ends\n\n    dst() = float4(diffuse_accum * diffuse_scale\n                 + specular_accum * specular_f0_scale\n                 + fresnel_accum * specular_fresnel_scale, 1.0f);\n\n  \}\n\};\n"
+  rebuild ""
+  image_light_diffuse_specular_light_height {{parent.light_height}}
+  image_light_diffuse_specular_height_scale {{parent.bump_height}}
+  image_light_diffuse_specular_diffuse_intensity {{parent.diffuse_intensity}}
+  image_light_diffuse_specular_diffuse_roughness {{parent.diffuse_rough}}
+  image_light_diffuse_specular_specular_intensity {{parent.specular*10}}
+  image_light_diffuse_specular_specular_roughness {{parent.spec_rough}}
+  image_light_diffuse_specular_specular_f0 {{"pow((ior - 1) / (ior + 1), 2)"}}
+  image_light_diffuse_specular_specular_tint {{parent.spec_tint} {parent.spec_tint} {parent.spec_tint}}
+  image_light_diffuse_specular_shadow_strength {{parent.shadow_strength}}
+  image_light_diffuse_specular_shadow_distance {{parent.shadow_distance}}
+  image_light_diffuse_specular_shadow_softness {{parent.shadow_softness}}
+  image_light_diffuse_specular_shadow_steps {{parent.shadow_steps}}
+  rebuild_finalise ""
+  name BlinkScript3
+  xpos 1662
+  ypos 673
+ }
+push $N87411f80
+ Dot {
+  name Dot16
+  xpos 1353
+  ypos 308
  }
  Reformat {
   type "to box"
@@ -318,114 +164,41 @@ set Ndba5800 [stack 0]
   box_height {{img.height}}
   box_fixed true
   box_pixel_aspect {{img.pixel_aspect}}
+  resize distort
+  center false
   name Reformat1
-  xpos 1199
-  ypos 284
- }
-push $Ndaefc00
-push $Ndb0d200
- Dot {
-  name Dot15
-  xpos 1069
-  ypos -257
- }
- BlinkScript {
-  inputs 2
-  kernelSourceFile C:/Users/petes/Documents/Nuke_Blinkscripts/image_light/image_light_diffuse_v001.cpp
-  recompileCount 34
-  ProgramGroup 1
-  kernelSource "kernel image_light_diffuse : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> normal;\n  Image<eRead, eAccessRandom, eEdgeClamped> l;\n  Image<eWrite> dst;\n\n  param:\n\n    float light_height;\n\nlocal:\nint l_w;\nint l_h;\nfloat l_w_div;\nfloat l_h_div;\nint _w;\nint _h;\nfloat _w_div;\nfloat _h_div;\n\nfloat lightmap_size;\n\nfloat3 l_dir;\nfloat3 view_dir;\n\nvoid init()\{\n\n\tl_w = l.bounds.width();\n\tl_h = l.bounds.height();\n\tl_w_div = 1.0f/float(l_w);\n\tl_h_div = 1.0f/float(l_h);\n\n    _w = normal.bounds.width();\n\t_h = normal.bounds.height();\n\t_w_div = 1.0f/float(_w);\n\t_h_div = 1.0f/float(_h);\n\n    lightmap_size = 1.0f / (float(l_w) * float(l_h));\n\}\n\n  void process(int2 pos) \{\n\n\tfloat4 accum = float4(0.0, 0.0, 0.0, 0.0);\n\n\tfloat3 l_colour = float3(0.0, 0.0, 0.0);\n    float3 l_pos = float3(0.0, 0.0, 0.0);\n    float3 N = float3(normal().x, normal().y, normal().z);\n\n //normalised screen pos, from -0.5 - 0.5.\n    float3 P = float3( \n        (float(pos.x) * _w_div) - 0.5f,\n        (float(pos.y) * _h_div) - 0.5f,\n        0.0f);\n\n    view_dir = float3(0.0, 0.0, 1.0) - P;\n    view_dir = normalize(view_dir);\n\n\t// float result;\n\tfor (int x = 0; x < l_w; x++)\{\n\t\tfor (int y = 0; y < l_h; y++)\{\n            // if (int(l(x,y).w) != 1) break; // optimisation that doesn't seem to optimise anything...\n\t\t\tl_colour = float3( l(x,y).x, l(x,y).y, l(x,y).z );\n            l_pos  = float3( \n                ((float(x)/float(l_w)) - 0.5f),\n                ((float(y)/float(l_h)) - 0.5f),\n                light_height); \n            \n            // direction of light to pixel\n            l_dir = l_pos - P;\n            float distance = length(l_dir);\n            l_dir = normalize(l_dir);\n\n            // diffuse\n            float NdotL = dot(N, l_dir);\n            NdotL = min(1.0f, max(0.0f, NdotL));\n            float diffuse = NdotL / (distance*distance);\n            // diffuse *= diffuse_intensity;\n\n\n\n            // colour\n            l_colour *= diffuse;\n\n\t\taccum += float4(l_colour, 1.0);\t\n\t\t\}\n\t\} // loop ends\n    dst() = accum * lightmap_size;\n\n  \}\n\};"
-  rebuild ""
-  image_light_diffuse_light_height {{parent.light_height}}
-  rebuild_finalise ""
-  name BlinkScript1
-  xpos 1035
-  ypos 245
- }
- Switch {
-  inputs 2
-  which {{diffuse_intensity==0}}
-  name Switch4
-  xpos 1035
-  ypos 284
+  xpos 1319
+  ypos 1080
  }
  Grade {
-  multiply {{parent.diffuse_intensity}}
-  name Grade3
-  xpos 1035
-  ypos 417
- }
-set Ndbdb000 [stack 0]
- Merge2 {
-  inputs 2
-  operation plus
-  name Merge3
-  xpos 1035
-  ypos 814
-  disable {{"parent.specular ==0"}}
+  channels all
+  multiply 0
+  name Grade5
+  xpos 1319
+  ypos 1117
  }
  Dot {
-  name Dot12
-  xpos 1069
-  ypos 1106
- }
-push $Ndba5800
-push $Ndbdb000
-push $Nda87c00
- Dot {
-  name Dot8
-  xpos 1696
-  ypos -622
- }
- Dot {
-  name Dot9
-  xpos 1696
-  ypos 420
- }
-set Ndc14000 [stack 0]
- Clamp {
-  maximum_enable false
-  name Clamp1
-  xpos 1545
-  ypos 411
- }
- Merge2 {
-  inputs 2
-  operation multiply
-  name Merge1
-  xpos 1395
-  ypos 417
+  name Dot6
+  xpos 1353
+  ypos 1184
  }
  Merge2 {
   inputs 2
   operation plus
-  name Merge2
-  xpos 1395
-  ypos 552
- }
- Dot {
-  name Dot10
-  xpos 1429
-  ypos 795
- }
-push $Ndc14000
- Merge2 {
-  inputs 2
-  operation plus
-  name Merge4
+  name Merge5
   xpos 1662
-  ypos 792
- }
- Switch {
-  inputs 2
-  which {{effect_only}}
-  name Switch3
-  xpos 1662
-  ypos 1103
+  ypos 1181
  }
  Output {
   name Output1
   xpos 1662
-  ypos 1234
+  ypos 1316
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "This merge exists so that the viewport handles\n(like rotopaint brush, transform handles etc)\ncome through the tool cleanly."
+  xpos 1551
+  ypos 1207
  }
 end_group
