@@ -4,7 +4,7 @@ Group {
  selected true
  addUserKnob {20 User l "Art Lens Depth"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Art Lens Depth"}
- addUserKnob {26 about l "" t "0.1 - initial build, shell from art lens 2d\n0.2 - tidy up\n0.3 - removed spaces from blink knob names\n0.4 - Algorithm updated, handles FG edges much better\n0.5 - Added coma, field falloff\n" +STARTLINE T "<font style=\"color: #666666;\">v0.5 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 about l "" t "0.1 - initial build, shell from art lens 2d\n0.2 - tidy up\n0.3 - removed spaces from blink knob names\n0.4 - Algorithm updated, handles FG edges much better\n0.5 - Added coma, field falloff\n1.0 - removed nuke.executing()\n" +STARTLINE T "<font style=\"color: #666666;\">v1.0 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 ""}
  addUserKnob {6 use_gpu l "Use GPU (<i>basically a requirement</i>)" +STARTLINE}
  use_gpu true
@@ -119,7 +119,7 @@ Group {
   xpos 1198
   ypos -145
  }
-set Nee49a500 [stack 0]
+set Nd0fefc00 [stack 0]
  Switch {
   inputs 2
   which {{"\[exists parent.input3]"}}
@@ -174,7 +174,7 @@ set Nee49a500 [stack 0]
   ypos -155
   number 1
  }
-push $Nee49a500
+push $Nd0fefc00
  Switch {
   inputs 2
   which {{"\[exists parent.input1]"}}
@@ -182,7 +182,7 @@ push $Nee49a500
   xpos 1072
   ypos -37
  }
-set Nee49c300 [stack 0]
+set Nd0fed400 [stack 0]
  Shuffle {
   in depth
   name Shuffle4
@@ -197,7 +197,7 @@ set Nee49c300 [stack 0]
   ypos 50
   disable {{!fg_depth_style}}
  }
-push $Nee49c300
+push $Nd0fed400
  Blur {
   channels rgba
   size {{preblur_highlights}}
@@ -226,7 +226,7 @@ push $Nee49c300
   xpos 880
   ypos -33
  }
-set Nc9ee8000 [stack 0]
+set Necab800 [stack 0]
  Shuffle {
   in depth
   name Shuffle2
@@ -241,7 +241,7 @@ set Nc9ee8000 [stack 0]
   ypos 57
   disable {{!bg_depth_style}}
  }
-push $Nc9ee8000
+push $Necab800
  Blur {
   channels rgba
   size {{preblur_highlights}}
@@ -257,7 +257,7 @@ push $Nc9ee8000
   useGPUIfAvailable {{parent.use_gpu}}
   rebuild ""
   ArtLensDepthKernel_Output {{parent.output_mode}}
-  ArtLensDepthKernel_Samples {{"\[python -execlocal farm\\ =\\ nuke.thisParent().knob('samples_farm').value()\\ngui\\ =\\ nuke.thisParent().knob('samples_gui').value()\\nif\\ nuke.executing():\\n\\ \\ \\ \\ ret\\ =\\ farm\\nelse:\\n\\ \\ \\ \\ if\\ nuke.thisParent().knob('preview_farm').value():\\n\\ \\ \\ \\ \\ \\ \\ \\ ret\\ =\\ farm\\n\\ \\ \\ \\ else:\\n\\ \\ \\ \\ \\ \\ \\ \\ ret\\ =\\ gui]"}}
+  ArtLensDepthKernel_Samples {{"!\$gui || preview_farm ? samples_farm : samples_gui"}}
   ArtLensDepthKernel_FocalLength {{parent.focalLength}}
   ArtLensDepthKernel_FStop {{parent.fStop}}
   ArtLensDepthKernel_FocusDistance {{parent.focalDistance}}
@@ -269,8 +269,8 @@ push $Nc9ee8000
   ArtLensDepthKernel_FGInput {{"\[exists parent.input1]"}}
   ArtLensDepthKernel_FGMult {{parent.FG_mult}}
   ArtLensDepthKernel_FGNearCoCLimit {{parent.max_near_size}}
-  ArtLensDepthKernel_MarchSteps {{"\[python -execlocal farm\\ =\\ nuke.thisParent().knob('march_steps_farm').value()\\ngui\\ =\\ nuke.thisParent().knob('march_steps_gui').value()\\nif\\ nuke.executing():\\n\\ \\ \\ \\ ret\\ =\\ farm\\nelse:\\n\\ \\ \\ \\ if\\ nuke.thisParent().knob('preview_farm').value():\\n\\ \\ \\ \\ \\ \\ \\ \\ ret\\ =\\ farm\\n\\ \\ \\ \\ else:\\n\\ \\ \\ \\ \\ \\ \\ \\ ret\\ =\\ gui]"}}
-  ArtLensDepthKernel_RefineSteps {{"\[python -execlocal farm\\ =\\ nuke.thisParent().knob('refine_steps_farm').value()\\ngui\\ =\\ nuke.thisParent().knob('refine_steps_gui').value()\\nif\\ nuke.executing():\\n\\ \\ \\ \\ ret\\ =\\ farm\\nelse:\\n\\ \\ \\ \\ if\\ nuke.thisParent().knob('preview_farm').value():\\n\\ \\ \\ \\ \\ \\ \\ \\ ret\\ =\\ farm\\n\\ \\ \\ \\ else:\\n\\ \\ \\ \\ \\ \\ \\ \\ ret\\ =\\ gui]"}}
+  ArtLensDepthKernel_MarchSteps {{"!\$gui || preview_farm ? march_steps_farm : march_steps_gui"}}
+  ArtLensDepthKernel_RefineSteps {{"!\$gui || preview_farm ? refine_steps_farm : refine_steps_gui"}}
   ArtLensDepthKernel_SphericalAberration {{parent.spherical_aberration}}
   ArtLensDepthKernel_Astigmatism {{parent.astigmatism}}
   ArtLensDepthKernel_Coma {{parent.coma}}
@@ -295,6 +295,7 @@ push $Nc9ee8000
   ArtLensDepthKernel_Jitter {{parent.jitter_samples}}
   rebuild_finalise ""
   name BlinkScript2
+  selected true
   xpos 1166
   ypos 241
  }
