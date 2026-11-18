@@ -4,7 +4,7 @@ Group {
  selected true
  addUserKnob {20 User l "Art Lens Depth"}
  addUserKnob {26 title l "" +STARTLINE T "<font size=\"+5\"> Art Lens Depth"}
- addUserKnob {26 about l "" t "0.1 - initial build, shell from art lens 2d\n0.2 - tidy up\n0.3 - removed spaces from blink knob names\n0.4 - Algorithm updated, handles FG edges much better\n0.5 - Added coma, field falloff\n1.0 - removed nuke.executing()\n1.1 - slight perf increase, pinhole camera model prevents CoC blowing up at extremes\n" +STARTLINE T "<font style=\"color: #666666;\">v1.1 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
+ addUserKnob {26 about l "" t "0.1 - initial build, shell from art lens 2d\n0.2 - tidy up\n0.3 - removed spaces from blink knob names\n0.4 - Algorithm updated, handles FG edges much better\n0.5 - Added coma, field falloff\n1.0 - removed nuke.executing()\n1.1 - slight perf increase, pinhole camera model prevents CoC blowing up at extremes\n1.2 - reconnected something, whoops" +STARTLINE T "<font style=\"color: #666666;\">v1.2 | <a href=\"https://www.linkedin.com/in/petejans/\" style=\"color: #6786b8;\">Peter Jansen</a>"}
  addUserKnob {26 ""}
  addUserKnob {6 use_gpu l "Use GPU (<i>basically a requirement</i>)" +STARTLINE}
  use_gpu true
@@ -252,7 +252,7 @@ Group {
   xpos 1910
   ypos -357
  }
-set N405ed800 [stack 0]
+set N940bd400 [stack 0]
  Shuffle {
   in depth
   name Shuffle4
@@ -273,7 +273,6 @@ set N405ed800 [stack 0]
   xpos 1944
   ypos -190
  }
-set N405ecc00 [stack 0]
  BlinkScript {
   recompileCount 1
   ProgramGroup 1
@@ -293,6 +292,7 @@ set N405ecc00 [stack 0]
   xpos 1910
   ypos -100
  }
+set N940bc400 [stack 0]
  Constant {
   inputs 0
   format "32 32 0 0 32 32 1 32"
@@ -334,8 +334,8 @@ set N405ecc00 [stack 0]
   xpos 1910
   ypos 53
  }
-push $N405ecc00
-push $N405ed800
+push $N940bc400
+push $N940bd400
  Blur {
   channels rgba
   size {{preblur_highlights}}
@@ -364,7 +364,7 @@ push $N405ed800
   xpos 581
   ypos -393
  }
-set N40596400 [stack 0]
+set N94071c00 [stack 0]
  Shuffle {
   in depth
   name Shuffle2
@@ -405,7 +405,7 @@ set N40596400 [stack 0]
   xpos 581
   ypos -116
  }
-set N40595400 [stack 0]
+set N94070c00 [stack 0]
  Constant {
   inputs 0
   format "32 32 0 0 32 32 1 32"
@@ -447,8 +447,8 @@ set N40595400 [stack 0]
   xpos 581
   ypos 22
  }
-push $N40595400
-push $N40596400
+push $N94070c00
+push $N94071c00
  Blur {
   channels rgba
   size {{preblur_highlights}}
