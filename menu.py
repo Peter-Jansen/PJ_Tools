@@ -69,6 +69,7 @@ p_blinks.addCommand('ParticleVelocityProjection', 'nuke.createNode(\'ParticleVel
 p_blinks.addCommand('Random Rotation', 'nuke.createNode(\'random_rotation.nk\')', icon = 'random_rotation.png')
 p_blinks.addCommand('ParticleFade', 'nuke.createNode(\'ParticleFade.nk\')', icon = 'ParticleFade.png')
 p_blinks.addCommand('ParticleLookatXZ', 'nuke.createNode(\'ParticleLookatXZ.nk\')', icon = 'ParticleLookatXZ.png')
+p_blinks.addCommand('ParticleWind', 'nuke.createNode(\'ParticleWind.nk\')', icon = 'ParticleWindNoise.png')
 p_tools.addSeparator()
 
 # Tansform
